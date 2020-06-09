@@ -1,0 +1,86 @@
+@font-face {
+    font-family: 'inanplayer';
+    src:  url('../../fonts/inanplayer.eot?qn9v9b');
+    src:  url('../../fonts/inanplayer.eot?qn9v9b#iefix') format('embedded-opentype'),
+    url('../../fonts/inanplayer.ttf?qn9v9b') format('truetype'),
+    url('../../fonts/inanplayer.woff?qn9v9b') format('woff'),
+    url('../../fonts/inanplayer.svg?qn9v9b#icomoon') format('svg');
+    font-weight: normal;
+    font-style: normal;
+    font-display: block;
+}
+.video-react {
+    overflow: hidden;
+    font-family: Helvetica Neue, serif;
+}
+.video-react .video-react-video {
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    object-fit: fill;
+}
+.video-react .video-react-big-play-button {
+    display: none;
+}
+.video-react .video-react-poster {
+    background-size: cover;
+}
+.video-react .video-react-control-bar {
+    background-color: transparent;
+    padding: 0 20px;
+    margin-bottom: 20px;
+}
+.video-react .video-react-control:before {
+    font-size: 2.2em;
+    line-height: 1.5;
+}
+.video-react .video-react-progress-holder, .video-react .video-react-volume-bar.video-react-slider-horizontal, .video-react .video-react-slider-horizontal .video-react-volume-level, .video-react .video-react-progress-holder .video-react-play-progress, .video-react .video-react-progress-holder .video-react-load-progress, .video-react .video-react-progress-holder .video-react-tooltip-progress-bar, .video-react .video-react-progress-holder .video-react-load-progress div {
+    height: 0.15em;
+}
+.video-react .video-react-play-progress:before, .video-react .video-react-slider-horizontal .video-react-volume-level:before {
+    height: 16px;
+    width: 2px;
+    background-color: white;
+    top: -7px;
+    font-size: 0;
+}
+.video-react .video-react-load-progress div {
+    background-color: #393939;
+}
+.video-react .video-react-slider, .video-react .video-react-slider .video-react-load-progress {
+    background-color: #6e6e6e;
+}
+.video-react .video-react-time-control {
+    font-size: 1.4em;
+    line-height: 2.35em;
+    padding-left: .7em;
+    padding-right: .7em;
+}
+.video-react-current-time-display {
+    margin-right: -1em;
+}
+.video-react-duration-display {
+    margin-left: -1em;
+}
+.video-react-icon-fullscreen, .video-react .video-react-mute-control, .video-react .video-react-volume-menu-button {
+    font-family: 'inanplayer' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+}
+.video-react-icon-fullscreen:before {
+    content: "\e900";
+}
+.video-react-icon-volume-up:before, .video-react-icon-volume-off:before, .video-react .video-react-bezel .video-react-bezel-icon-volume-off:before, .video-react .video-react-mute-control.video-react-vol-muted:before, .video-react .video-react-volume-menu-button.video-react-vol-muted:before {
+    content: "\e901";
+}
+.video-react .video-react-bezel .video-react-bezel-icon-volume-up:before, .video-react .video-react-mute-control:before, .video-react .video-react-volume-menu-button:before, .video-react-icon-volume-down:before, .video-react .video-react-bezel .video-react-bezel-icon-volume-down:before, .video-react .video-react-mute-control.video-react-vol-2:before, .video-react .video-react-volume-menu-button.video-react-vol-2:before, .video-react .video-react-mute-control.video-react-vol-1:before, .video-react .video-react-volume-menu-button.video-react-vol-1:before {
+    content: "\e902";
+}
+.video-react-icon-play-arrow:before, .video-react .video-react-bezel .video-react-bezel-icon-play:before, .video-react .video-react-play-control:before, .video-react .video-react-big-play-button:before {
+    font-size: 2.75em;
+    line-height: 1.15;
+}

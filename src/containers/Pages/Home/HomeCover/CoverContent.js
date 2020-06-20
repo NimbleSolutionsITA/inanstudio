@@ -7,7 +7,7 @@ import Container from "../../../../components/Container";
 
 
 const CoverWrapper = styled.div`
-  width: ${window.innerWidth}px;
+  width: 100%;
   position: fixed;
   z-index: 1;
   overflow: hidden;
@@ -33,11 +33,14 @@ const CoverContent = ({color, colorMobile, title, ctaLink, ctaText, isMobile, he
             }
         },
         title: {
-            paddingTop: `${headerHeight}px`,
+            marginTop: `calc(${headerHeight}px + 5px)`,
             textTransform: 'uppercase',
             marginLeft: '-3px',
+            minHeight: '75px',
+            width: 'calc(100% - 80px)',
             [theme.breakpoints.down('sm')]: {
-                paddingTop: 0,
+                marginTop: '10px',
+                width: '100%',
             },
         },
     }));
@@ -53,12 +56,12 @@ const CoverContent = ({color, colorMobile, title, ctaLink, ctaText, isMobile, he
                             component="h1"
                             to={ctaLink}
                         >
-                            { isMobile && ctaLink ? <Link underline="none" color="inherit" to={ctaLink}>{title}</Link> : title }
+                            <Link disableHover underline="none" color="inherit" to={ctaLink}>{title}</Link>
                         </Typography>
                     )}
                     {ctaLink && !isMobile && (
                         <Cta>
-                            <Link underline="none" color="inherit" to={ctaLink}>{ctaText}</Link>
+                            <Link disableHover underline="none" color="inherit" to={ctaLink}>{ctaText}</Link>
                         </Cta>
                     )}
                 </TitleWrapper>

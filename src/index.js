@@ -5,6 +5,7 @@ import { ConnectedRouter } from 'connected-react-router';
 import App from './App';
 import configureStore from "./configureStore";
 import history from './history';
+import ScrollToTop from "./components/ScrollToTop";
 
 const initialState = {};
 const store = configureStore(initialState, history);
@@ -12,6 +13,7 @@ const store = configureStore(initialState, history);
 render(
     <Provider store={store}>
         <ConnectedRouter history={history}>
+            <ScrollToTop />
             <App />
         </ConnectedRouter>
     </Provider>,

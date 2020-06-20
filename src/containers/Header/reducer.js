@@ -25,7 +25,7 @@ const HeaderReducer = () => (state = initialState, action) =>
                 break;
             case SET_HEADER_HEIGHT:
                 Object.assign(draft, {
-                    height: action.payload.height,
+                    height: action.payload.height - 2,
                 });
                 break;
             case OPEN_DRAWER:

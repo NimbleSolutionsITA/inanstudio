@@ -2,7 +2,7 @@ import { put, takeEvery } from 'redux-saga/effects';
 
 import axios from 'axios';
 
-import { setUserData } from './actions';
+import { setUserData, setLoginFailed } from './actions';
 
 import {
   baseUrl,
@@ -39,8 +39,12 @@ function* loginUser({ payload: { username, password } }) {
       }
       return res;
     })
-    .catch(() => null);
-  if (token) yield put(setUserData(token));
+    .catch(error => error.response.data.code);
+  console.log(token)
+  if (token.id) yield put(setUserData(token));
+  else if (token === '[jwt_auth] incorrect_password') yield put(setLoginFailed('the password is incorrect'))
+  else if (token === '[jwt_auth] invalid_email') yield put(setLoginFailed('the email is incorrect'))
+  else yield put(setUserData('login failed'))
 }
 
 function* logoutUser() {

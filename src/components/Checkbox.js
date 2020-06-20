@@ -100,7 +100,7 @@ const Checkbox = ({color, fill, ...props}) => {
     return (
         <MuiCheckbox
             className={classes.root}
-            checkedIcon={<span className={clsx(classes.icon, color ? classes.checkedIcon : classes.checkedFillIcon)} />}
+            checkedIcon={<span className={clsx(classes.icon, color ? null : classes.checkedFillIcon)} />}
             icon={<span className={classes.icon} />}
             {...props}
         />

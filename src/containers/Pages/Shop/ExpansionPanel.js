@@ -18,17 +18,29 @@ const useStyles = makeStyles((theme) => ({
         '&::before': {
             display: 'none',
         },
+        [theme.breakpoints.down('sm')]: {
+            marginTop: '10px',
+            '&.Mui-expanded': {
+                marginTop: '10px',
+            },
+        },
     },
     expansionPanelSummary: {
         padding: 0,
+        minHeight: '25px',
         '&.Mui-expanded': {
-            minHeight: '48px',
+            minHeight: '25px',
         },
     },
     expansionPanelSummaryContent: {
+        margin: '5px 0',
         '&.Mui-expanded': {
-            margin: '12px 0',
+            margin: '5px 0',
         },
+    },
+    expandIcon: {
+        padding: '5px',
+        marginRight: '-8px',
     },
 }));
 
@@ -57,7 +69,8 @@ const ExpansionPanel = ({children ,title, plusMinus}) => {
                 expandIcon={expandIcon()}
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
-                classes={{root: classes.expansionPanelSummary, content: classes.expansionPanelSummaryContent}}
+                classes={{root: classes.expansionPanelSummary, content: classes.expansionPanelSummaryContent, expandIcon: classes.expandIcon}}
+                IconButtonProps={{disableRipple: true}}
             >
                 {title}
             </ExpansionPanelSummary>

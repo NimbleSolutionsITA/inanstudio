@@ -9,7 +9,7 @@ const Link = (props) => {
             transition: 'textDecoration .75s ease',
             cursor: 'pointer',
             '&:hover': {
-                textDecoration: 'line-through'
+                textDecoration: !props.disableHover && 'line-through'
             },
         },
     });

@@ -12,7 +12,6 @@
 .video-react {
     overflow: hidden;
     font-family: Helvetica Neue, serif;
-    height: 100% !important;
 }
 .video-react .video-react-video {
     min-width: 100%;
@@ -31,18 +30,21 @@
     padding: 0 20px;
     margin-bottom: 20px;
 }
+.video-react .video-react-control {
+    width: 24px;
+}
 .video-react .video-react-control:before {
-    font-size: 2.2em;
-    line-height: 1.5;
+    font-size: 14px;
+    line-height: 32px;
 }
 .video-react .video-react-progress-holder, .video-react .video-react-volume-bar.video-react-slider-horizontal, .video-react .video-react-slider-horizontal .video-react-volume-level, .video-react .video-react-progress-holder .video-react-play-progress, .video-react .video-react-progress-holder .video-react-load-progress, .video-react .video-react-progress-holder .video-react-tooltip-progress-bar, .video-react .video-react-progress-holder .video-react-load-progress div {
     height: 0.15em;
 }
 .video-react .video-react-play-progress:before, .video-react .video-react-slider-horizontal .video-react-volume-level:before {
-    height: 16px;
+    height: 12px;
     width: 2px;
     background-color: white;
-    top: -7px;
+    top: -5px;
     font-size: 0;
 }
 .video-react .video-react-load-progress div {
@@ -52,8 +54,8 @@
     background-color: #6e6e6e;
 }
 .video-react .video-react-time-control {
-    font-size: 1.4em;
-    line-height: 2.35em;
+    font-size: 10px;
+    line-height: 32px;
     padding-left: .7em;
     padding-right: .7em;
 }
@@ -82,6 +84,28 @@
     content: "\e902";
 }
 .video-react-icon-play-arrow:before, .video-react .video-react-bezel .video-react-bezel-icon-play:before, .video-react .video-react-play-control:before, .video-react .video-react-big-play-button:before {
-    font-size: 2.75em;
-    line-height: 1.15;
+    font-size: 22px;
+    line-height: 32px;
+}
+.video-react .video-react-control:focus:before, .video-react .video-react-control:hover:before, .video-react .video-react-control:focus {
+    text-shadow: none;
+}
+@media (min-width: 735px) {
+    .video-react .video-react-control-bar {
+        max-width: 735px;
+        padding-left: 24px;
+        padding-right: 24px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+@media (min-width: 925px) {
+    .video-react .video-react-control-bar {
+        max-width: 925px;
+    }
+}
+@media (min-width: 1280px) {
+    .video-react .video-react-control-bar {
+        max-width: 1280px;
+    }
 }

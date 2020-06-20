@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 const NavWrapper = styled.div`
   width: 100%;
-  height: 18pt;
+  height: 20px;
   border-top: 1pt solid;
   border-bottom: 1pt solid;
   text-transform: uppercase;
@@ -17,7 +17,7 @@ const NavTools = styled.div`
   }
 `;
 
-const NavBar = ({navLinks, cartItems, wishListItems}) => {
+const NavBar = ({navLinks, cartItems, wishlistItems, currentPath, authenticated}) => {
 
     return (
         <NavWrapper>
@@ -27,14 +27,37 @@ const NavBar = ({navLinks, cartItems, wishListItems}) => {
                     color="inherit"
                     style={{marginRight: '20px'}}
                     to={link.url}
+                    active={currentPath.startsWith(link.url)}
                 >
                     {link.name}
                 </Link>
             ))}
             <NavTools>
-                <span>LOGIN</span>
-                <span>WISHLIST {wishListItems && `(${wishListItems})`}</span>
-                <span>BAG {cartItems && `(${cartItems})`}</span>
+                <Link
+                    color="inherit"
+                    style={{marginRight: '20px'}}
+                    to={authenticated ? '/account' : '/account/login'}
+                    active={currentPath.startsWith('/account')}
+                >
+                    {authenticated ? 'ACCOUNT' : 'LOGIN'}
+                </Link>
+
+                <Link
+                    color="inherit"
+                    style={{marginRight: '20px'}}
+                    to="/wishlist"
+                    active={currentPath === '/wishlist'}
+                >
+                    WISHLIST ({wishlistItems && `${wishlistItems}`})
+                </Link>
+                <Link
+                    color="inherit"
+                    style={{marginRight: '20px'}}
+                    to="/bag"
+                    active={currentPath === '/bag'}
+                >
+                    BAG ({cartItems && `${cartItems}`})
+                </Link>
             </NavTools>
         </NavWrapper>
     )

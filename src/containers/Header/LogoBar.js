@@ -4,8 +4,8 @@ import Link from "../../components/Link";
 
 const LogoWrapper = styled.div`
   width: 100%;
-  height: 66px;
-  margin: 30px 0;
+  height: 43px;
+  margin: 20px 0;
   svg {
     transition: fill .25s ease;
   }

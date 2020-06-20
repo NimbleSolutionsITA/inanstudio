@@ -69,7 +69,7 @@ function Home(props) {
 
 
     return ( useMemo(() => (
-        <div style={{position: 'relative', scrollSnapType: 'y proximity'}}>
+        <div style={{position: 'relative'}}>
 
             {props.showContent && (
                 <CoverContent

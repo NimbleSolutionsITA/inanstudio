@@ -10,13 +10,24 @@
  */
 export const baseUrl = 'https://wp.inanstudio.com/';
 export const woocommerceVersion = 'wc/v3';
-export const woocommerceKey = 'ck_7c64fb75363e97bc5a5b517e1584f041b23623c3';
-export const woocommerceSecret = 'cs_7896b3337a5676d23fdad1346683a983c26c99e2';
 
 export const FETCH_WOOCOMMERCE_DATA = 'WoocommerceDataProvider/FETCH_DATA';
 export const SET_WOOCOMMERCE_DATA = 'WoocommerceDataProvider/SET_DATA';
 export const FETCH_WORDPRESS_DATA = 'WordpressDataProvider/FETCH_DATA';
 export const SET_WORDPRESS_DATA = 'WordpressDataProvider/SET_DATA';
+export const CREATE_WOOCOMMERCE_CUSTOMER = 'WordpressDataProvider/CREATE_CUSTOMER';
+export const SET_WOOCOMMERCE_CUSTOMER_RESPONSE = 'WordpressDataProvider/SET_CUSTOMER_RESPONSE';
+export const UPDATE_WOOCOMMERCE_CUSTOMER = 'WordpressDataProvider/UPDATE_CUSTOMER';
+
+export const ADD_CART_ITEM = 'Cart/ADD_CART_ITEM';
+export const UPDATE_CART_ITEM = 'Cart/UPDATE_CART_ITEM';
+export const DELETE_CART_ITEM = 'Cart/DELETE_CART_ITEM';
+export const DESTROY_CART = 'Cart/DESTROY_CART';
+
+export const ADD_WISHLIST_ITEM = 'Wishlist/ADD_WISHLIST_ITEM';
+export const UPDATE_WISHLIST_ITEM = 'Wishlist/UPDATE_WISHLIST_ITEM';
+export const DELETE_WISHLIST_ITEM = 'Wishlist/DELETE_WISHLIST_ITEM';
+export const DESTROY_WISHLIST = 'Wishlist/DESTROY_WISHLIST';
 
 export const SET_CURRENT_COVER = 'HomeCover/SET_CURRENT_COVER';
 export const TOGGLE_SHOW_CONTENT = 'HomeCover/TOGGLE_SHOW_CONTENT';
@@ -29,3 +40,6 @@ export const CHECK_LOGIN = 'AuthProvider/CHECK_LOGIN';
 export const LOGIN = 'AuthProvider/LOGIN';
 export const LOGOUT = 'AuthProvider/LOGOUT';
 export const SET_USER_DATA = 'AuthProvider/SET_USER_DATA';
+export const SET_LOGIN_FAILED = 'AuthProvider/SET_LOGIN_FAILED';
+
+export const regExpEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/

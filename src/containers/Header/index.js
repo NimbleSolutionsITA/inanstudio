@@ -1,7 +1,7 @@
-import React, {useMemo, useState, useRef, useEffect} from "react";
-import {login, logout} from "../../providers/AuthProvider/actions";
+import React, {useMemo, useRef, useEffect} from "react";
 import {useLocation} from "react-router";
 import {connect} from "react-redux";
+import useWoocommerceData from "../../providers/WoocommerceDataProvider";
 
 import {setHeaderHeight, setHeaderColor, openDrawer} from "./actions";
 import styled from "styled-components";
@@ -11,6 +11,7 @@ import NewsFeed from './NewsFeed';
 import LogoBar from './LogoBar';
 import Container from "../../components/Container";
 import AppBar from "./AppBar";
+import Filters from "./Filters";
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -21,9 +22,12 @@ const HeaderWrapper = styled.div`
   background-color: ${({pathname}) => pathname === '/' ? 'transparent' : '#fff'};
 `;
 
+function useQuery() {
+    return new URLSearchParams(useLocation().search);
+}
+
 const Header = (props) => {
-    const [username, setUsername] = useState( '' )
-    const [password, setPassword] = useState( '' )
+    useWoocommerceData('products/categories', {})
 
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
@@ -32,14 +36,17 @@ const Header = (props) => {
 
     const navLinks = [
         {name: 'shop', url: '/shop'},
-        {name: 'made to order', url: '/shop'},
+        {name: 'made to order', url: '/made-to-order'},
         {name: 'collection', url: '/collection'},
         {name: 'about', url: '/about'},
         {name: 'stockist', url: '/stockist'},
     ]
-    const cartItems = 3;
-    const wishListItems = 10;
+    const cartItems = props.cart.length;
+    const wishListItems = props.wishlist.length;
+
     let location = useLocation()
+    let query = useQuery()
+
     useEffect(() => {
         if(headerEl.current?.offsetHeight && headerEl.current.offsetHeight !== props.headerHeight) {
             props.setHeaderHeight(headerEl.current.offsetHeight)
@@ -50,15 +57,6 @@ const Header = (props) => {
         if(location.pathname !== '/') props.setHeaderColor('#000', '#000')
     }, [isMobile, location.pathname, props])
 
-
-    function handleLogin( e ) {
-        e.preventDefault();
-        props.login(username, password);
-    }
-
-    function handleLogout() {
-        props.logout();
-    }
     return useMemo(() => (
         <React.Fragment>
             {isMobile ? (
@@ -70,44 +68,52 @@ const Header = (props) => {
                         isMobile={isMobile}
                         navLinks={navLinks}
                         cartItems={cartItems}
-                        wishListItems={wishListItems}
+                        wishlistItems={wishListItems}
                     >
                         {props.news?.length > 0 && !props.open && <NewsFeed isMobile={isMobile} currentNews={props.news} />}
+                        {location.pathname === '/shop' && props.categories && (
+                            <Filters isMobile={isMobile} categories={props.categories} activeCategory={query.get('category') || 'view-all'} />
+                        )}
                     </AppBar>
-                    <div style={{width: '100%', height: `${props.headerHeight}px`}} />
+                    <div style={{width: '100%', height: `calc(${props.headerHeight}px`}} />
                 </React.Fragment>
             ) : (
                 <HeaderWrapper ref={headerEl} color={props.headerColor} pathname={location.pathname}>
                     <Container>
                         {props.news?.length > 0 && <NewsFeed isMobile={isMobile} currentNews={props.news} />}
-                        <LogoBar fill={props.headerColor} height={66} />
+                        <LogoBar fill={props.headerColor} height={43} />
                         <NavBar
                             navLinks={navLinks}
                             cartItems={cartItems}
-                            wishListItems={wishListItems}
+                            wishlistItems={wishListItems}
+                            currentPath={location.pathname}
+                            authenticated={props.authenticated}
                         />
+                        {location.pathname.startsWith('/shop') && props.categories && (
+                            <Filters isMobile={isMobile} categories={props.categories} activeCategory={query.get('category') || 'view-all'} />
+                        )}
                     </Container>
                 </HeaderWrapper>
             )}
         </React.Fragment>
 
-    ), [isMobile, props.open, props.openDrawer, props.news, props.headerHeight, props.headerColor, navLinks, location.pathname])
+    ), [isMobile, props.open, props.openDrawer, props.news, props.categories, props.headerHeight, props.headerColor, navLinks, cartItems, wishListItems, location.pathname, query])
 
 }
 
 const mapStateToProps = state => ({
     authenticated: state.user.authenticated,
-    authenticating: state.user.authenticating,
     headerColor: state.header.headerColor,
     headerColorMobile: state.header.headerColorMobile,
     news: state.wordpress['news-feed'],
     headerHeight: state.header.height,
     open: state.header.open,
+    cart: state.cart,
+    wishlist: state.wishlist,
+    categories: state.woocommerce['products-categories'],
 })
 
 const mapDispatchToProps = {
-    login,
-    logout,
     setHeaderHeight,
     setHeaderColor,
     openDrawer,

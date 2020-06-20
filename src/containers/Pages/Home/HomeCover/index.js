@@ -9,7 +9,6 @@ import CoverVideoPlayer from '../CoverVideoPlayer';
 const CoverWrapper = styled.div`
   min-height:  ${({coverCSSHeight}) => coverCSSHeight};
   width: 100%;
-  scroll-snap-align: start;
   text-transform: uppercase;
   background-image: ${({bg, isCover, video, showOverlay}) => isCover || (video && showOverlay) ? `url(${bg})` : 'none'};
   background-size: cover;
@@ -33,8 +32,11 @@ const HomeCover = ({headerHeight, bg, bgMobile, title, isCover, isCoverMobile, c
             textTransform: 'uppercase',
             marginLeft: '-3px',
             opacity: 0,
-            [theme.breakpoints.up('md')]: {
-                lineHeight: '92px',
+            width: 'calc(100% - 80px)',
+            paddingBottom: '9px',
+            [theme.breakpoints.down('sm')]: {
+                paddingBottom: '16px',
+                width: '100%',
             },
         },
     }))
@@ -47,37 +49,38 @@ const HomeCover = ({headerHeight, bg, bgMobile, title, isCover, isCoverMobile, c
                 else return '100vh'
             }
             return(
-                <CoverWrapper coverCSSHeight={coverCSSHeight} bg={!video && isMobile ? bgMobile : bg} isCover={isMobile ? isCoverMobile : isCover} video={!!video} showOverlay={showContent}>
-                {video ? (
-                    <CoverVideoPlayer
-                        poster={isMobile ? bgMobile : bg}
-                        loop={loop}
-                        autoPlay={autoplay}
-                        muted={isMobile && autoplay ? false : mute}
-                        src={video}
-                        color={isMobile ? colorMobile : color}
-                        headerHeight={isMobile ? headerHeight : 0}
-                    />
-                ) : (
-                    <React.Fragment>
-                        <Container style={{paddingTop: isMobile ? 0 : headerHeight}}>
-                            {((!isCover && !isMobile) || (!isCoverMobile && isMobile)) && (
-                                <React.Fragment>
-                                    <Typography
-                                        classes={{ root: classes.title }}
-                                        variant="h1"
-                                        component="h1"
-                                    >
-                                        {title}
-                                    </Typography>
-                                    <PortraitImageWrapper isMobile={isMobile}>
-                                        <img alt={title} width="100%" src={isMobile ? bgMobile : bg} />
-                                    </PortraitImageWrapper>
-                                </React.Fragment>
-                            )}
-                        </Container>
-                    </React.Fragment>
-                )}
+                <CoverWrapper coverCSSHeight={'auto'} bg={!video && isMobile ? bgMobile : bg} isCover={isMobile ? isCoverMobile : isCover} video={!!video} showOverlay={showContent}>
+                    {!video && <img src={isMobile ? isCoverMobile && bgMobile : isCover && bg} alt="" style={{width: '100%', opacity: 0}} />}
+                    {video ? (
+                        <CoverVideoPlayer
+                            poster={isMobile ? bgMobile : bg}
+                            loop={loop}
+                            autoPlay={autoplay}
+                            muted={isMobile && autoplay ? false : mute}
+                            src={video}
+                            color={isMobile ? colorMobile : color}
+                            headerHeight={isMobile ? headerHeight : 0}
+                        />
+                    ) : (
+                        <React.Fragment>
+                            <Container style={{paddingTop: isMobile ? 0 : headerHeight}}>
+                                {((!isCover && !isMobile) || (!isCoverMobile && isMobile)) && (
+                                    <React.Fragment>
+                                        <Typography
+                                            classes={{ root: classes.title }}
+                                            variant="h1"
+                                            component="h1"
+                                        >
+                                            {title}
+                                        </Typography>
+                                        <PortraitImageWrapper isMobile={isMobile}>
+                                            <img alt={title} width="100%" src={isMobile ? bgMobile : bg} />
+                                        </PortraitImageWrapper>
+                                    </React.Fragment>
+                                )}
+                            </Container>
+                        </React.Fragment>
+                    )}
             </CoverWrapper>
         )}, [autoplay, bg, bgMobile, classes.title, color, colorMobile, headerHeight, isCover, isCoverMobile, isMobile, loop, mute, showContent, title, video]
     )

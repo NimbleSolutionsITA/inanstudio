@@ -5,9 +5,17 @@ import {Link as RouterLink} from 'react-router-dom';
 const Button = (props) => {
     const useStyles = makeStyles({
         root: {
-            width: '100%',
             borderRadius: 0,
-            fontSize: '12px',
+            fontSize: '10px',
+            paddingRight: props.disableGutters && 0,
+            paddingLeft: props.disableGutters && 0,
+            paddingTop: props.disablePadding && '2px',
+            paddingBottom: props.disablePadding && '2px',
+            color: props.inactive && '#999',
+            minWidth: '32px',
+            '&:hover': {
+                backgroundColor: props.disableHover && 'transparent',
+            }
         },
     });
     const classes = useStyles();

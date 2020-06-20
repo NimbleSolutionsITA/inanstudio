@@ -6,8 +6,9 @@ import BurgerIcon from "../../components/svg/BurgerIcon";
 import CartIcon from "../../components/svg/CartIcon";
 import INAN from "../../components/svg/INAN";
 import Container from "../../components/Container";
+import InAnLogo from "../../components/svg/InAnLogo";
 
-const AppBar = forwardRef(({children, open, openDrawer, navLinks}, headerEl) => {
+const AppBar = forwardRef(({children, open, openDrawer, navLinks, cartItems, wishlistItems}, headerEl) => {
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -29,10 +30,12 @@ const AppBar = forwardRef(({children, open, openDrawer, navLinks}, headerEl) => 
             transition: 'all .75s ease',
         },
         appBarRoot: {
+            backgroundColor: open ? 'transparent' : '#fff',
             zIndex: theme.zIndex.modal+1,
         },
         drawerRoot: {
-            height: '100vh',
+            height: window.innerHeight,
+            width: '100%',
             backgroundColor: '#000',
             color: '#fff',
             paddingTop: '70px',
@@ -52,14 +55,14 @@ const AppBar = forwardRef(({children, open, openDrawer, navLinks}, headerEl) => 
 
     return (
         <div className={classes.root}>
-            <MuiAppBar color={open ? 'secondary' : 'primary'} ref={headerEl} position="fixed" square elevation={0} classes={{root: classes.appBarRoot}}>
+            <MuiAppBar ref={headerEl} position="fixed" square elevation={0} classes={{root: classes.appBarRoot}}>
                 <Toolbar component={Container}>
                     <IconButton edge="start" className={classes.title} color="inherit">
                         <Link to="/"><INAN height={30} color={open ? '#fff' : '#000'} /></Link>
                     </IconButton>
                     <div style={{flex: 1}} />
                     <IconButton className={classes.toolbarIcons} color="inherit" aria-label="menu">
-                        <CartIcon color={open ? '#fff' : '#000'} height={20} open={open} items={3} />
+                        <CartIcon color={open ? '#fff' : '#000'} height={20} open={open} items={cartItems} />
                     </IconButton>
                     <IconButton onClick={() => openDrawer(!open)} edge="end" className={classes.toolbarIcons} color="inherit" aria-label="menu">
                         <BurgerIcon color={open ? '#fff' : '#000'} open={open}/>
@@ -69,12 +72,12 @@ const AppBar = forwardRef(({children, open, openDrawer, navLinks}, headerEl) => 
             </MuiAppBar>
             <SwipeableDrawer
                 classes={{paper: classes.drawerRoot}}
-                anchor="top"
+                anchor="right"
                 open={open}
                 onClose={() => openDrawer(false)}
                 onOpen={() => openDrawer(true)}
             >
-                <Container style={{height: '100%'}}>
+                <Container style={{height: '100%', position: 'relative'}}>
                     <List className={classes.drawerNavContainer}>
                         {navLinks.map((link, index) => (
                             <ListItem component={Link} to={link.url} disableGutters button key={link.name} onClick={() => openDrawer(false)}>
@@ -83,10 +86,10 @@ const AppBar = forwardRef(({children, open, openDrawer, navLinks}, headerEl) => 
                         ))}
                         <ListItem component="div" style={{flexGrow: 1}} />
                         <ListItem component={Link} to="/" disableGutters button onClick={() => openDrawer(false)}>
-                            <ListItemText primary="SHOPPING BAG" />
+                            <ListItemText primary={`SHOPPING BAG (${cartItems})`} />
                         </ListItem>
                         <ListItem component={Link} to="/" disableGutters button onClick={() => openDrawer(false)}>
-                            <ListItemText primary="WHISH LIST" />
+                            <ListItemText primary={`WHISH LIST (${wishlistItems})`} />
                         </ListItem>
                         <ListItem component={Link} to="/" disableGutters button onClick={() => openDrawer(false)}>
                             <ListItemText primary="LOGIN / REGISTER" />
@@ -95,6 +98,9 @@ const AppBar = forwardRef(({children, open, openDrawer, navLinks}, headerEl) => 
                             <ListItemText primary="CUSTOMER SERVICE" />
                         </ListItem>
                     </List>
+                    <div style={{position: 'absolute', bottom: '10px', right: '20px'}}>
+                        <InAnLogo color="#fff" height="50px" />
+                    </div>
                 </Container>
             </SwipeableDrawer>
         </div>

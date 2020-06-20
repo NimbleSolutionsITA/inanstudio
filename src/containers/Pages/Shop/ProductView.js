@@ -1,7 +1,6 @@
 import React from "react"
 import useWoocommerceData from "../../../providers/WoocommerceDataProvider"
 import {useSelector} from "react-redux"
-import styled from "styled-components"
 import {
     Grid,
 } from "@material-ui/core"
@@ -10,57 +9,53 @@ import VideoPlayer from "../../../components/VideoPlayer"
 import Carousel from "../../../components/Carousel"
 import ProductSidebar from "./ProductSidebar"
 import CrossSell from "./CrossSell";
+import ModalImage from "../../../components/ModalImage";
 
-const ImageWrapper = styled.div`
-  width: 100%;
-  background-image: ${({bg}) => `url(${bg})`};
-  background-size: cover;
-  margin-bottom: 1rem;
-  img {
-    opacity: 0;
-    width: 100%;
-  }
-`
-
-const ProductView = ({prodId, colors, isMobile, sizeGuide}) => {
-    useWoocommerceData(`products/${prodId}`, {})
-    const product = useSelector(state => state.woocommerce[`products-${prodId}`])
+const ProductView = ({products, prodId, colors, isMobile, sizeGuide}) => {
+    useWoocommerceData(`products/${prodId}/variations`, {})
+    const variations = useSelector(state => state.woocommerce[`products-${prodId}-variations`])
+    const product = products.filter(prod => prod.id === prodId)[0]
     return (
-        <Container>
-            {product &&
-            <Grid container spacing={4}>
-                <Grid sm={12} md={8} item>
-                    {isMobile ?
-                        <Carousel
-                            images={product.images}
-                            poster={product.acf.video_url && product.acf.video_cover.url}
-                            src={product.acf.video_url && product.acf.video_url}
-                        />
-                     : (
-                        <React.Fragment>
-                            {product.images.map(image =>
-                                <ImageWrapper bg={image.src} key={image.src}>
-                                    <img src={image.src} alt={image.alt} />
-                                </ImageWrapper>
+        <React.Fragment>
+            <Container>
+                {product && variations &&
+                <Grid container spacing={2}>
+                    <Grid xs={12} md={8} item>
+                        {isMobile ?
+                            <Carousel
+                                images={product.images}
+                                poster={product.acf.video_url && product.acf.video_cover.url}
+                                src={product.acf.video_url && product.acf.video_url}
+                            />
+                            : (
+                                <div>
+                                    {product.images.map(image =>
+                                        <ModalImage url={image.src} key={image.src} alt={image.alt} />
+                                    )}
+                                    {product.acf.video_url && (
+                                        <VideoPlayer
+                                            poster={product.acf.video_cover.url}
+                                            src={product.acf.video_url}
+                                        />
+                                    )}
+                                </div>
                             )}
-                            {product.acf.video_url && (
-                                <VideoPlayer
-                                    poster={product.acf.video_cover.url}
-                                    src={product.acf.video_url}
-                                />
-                            )}
-                        </React.Fragment>
-                    )}
+                    </Grid>
+                    <Grid xs={12} md={4} item>
+                        <ProductSidebar variations={variations} product={product} colors={colors} isMobile={isMobile} sizeGuide={sizeGuide} />
+                    </Grid>
                 </Grid>
-                <Grid sm={12} md={4} item>
-                    <ProductSidebar product={product} colors={colors} isMobile={isMobile} sizeGuide={sizeGuide} />
-                </Grid>
-            </Grid>
-            }
-            {product && product.related_ids && (
-                <CrossSell isMobile={isMobile} items={product.related_ids}/>
+                }
+                {!isMobile && product && product.related_ids && (
+                    <CrossSell isMobile={isMobile} items={product.related_ids}/>
+                )}
+            </Container>
+            {isMobile && product && variations && product.related_ids && (
+                <Container style={{borderTop: '1px solid #000', marginTop: '60px', overflow: 'hidden'}}>
+                    <CrossSell isMobile={isMobile} items={product.related_ids}/>
+                </Container>
             )}
-        </Container>
+        </React.Fragment>
     )
 }
 

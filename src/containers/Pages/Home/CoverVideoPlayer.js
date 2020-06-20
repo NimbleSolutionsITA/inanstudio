@@ -32,7 +32,7 @@ const CoverVideoPlayer = (props) => {
         else dispatch(toggleShowContent(false))
      }, [dispatch, player, playerState.paused, showContent])
     return (useMemo(() => (
-        <div style={{position: 'relative', backgroundImage: `url(${props.poster})`, height: `calc(100vh - ${props.headerHeight}px)`}}>
+        <div style={{position: 'relative'}}>
             <Player
                 ref={player}
                 poster={props.poster}
@@ -41,7 +41,6 @@ const CoverVideoPlayer = (props) => {
                 muted={props.mute}
                 playsInline
                 fluid={false}
-                height={window.innerHeight}
                 width={window.innerWidth}
             >
                 <source src={props.src} />
@@ -57,7 +56,7 @@ const CoverVideoPlayer = (props) => {
                 WATCH
             </Typography>
         </div>
-        ), [props.autoplay, props.color, props.headerHeight, props.loop, props.mute, props.poster, props.src, showContent])
+        ), [props.autoplay, props.color, props.loop, props.mute, props.poster, props.src, showContent])
     );
 }
 

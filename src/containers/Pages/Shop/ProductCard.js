@@ -1,7 +1,10 @@
 import React from "react"
+import {useDispatch} from "react-redux"
+import {addWishlistItem} from "../Wishlist/actions"
 import styled from "styled-components"
-import {Typography} from "@material-ui/core";
-import Link from "../../../components/Link";
+import {Typography} from "@material-ui/core"
+import Link from "../../../components/Link"
+import Button from "../../../components/Button"
 
 const CardWrapper = styled.div`
     height: 100%;
@@ -10,23 +13,35 @@ const CardWrapper = styled.div`
 `
 const ImageWrapper = styled.div`
     flex-grow: 1;
-    transition: background-image 1.25s ease;
+    transition: background-image .25s ease;
     background-image: ${({bg}) => `url(${bg})`};
     background-size: contain;
     background-position: center;
     background-color: #e9e9e9;
-  img {
-   width: 100%;
-   opacity: 0;
-  }
-  :hover {
+    position: relative;
+    button {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+    img {
+      width: 100%;
+      opacity: 0;
+    }
+    :hover {
       background-image: ${({bgHover}) => `url(${bgHover})`};
+    }
+    :hover > button {
+      opacity: 1;
+      z-index: 1;
     }
 `
 const ContentWrapper = styled.div`
   text-transform: uppercase;
   p {
-      min-height: 1rem;
+      min-height: 18px;
   }
 `
 const Sale = styled.span`
@@ -34,9 +49,15 @@ const Sale = styled.span`
 `
 
 const ProductCard = ({product, isMobile}) => {
+    const dispatch = useDispatch()
+    const handleClick = () => {
+        dispatch(addWishlistItem(product.id, 1))
+        console.log('added to wishlist')
+    }
     return (
         <CardWrapper>
             <ImageWrapper bg={product.images[0].src} bgHover={product.images[1].src}>
+                <Button disableHover disableGutters disableRipple onClick={handleClick}>add to wishlist</Button>
                 <Link to={`/shop/${product.slug}`}><img src={product.images[0].src} alt={product.images[0].alt} /></Link>
             </ImageWrapper>
             <ContentWrapper>

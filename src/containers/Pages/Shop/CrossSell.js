@@ -1,7 +1,27 @@
 import React from "react"
 import CrossSellItem from "./CrossSellItem"
 import SwipeableViews from 'react-swipeable-views'
-import {Grid, Typography} from "@material-ui/core"
+import {Divider, Grid, Typography} from "@material-ui/core"
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
+const responsive = {
+    desktop: {
+        breakpoint: { max: 1920, min: 925 },
+        items: 3,
+        slidesToSlide: 3 // optional, default to 1.
+    },
+    tablet: {
+        breakpoint: { max: 925, min: 735 },
+        items: 2,
+        slidesToSlide: 2 // optional, default to 1.
+    },
+    mobile: {
+        breakpoint: { max: 735, min: 0 },
+        items: 2,
+        slidesToSlide: 1 // optional, default to 1.
+    }
+};
 
 const styles = {
     root: {
@@ -21,20 +41,28 @@ const CrossSell = ({items, isMobile}) => {
 
     return (
         <React.Fragment>
-            <Typography variant="h1" component="h2">You may also like</Typography>
+            {!isMobile && <Divider />}
+            <Typography style={{padding: '20px 0 40px'}} variant={isMobile ? 'h2' : 'h1'} component="h2">
+                You may also like
+            </Typography>
             {isMobile ? (
-                <SwipeableViews
-                    style={styles.root}
-                    slideStyle={styles.slideContainer}
+                <Carousel
+                    partialVisible={true}
+                    responsive={responsive}
+                    infinite={true}
+                    keyBoardControl={true}
+                    customTransition="all .5"
+                    transitionDuration={500}
+                    containerClass="carousel-container"
+                    removeArrowOnDeviceType={["tablet", "mobile"]}
+                    itemClass="carousel-item-padding-40-px"
                 >
                     {items.map(item => (
-                        <div style={styles.slide}>
-                            <CrossSellItem key={item} id={item}/>
-                        </div>
+                        <CrossSellItem key={item} id={item}/>
                     ))}
-                </SwipeableViews>
+                </Carousel>
             ) : (
-                <Grid container spacing={isMobile ? 2 : 4}>
+                <Grid container spacing={isMobile ? 1 : 2}>
                     {items.slice(0, 3).map(item => (
                         <Grid xs={6} md={4} item key={item}>
                             <CrossSellItem id={item}/>

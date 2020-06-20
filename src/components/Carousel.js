@@ -3,6 +3,7 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import SwipeableViews from 'react-swipeable-views';
 import VideoPlayer from "./VideoPlayer";
+import ModalImage from "./ModalImage";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -68,7 +69,7 @@ const Carousel = ({images, poster, src}) => {
                     {images.map((step, index) => (
                         <div className={classes.imgWrapper}  key={step.src} style={{backgroundImage: `url(${step.src})`}}>
                             {Math.abs(activeStep - index) <= 2 ? (
-                                <img className={classes.img} src={step.src} alt={step.alt} />
+                                <ModalImage className={classes.img} url={step.src} alt={step.alt} />
                             ) : null}
                         </div>
                     ))}
@@ -88,7 +89,7 @@ const Carousel = ({images, poster, src}) => {
                     {images.map((step, index) => (
                         <div className={classes.imgWrapper}  key={step.src} style={{backgroundImage: `url(${step.src})`}}>
                             {Math.abs(activeStep - index) <= 2 ? (
-                                <img className={classes.img} src={step.src} alt={step.alt} />
+                                <ModalImage className={classes.img} url={step.src} alt={step.alt} />
                             ) : null}
                         </div>
                     ))}

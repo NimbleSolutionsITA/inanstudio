@@ -18,6 +18,9 @@ export const SET_WORDPRESS_DATA = 'WordpressDataProvider/SET_DATA';
 export const CREATE_WOOCOMMERCE_CUSTOMER = 'WordpressDataProvider/CREATE_CUSTOMER';
 export const SET_WOOCOMMERCE_CUSTOMER_RESPONSE = 'WordpressDataProvider/SET_CUSTOMER_RESPONSE';
 export const UPDATE_WOOCOMMERCE_CUSTOMER = 'WordpressDataProvider/UPDATE_CUSTOMER';
+export const CREATE_WOOCOMMERCE_ORDER = 'WordpressDataProvider/CREATE_ORDER';
+export const UPDATE_WOOCOMMERCE_ORDER = 'WordpressDataProvider/UPDATE_ORDER';
+export const SET_WOOCOMMERCE_ORDER_RESPONSE = 'WordpressDataProvider/SET_WOOCOMMERCE_ORDER_RESPONSE';
 
 export const ADD_CART_ITEM = 'Cart/ADD_CART_ITEM';
 export const UPDATE_CART_ITEM = 'Cart/UPDATE_CART_ITEM';
@@ -41,5 +44,14 @@ export const LOGIN = 'AuthProvider/LOGIN';
 export const LOGOUT = 'AuthProvider/LOGOUT';
 export const SET_USER_DATA = 'AuthProvider/SET_USER_DATA';
 export const SET_LOGIN_FAILED = 'AuthProvider/SET_LOGIN_FAILED';
+export const SET_USER_INFO = 'AuthProvider/SET_USER_INFO';
+export const SET_AUTHENTICATED = 'AuthProvider/SET_AUTHENTICATED';
 
-export const regExpEmail = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+export const WCHeaders = () => {
+    const myHeaders = new Headers();
+    const encodedData = window.btoa(process.env.REACT_APP_WOOCOMMERCE_CLIENT + ':' + process.env.REACT_APP_WOOCOMMERCE_SECRET);
+    const authorizationHeaderString = 'Basic ' + encodedData;
+    myHeaders.append("Authorization", authorizationHeaderString);
+    myHeaders.append("Content-Type", 'application/json')
+    return myHeaders
+}

@@ -40,7 +40,7 @@ function lightenDarkenColor(col, amt) {
 
 }
 
-const Checkbox = ({color, fill, ...props}) => {
+const Checkbox = ({color, fill, ...rest}) => {
     const useStyles = makeStyles({
         root: {
             '&:hover': {
@@ -102,7 +102,7 @@ const Checkbox = ({color, fill, ...props}) => {
             className={classes.root}
             checkedIcon={<span className={clsx(classes.icon, color ? null : classes.checkedFillIcon)} />}
             icon={<span className={classes.icon} />}
-            {...props}
+            {...rest}
         />
     )
 }

@@ -25,16 +25,16 @@ const AddToBag = ({itemId, name, price, leather, size, color, image, slug, child
     return (
         <React.Fragment>
             <Button fullWidth onClick={handleAddToCart} color="secondary" variant="contained">{children}</Button>
-            {qty && (
-                <RightDrawer open={open} setOpen={setOpen}>
-                    <TitleWrapper>
-                        <Typography variant="h3" component="h3">Added to shopping bag</Typography>
-                    </TitleWrapper>
+            <RightDrawer open={open} setOpen={setOpen}>
+                <TitleWrapper>
+                    <Typography variant="h3" component="h3">Added to shopping bag</Typography>
+                </TitleWrapper>
+                {qty &&
                     <Grid container spacing={2}>
-                        <Grid style={{paddingTop: 0, marginTop: '-2px'}} item xs={12} lg={6}>
+                        <Grid style={{paddingTop: 0, marginTop: '-2px'}} item xs={6}>
                             <img width='100%' src={image} alt={name}/>
                         </Grid>
-                        <Grid item xs={12} lg={6}>
+                        <Grid item xs={6}>
                             <Typography><b>{name}</b></Typography>
                             <Typography><b>€ {price}</b></Typography>
                             {leather && (
@@ -47,14 +47,14 @@ const AddToBag = ({itemId, name, price, leather, size, color, image, slug, child
                             {size && (
                                 <>
                                     <br />
-                                    <Typography>size Type:</Typography>
+                                    <Typography>size:</Typography>
                                     <Typography>{size}</Typography>
                                 </>
                             )}
                             {color && (
                                 <>
                                     <br />
-                                    <Typography>color Type:</Typography>
+                                    <Typography>color:</Typography>
                                     <Typography>{color}</Typography>
                                 </>
                             )}
@@ -62,15 +62,15 @@ const AddToBag = ({itemId, name, price, leather, size, color, image, slug, child
                             <Typography>Quantity:</Typography>
                             <Typography>{qty}</Typography>
                         </Grid>
-                        <Grid item xs={12} lg={6}>
+                        <Grid item xs={6}>
                             <Button fullWidth to="/bag" color="secondary" variant="outlined">View bag</Button>
                         </Grid>
-                        <Grid item xs={12} lg={6}>
-                            <Button fullWidth to="/cart" color="secondary" variant="contained">Checkout</Button>
+                        <Grid item xs={6}>
+                            <Button fullWidth to="/checkout" color="secondary" variant="contained">Checkout</Button>
                         </Grid>
                     </Grid>
-                </RightDrawer>
-            )}
+                }
+            </RightDrawer>
         </React.Fragment>
     )
 }

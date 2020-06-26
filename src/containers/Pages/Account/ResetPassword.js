@@ -1,8 +1,8 @@
 import React, {useState} from "react"
 import Wordpress from '@wordpress/api-fetch'
 import {baseUrl} from "../../../constants"
+import {regExpEmail} from "../../../helpers";
 import {
-    CircularProgress,
     Divider,
     FormControl,
     Grid, IconButton, InputAdornment,
@@ -10,10 +10,8 @@ import {
     Typography
 } from "@material-ui/core";
 import Button from "../../../components/Button";
-import Link from "../../../components/Link";
 
 const ResetPassword = () => {
-    const regexp = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
     const [data, setData] = useState({
         email: null,
         password: null,
@@ -34,7 +32,7 @@ const ResetPassword = () => {
     })
     const handleChange = (event, field) => {
         const value = event.target.value
-        if (field === 'code' && data.email && regexp.test(data.email) && value.length === 4) {
+        if (field === 'code' && data.email && regExpEmail.test(data.email) && value.length === 4) {
             setData({...data, code: value})
             Wordpress( {
                 path: `${baseUrl}wp-json/bdpwr/v1/validate-code`,
@@ -66,12 +64,12 @@ const ResetPassword = () => {
     };
     function handleReset() {
         setDataError({
-            email: !data.email ? 'EMAIL IS REQUIRED' : !regexp.test(data.email) && 'PLEASE ENTER A VALID EMAIL ADDRESS',
+            email: !data.email ? 'EMAIL IS REQUIRED' : !regExpEmail.test(data.email) && 'PLEASE ENTER A VALID EMAIL ADDRESS',
             password: !data.password && 'PASSWORD IS REQUIRED',
             confirmPassword: data.password !== data.confirmPassword && 'PASSWORD DOES NOT MATCH',
             code: data.code.length !== 4 ? 'CODE MUST BE 4 DIGITS' : dataError.code
         })
-        if (data.validCode && data.email && regexp.test(data.email) && data.password && data.password === data.confirmPassword && !data.honeypot) {
+        if (data.validCode && data.email && regExpEmail.test(data.email) && data.password && data.password === data.confirmPassword && !data.honeypot) {
             Wordpress( {
                 path: `${baseUrl}wp-json/bdpwr/v1/set-password`,
                 method: 'POST',
@@ -84,7 +82,7 @@ const ResetPassword = () => {
     }
     function handleSubmit() {
         setDataError({
-            email: !data.email ? 'EMAIL IS REQUIRED' : !regexp.test(data.email) && 'PLEASE ENTER A VALID EMAIL ADDRESS'
+            email: !data.email ? 'EMAIL IS REQUIRED' : !regExpEmail.test(data.email) && 'PLEASE ENTER A VALID EMAIL ADDRESS'
         })
         if (data.email && !data.honeypot) {
             Wordpress( {
@@ -94,7 +92,6 @@ const ResetPassword = () => {
             } )
                 .then(response => {
                     setData({...data, emailSent: response.message})
-                    console.log(response)
                 })
                 .catch(error => setDataError({...dataError, email: error.message}));
         }

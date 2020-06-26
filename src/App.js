@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import { Switch, Route } from 'react-router-dom'
+import {Switch, Route, useLocation} from 'react-router-dom'
 import {connect} from "react-redux"
 import {checkLogin} from "./providers/AuthProvider/actions"
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
@@ -18,12 +18,16 @@ import Footer from "./containers/Footer"
 import Error from "./containers/Pages/Error"
 import ShoppingBag from "./containers/Pages/ShoppingBag";
 import Wishlist from "./containers/Pages/Wishlist";
+import Checkout from "./containers/Pages/Checkout";
+import useWoocommerceData from "./providers/WoocommerceDataProvider";
 
 function App(props) {
     useWordpressData('news_feed', [])
+    useWoocommerceData('data/countries', [])
     useEffect(() => {
-        if (!props.authenticated && !props.authenticating) props.checkLogin();
+        if (!props.user.authenticated && !props.user.authenticating) props.checkLogin();
     }, [props])
+    const currentPath = useLocation()
 
     return (
         <ThemeProvider theme={createMuiTheme(materialTheme)}>
@@ -36,18 +40,18 @@ function App(props) {
                 <Route exact path="/stockist" component={Stockist} />
                 <Route exact path="/bag" component={ShoppingBag} />
                 <Route exact path="/wishlist" component={Wishlist} />
+                <Route exact path="/checkout" component={Checkout} />
                 <Route path="/account" component={Account} />
                 <Route exact path="/error/:section/:code" component={Error} />
             </Switch>
-            <Footer />
+            {currentPath.pathname !== '/checkout' && <Footer />}
             <GlobalStyle />
         </ThemeProvider>
     )
 }
 
 const mapStateToProps = state => ({
-    authenticated: state.user.authenticated,
-    authenticating: state.user.authenticating,
+    user: state.user,
 })
 
 const mapDispatchToProps = {

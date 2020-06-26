@@ -1,11 +1,12 @@
 import React from "react";
 import {useDispatch} from "react-redux";
 import styled from "styled-components";
-import { addCartItem} from "../ShoppingBag/actions";
-import {deleteWishlistItem, updateWishlistItem} from "./actions";
+import { deleteCartItem, updateCartItem, addCartItem} from "../containers/Pages/ShoppingBag/actions";
+import {addWishlistItem, deleteWishlistItem, updateWishlistItem} from "../containers/Pages/Wishlist/actions";
 import {Grid, Typography, Divider, IconButton} from "@material-ui/core";
-import Button from "../../../components/Button";
-import Link from "../../../components/Link";
+import Button from "../components/Button";
+import Link from "../components/Link";
+import {formatPrice} from "../helpers";
 
 const IconWrapper = styled.div`
   button {
@@ -23,17 +24,23 @@ const IconWrapper = styled.div`
   }
 `
 
-const Item = ({itemData}) => {
+const CartItem = ({itemData, isBag}) => {
     const dispatch = useDispatch()
-    const formatPrice = (price) =>  new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(price)
+
     const handleRemove = () => {
+        isBag ?
+        dispatch(deleteCartItem(itemData.id)) :
         dispatch(deleteWishlistItem(itemData.id))
     }
     const handleUpdateQty = (newQty) => {
-        dispatch(updateWishlistItem(itemData.id, newQty))
+        isBag ?
+            dispatch(updateCartItem(itemData.id, newQty)) :
+            dispatch(updateWishlistItem(itemData.id, newQty))
     }
-    const handeleMoveToCart = () => {
-        dispatch(addCartItem(itemData.id, itemData.name, itemData.price, itemData.leather, itemData.size, itemData.color, itemData.image, itemData.slug, itemData.qty))
+    const handleMove = () => {
+        isBag ?
+            dispatch(addWishlistItem(itemData.id, itemData.name, itemData.price, itemData.leather, itemData.size, itemData.color, itemData.image, itemData.slug, itemData.qty)) :
+            dispatch(addCartItem(itemData.id, itemData.name, itemData.price, itemData.leather, itemData.size, itemData.color, itemData.image, itemData.slug, itemData.qty))
         handleRemove()
     }
 
@@ -69,7 +76,7 @@ const Item = ({itemData}) => {
                 <div style={{display: 'flex'}}>
                     <Button inactive onClick={handleRemove} disableGutters>Remove</Button>
                     <div style={{flexGrow: 1}} />
-                    <Button inactive onClick={handeleMoveToCart} disableGutters>add to bag</Button>
+                    <Button inactive onClick={handleMove} disableGutters>{isBag ? 'move to wishlist' : 'add to bag'}</Button>
                 </div>
                 <Divider />
                 <br />
@@ -79,4 +86,4 @@ const Item = ({itemData}) => {
     )
 }
 
-export default Item
+export default CartItem

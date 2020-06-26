@@ -3,18 +3,19 @@ import {Button as MaterialButton, makeStyles} from '@material-ui/core';
 import {Link as RouterLink} from 'react-router-dom';
 
 const Button = (props) => {
+    const {disableGutters, disablePadding, inactive, disableHover, children, ...rest} = props
     const useStyles = makeStyles({
         root: {
             borderRadius: 0,
             fontSize: '10px',
-            paddingRight: props.disableGutters && 0,
-            paddingLeft: props.disableGutters && 0,
-            paddingTop: props.disablePadding && '2px',
-            paddingBottom: props.disablePadding && '2px',
-            color: props.inactive && '#999',
-            minWidth: '32px',
+            paddingRight: disableGutters && 0,
+            paddingLeft: disableGutters && 0,
+            paddingTop: disablePadding && '2px',
+            paddingBottom: disablePadding && '2px',
+            color: inactive && '#999',
+            minWidth: '20px',
             '&:hover': {
-                backgroundColor: props.disableHover && 'transparent',
+                backgroundColor: disableHover && 'transparent',
             }
         },
     });
@@ -24,9 +25,9 @@ const Button = (props) => {
             classes={{root: classes.root}}
             component={props.to ? RouterLink : 'button'}
             disableElevation
-            {...props}
+            {...rest}
         >
-            {props.children}
+            {children}
         </MaterialButton>
     )
 }

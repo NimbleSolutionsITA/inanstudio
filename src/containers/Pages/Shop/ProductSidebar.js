@@ -1,7 +1,6 @@
 import React, {useState, useMemo} from "react"
 import {Divider, Typography, Collapse} from "@material-ui/core"
 import {useDispatch} from "react-redux"
-import {addCartItem} from "../ShoppingBag/actions"
 import {addWishlistItem} from "../Wishlist/actions"
 import styled from "styled-components"
 import RichText from "../../../components/RichText"
@@ -41,10 +40,6 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide}) => {
                 (!sizeType || variation.attributes.filter(attr => attr.id === 2 && attr.option === sizeType).length > 0))
         })[0]?.id :
         product.id
-
-    const addToWishlist = () => {
-        dispatch(addWishlistItem(itemId, product.name, product.price, leatherType, sizeType, colorType, product.image.src, product.slug, 1))
-    }
 
     return( useMemo(() => (
             <React.Fragment>
@@ -117,7 +112,7 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide}) => {
                     {!isPreOrder && !isOutOfStock && (
                         <AddToBag name={product.name} itemId={itemId} leather={leatherType} size={sizeType} color={colorType} image={product.images[0].src} slug={product.slug} price={product.price} />
                     )}
-                    <Button disableGutters disableRipple onClick={addToWishlist}>add to whishlist</Button>
+                    <Button disableGutters disableRipple onClick={() => dispatch(addWishlistItem(itemId, product.name, product.price, leatherType, sizeType, colorType, product.image.src, product.slug, 1))}>add to whishlist</Button>
                 </AddToBagWrapper>
                 {!isMobile && <Divider />}
                 <ExpansionPanel plusMinus title={<Typography>Special enquiries</Typography>}>
@@ -142,7 +137,7 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide}) => {
                 </ExpansionPanel>
                 <Divider />
             </React.Fragment>
-        ), [addToWishlist, colorOptions, colorType, colors, isMobile, isOutOfStock, isPreOrder, isVeganOption, itemId, leatherOptions, leatherType, openDetails, product, sizeGuide, sizeOptions, sizeType])
+        ), [colorOptions, colorType, colors, dispatch, isMobile, isOutOfStock, isPreOrder, isVeganOption, itemId, leatherOptions, leatherType, openDetails, product, sizeGuide, sizeOptions, sizeType])
 
     )
 }

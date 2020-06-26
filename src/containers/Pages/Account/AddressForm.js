@@ -1,20 +1,31 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {FormControl, Grid, TextField} from "@material-ui/core";
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import {useSelector} from "react-redux";
 
 const AddressForm = ({data, setData, dataError, setDataError}) => {
+    const countries = useSelector(state => state.woocommerce['data-countries'])
+    const [states, setStates] = useState([])
+    const countryList = countries.map(c => {
+        return {name: c.name, code: c.code}
+    })
     const handleChange = (event, field) => {
         setDataError({...dataError, [field]: false})
         setData({...data, [field]: event.target.value})
+        if (field === 'country' && event.target.value)
+            setStates(countries.filter(c => c.code === event.target.value)[0].states)
     }
+
     return (
         <React.Fragment>
-            <Grid container spacing={4}>
+            <Grid container spacing={2} direction="row">
                 <Grid item xs={12} lg={6}>
-                    <FormControl fullWidth style={{marginTop: '10px'}}>
+                    <FormControl fullWidth>
                         <TextField
                             placeholder="ENTER YOUR FIRST NAME"
                             required
-                            error={dataError.firstName}
+                            autoComplete="off"
+                            error={!!dataError.firstName}
                             label="FIRST NAME"
                             helperText={dataError.firstName}
                             fullWidth
@@ -28,11 +39,12 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} lg={6}>
-                    <FormControl fullWidth style={{marginTop: '10px'}}>
+                    <FormControl fullWidth>
                         <TextField
                             placeholder="ENTER YOUR LAST NAME"
                             required
-                            error={dataError.lastName}
+                            autoComplete="family-name"
+                            error={!!dataError.lastName}
                             label="LAST NAME"
                             helperText={dataError.lastName}
                             fullWidth
@@ -45,45 +57,104 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                         />
                     </FormControl>
                 </Grid>
-            </Grid>
-            <FormControl fullWidth style={{marginTop: '10px'}}>
-                <TextField
-                    placeholder="ENTER YOUR COMPANY NAME"
-                    error={dataError.company}
-                    label="COMPANY"
-                    helperText={dataError.company}
-                    fullWidth
-                    type="text"
-                    value={data.company}
-                    onChange={(event) => handleChange(event, 'company')}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
-            </FormControl>
-            <FormControl fullWidth style={{marginTop: '10px'}}>
-                <TextField
-                    placeholder="ENTER YOUR ADDRESS"
-                    required
-                    error={dataError.address}
-                    label="ADDRESS"
-                    helperText={dataError.address}
-                    fullWidth
-                    type="text"
-                    value={data.address}
-                    onChange={(event) => handleChange(event, 'address')}
-                    InputLabelProps={{
-                        shrink: true,
-                    }}
-                />
-            </FormControl>
-            <Grid container spacing={4}>
-                <Grid item xs={12} lg={6}>
-                    <FormControl fullWidth style={{marginTop: '10px'}}>
+                <Grid item xs={12}>
+                    <FormControl fullWidth>
                         <TextField
+                            placeholder="ENTER YOUR COMPANY NAME"
+                            autoComplete="organization"
+                            error={!!dataError.company}
+                            label="COMPANY"
+                            helperText={dataError.company}
+                            fullWidth
+                            type="text"
+                            value={data.company}
+                            onChange={(event) => handleChange(event, 'company')}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </FormControl>
+                </Grid>
+                <Grid item xs={12}>
+                    <FormControl fullWidth>
+                        <TextField
+                            placeholder="ENTER YOUR ADDRESS"
+                            required
+                            autoComplete="street-address"
+                            error={!!dataError.address}
+                            label="ADDRESS"
+                            helperText={dataError.address}
+                            fullWidth
+                            type="text"
+                            value={data.address}
+                            onChange={(event) => handleChange(event, 'address')}
+                            InputLabelProps={{
+                                shrink: true,
+                            }}
+                        />
+                    </FormControl>
+                </Grid>
+                {countryList?.length &&
+                <React.Fragment>
+                    <Grid item xs={12} lg={6}>
+                        <FormControl fullWidth>
+                            <Autocomplete
+                                options={countryList}
+                                getOptionLabel={(option) => option.name}
+                                getOptionSelected={(option) => option.code}
+                                onChange={(event,v) => handleChange({target: {value: v ?  v.code : countryList[0].code}}, 'country')}
+                                renderInput={(params) =>
+                                    <TextField
+                                        {...params}
+                                        autoComplete="new-password"
+                                        placeholder="ENTER YOUR COUNTRY"
+                                        required
+                                        error={!!dataError.country}
+                                        label="COUNTRY"
+                                        helperText={dataError.country}
+                                        fullWidth
+                                        type="text"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                }
+                            />
+                        </FormControl>
+                    </Grid>
+                    <Grid item xs={12} lg={6}>
+                        <FormControl fullWidth>
+                            <Autocomplete
+                                options={states}
+                                getOptionLabel={(option) => option.name}
+                                getOptionSelected={(option) => option.code}
+                                onChange={(event,v) => handleChange({target: {value: v ?  v.code : ''}}, 'state')}
+                                renderInput={(params) =>
+                                    <TextField
+                                        {...params}
+                                        autoComplete="new-password"
+                                        placeholder="ENTER YOUR STATE OR PROVINCE"
+                                        error={!!dataError.state}
+                                        label="STATE OR PROVINCE"
+                                        helperText={dataError.state}
+                                        fullWidth
+                                        type="text"
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                }
+                            />
+                        </FormControl>
+                    </Grid>
+                </React.Fragment>}
+                <Grid item xs={12} lg={6}>
+                    <FormControl fullWidth>
+                        <TextField
+                            autoComplete="city"
                             placeholder="ENTER YOUR CITY"
                             required
-                            error={dataError.city}
+                            error={!!dataError.city}
                             label="CITY"
                             helperText={dataError.city}
                             fullWidth
@@ -97,54 +168,18 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                     </FormControl>
                 </Grid>
                 <Grid item xs={12} lg={6}>
-                    <FormControl fullWidth style={{marginTop: '10px'}}>
+                    <FormControl fullWidth>
                         <TextField
                             placeholder="ENTER YOUR POST CODE"
                             required
-                            error={dataError.postcode}
+                            autoComplete="postal-code"
+                            error={!!dataError.postcode}
                             label="POST CODE"
                             helperText={dataError.postcode}
                             fullWidth
                             type="text"
                             value={data.postcode}
                             onChange={(event) => handleChange(event, 'postcode')}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                    </FormControl>
-                </Grid>
-            </Grid>
-            <Grid container spacing={4}>
-                <Grid item xs={12} lg={6}>
-                    <FormControl fullWidth style={{marginTop: '10px'}}>
-                        <TextField
-                            placeholder="ENTER YOUR COUNTRY"
-                            required
-                            error={dataError.country}
-                            label="COUNTRY"
-                            helperText={dataError.country}
-                            fullWidth
-                            type="text"
-                            value={data.country}
-                            onChange={(event) => handleChange(event, 'country')}
-                            InputLabelProps={{
-                                shrink: true,
-                            }}
-                        />
-                    </FormControl>
-                </Grid>
-                <Grid item xs={12} lg={6}>
-                    <FormControl fullWidth style={{marginTop: '10px'}}>
-                        <TextField
-                            placeholder="ENTER YOUR STATE"
-                            error={dataError.state}
-                            label="STATE"
-                            helperText={dataError.state}
-                            fullWidth
-                            type="text"
-                            value={data.state}
-                            onChange={(event) => handleChange(event, 'state')}
                             InputLabelProps={{
                                 shrink: true,
                             }}

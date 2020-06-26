@@ -16,7 +16,7 @@ import {connect} from "react-redux"
 import Checkbox from "../../../components/Checkbox"
 import Link from "../../../components/Link"
 
-import {regExpEmail} from "../../../constants"
+import {regExpEmail} from "../../../helpers";
 
 const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
     const [data, setData] = useState({
@@ -84,7 +84,8 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                     <TextField
                                         placeholder="ENTER YOUR FIRST NAME"
                                         required
-                                        error={dataError.firstName}
+                                        autoComplete="given-name"
+                                        error={!!dataError.firstName}
                                         label="FIRST NAME"
                                         helperText={dataError.firstName}
                                         fullWidth
@@ -102,7 +103,8 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                     <TextField
                                         placeholder="ENTER YOUR LAST NAME"
                                         required
-                                        error={dataError.lastName}
+                                        autoComplete="family-name"
+                                        error={!!dataError.lastName}
                                         label="LAST NAME"
                                         helperText={dataError.lastName}
                                         fullWidth
@@ -120,7 +122,8 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                             <TextField
                                 placeholder="ENTER YOUR EMAIL"
                                 required
-                                error={dataError.email}
+                                autoComplete="email"
+                                error={!!dataError.email}
                                 label="EMAIL"
                                 helperText={dataError.email}
                                 fullWidth
@@ -138,7 +141,8 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                     <TextField
                                         placeholder="ENTER YOUR PASSWORD"
                                         required
-                                        error={dataError.password}
+                                        autoComplete="password"
+                                        error={!!dataError.password}
                                         label="PASSWORD"
                                         helperText={dataError.password}
                                         fullWidth
@@ -168,7 +172,7 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                     <TextField
                                         placeholder="CONFIRM YOUR PASSWORD"
                                         required
-                                        error={dataError.confirmPassword}
+                                        error={!!dataError.confirmPassword}
                                         label="CONFIRM PASSWORD"
                                         helperText={dataError.confirmPassword}
                                         fullWidth

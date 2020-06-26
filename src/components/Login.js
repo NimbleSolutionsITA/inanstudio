@@ -1,115 +1,92 @@
-import React from 'react';
-import { TextControl, Button } from '@wordpress/components';
+import React, {useState} from 'react'
+import {connect} from "react-redux";
+import {Typography, TextField, FormControl, CircularProgress} from "@material-ui/core"
+import {regExpEmail} from "../helpers";
+import {login} from "../providers/AuthProvider/actions"
+import Button from "../components/Button"
+import Link from "../components/Link";
 
-const axios = require('axios');
-
-class Login extends React.Component {
-    constructor( props ) {
-        super( props );
-        this.state = { username: '', password: '', user: { } }
-        this.handleUsername = this.handleUsername.bind(this);
-        this.handlePassword = this.handlePassword.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-
-        this.Logout = this.Logout.bind(this);
-        this.getCurrentUser = this.getCurrentUser.bind(this);
+const LoginForm = ({authenticating, login, error}) => {
+    const [email, setEmail] = React.useState('')
+    const [emailError, setEmailError] = React.useState(false)
+    const [password, setPassword] = useState( '' )
+    const [passwordError, setPasswordError] = React.useState('')
+    const handleChange = (event) => {
+        if (event.target.type === 'email') {
+            setEmailError(false)
+            setEmail(event.target.value)
+        }
+        else {
+            setPassword(event.target.value)
+        }
     }
-
-    componentDidMount() {
-        if (this.props.token) this.getCurrentUser();
+    function handleLogin() {
+        if (!email) {
+            setEmailError('YOUR EMAIL IS REQUIRED')
+            return
+        }
+        else if (!regExpEmail.test(email)) {
+            setEmailError('PLEASE ENTER A VAILD EMAIL ADDRESS')
+            return
+        }
+        else if (!password) {
+            setPasswordError('YOUR PASSWORD IS REQUIRED')
+            return
+        }
+        else login(email, password);
     }
-
-    getCurrentUser() {
-        const token = this.props.token;
-        const userURI = this.props.url + '/wp-json/wp/v2/users/me';
-        const _this = this;
-        axios({
-            method: 'POST',
-            url: userURI,
-            headers: { 'Authorization': 'Bearer ' + token }
-        }).then(function (response) {
-            if ( response.status === 200 ) {
-                const data = response.data;
-                _this.setState( {user:data});
-
-            }
-        })
-            .catch(function (error) {
-                _this.Logout();
-            });
-
-    }
-
-    handleUsername( username ) {
-        this.setState( { username } )
-    }
-
-    handlePassword( password ) {
-        this.setState( { password } )
-    }
-    handleSubmit( e ) {
-        e.preventDefault();
-        const _this = this;
-        axios.post( this.props.url + '/wp-json/jwt-auth/v1/token/',
-            {
-                username: this.state.username,
-                password: this.state.password
-            })
-            .then(function (response) {
-                if ( response.status === 200 ) {
-                    const data = response.data;
-                    console.log(data);
-                    localStorage.setItem( 'login', data.token );
-                    _this.props.setLogin( data.token );
-                }
-            })
-            .catch(function (error) {
-                function strip_html_tags(str) {
-                    if ((str===null) || (str===''))
-                        return false;
-                    else
-                        str = str.toString();
-                    return str.replace(/<[^>]*>/g, '');
-                }
-                alert( strip_html_tags( error.response.data.message ) );
-            });
-    }
-    Logout() {
-        localStorage.removeItem('login');
-        this.props.setLogin('');
-    }
-    render() {
-        const { nickname, first_name, last_name } = this.state.user;
-        return (
-            <div>
-                {this.props.token && (
-                    <div className="dashboard">
-                        <button type="button" className="btn btn-danger" onClick={this.Logout}>Logout</button>
-
-                        <div className="jumbotron">
-                            Welcome { nickname }
-                            <p>I think your name is { first_name } { last_name}</p>
-                        </div>
-                    </div>
-                )}
-                {!this.props.token && (
-                    <form className="login" method="post">
-                        <TextControl className="form-group"
-                                     label="Username"
-                                     value={ this.state.username }
-                                     onChange={ (value) => this.handleUsername( value ) }
-                        />
-                        <TextControl className="form-group"
-                                     label="Password"
-                                     type="password"
-                                     onChange={ (value) => this.handlePassword( value ) }
-                        />
-                        <Button isPrimary onClick={this.handleSubmit}>Login</Button>
-                    </form>
-                )}
+    return (
+        <form>
+            {error && <Typography color="error" variant="body1">{error}</Typography> }
+            <FormControl fullWidth style={{marginTop: '10px'}}>
+                <TextField
+                    placeholder="ENTER YOUR EMAIL"
+                    required
+                    autoComplete="email"
+                    error={!!emailError}
+                    label="EMAIL"
+                    helperText={emailError}
+                    fullWidth
+                    type="email"
+                    value={email}
+                    onChange={handleChange}
+                    InputLabelProps={{
+                        shrink: true,
+                    }}
+                />
+            </FormControl>
+            <div style={{position: 'relative', marginTop: '10px', marginBottom: '25px'}}>
+                <Link style={{position: 'absolute', top: '5px', right: 0, zIndex: 1}} color="error" to="/account/reset-password">Forgot Password?</Link>
+                <FormControl fullWidth>
+                    <TextField
+                        placeholder="ENTER YOUR PASSWORD"
+                        required
+                        autoComplete="password"
+                        error={!!passwordError}
+                        label="PASSWORD"
+                        helperText={passwordError}
+                        fullWidth
+                        type="password"
+                        value={password}
+                        onChange={handleChange}
+                        InputLabelProps={{
+                            shrink: true,
+                        }}
+                    />
+                </FormControl>
             </div>
-        );
-    }
+            <Button variant="contained" color="secondary" fullWidth onClick={handleLogin}>{authenticating ? <CircularProgress size={15} /> : 'log in'}</Button>
+        </form>
+    )
 }
+const mapStateToProps = state => ({
+    authenticated: state.user.authenticated,
+    authenticating: state.user.authenticating,
+    error: state.user.error,
+})
 
-export default Login;
+const mapDispatchToProps = {
+    login,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)

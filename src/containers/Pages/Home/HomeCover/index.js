@@ -43,14 +43,10 @@ const HomeCover = ({headerHeight, bg, bgMobile, title, isCover, isCoverMobile, c
     const classes = useStyles()
     return useMemo(
         () => {
-            const coverCSSHeight = () => {
-                if(!isCover) return 'auto'
-                else if(isMobile) return `calc(100vh - ${headerHeight}px)`
-                else return '100vh'
-            }
             return(
-                <CoverWrapper coverCSSHeight={'auto'} bg={!video && isMobile ? bgMobile : bg} isCover={isMobile ? isCoverMobile : isCover} video={!!video} showOverlay={showContent}>
-                    {!video && <img src={isMobile ? isCoverMobile && bgMobile : isCover && bg} alt="" style={{width: '100%', opacity: 0}} />}
+                <CoverWrapper coverCSSHeight={'auto'} bg={!video && isMobile ? bgMobile || bg : bg} isCover={isMobile ? isCoverMobile : isCover} video={!!video} showOverlay={showContent}>
+                    {!video && isMobile && isCoverMobile && <img src={bgMobile || bg} alt="" style={{width: '100%', opacity: 0}} />}
+                    {!video && !isMobile && isCover && <img src={bg} alt="" style={{width: '100%', opacity: 0}} />}
                     {video ? (
                         <CoverVideoPlayer
                             poster={isMobile ? bgMobile : bg}

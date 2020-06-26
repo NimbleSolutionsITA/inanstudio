@@ -8,7 +8,7 @@ import INAN from "../../components/svg/INAN";
 import Container from "../../components/Container";
 import InAnLogo from "../../components/svg/InAnLogo";
 
-const AppBar = forwardRef(({children, open, openDrawer, navLinks, cartItems, wishlistItems}, headerEl) => {
+const AppBar = forwardRef(({children, authenticated, open, openDrawer, navLinks, cartItems, wishlistItems}, headerEl) => {
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -16,7 +16,8 @@ const AppBar = forwardRef(({children, open, openDrawer, navLinks, cartItems, wis
             flexGrow: 1,
             '& header': {
                 borderBottom: '1px solid #000',
-            }
+            },
+
         },
         title: {
             paddingTop: 20,
@@ -40,6 +41,9 @@ const AppBar = forwardRef(({children, open, openDrawer, navLinks, cartItems, wis
             color: '#fff',
             paddingTop: '70px',
             textTransform: 'uppercase',
+            '& > div': {
+                height: '100%',
+            }
         },
         drawerNavContainer: {
             display: 'flex',
@@ -85,16 +89,16 @@ const AppBar = forwardRef(({children, open, openDrawer, navLinks, cartItems, wis
                             </ListItem>
                         ))}
                         <ListItem component="div" style={{flexGrow: 1}} />
-                        <ListItem component={Link} to="/" disableGutters button onClick={() => openDrawer(false)}>
+                        <ListItem component={Link} to="/bag" disableGutters button onClick={() => openDrawer(false)}>
                             <ListItemText primary={`SHOPPING BAG (${cartItems})`} />
                         </ListItem>
-                        <ListItem component={Link} to="/" disableGutters button onClick={() => openDrawer(false)}>
-                            <ListItemText primary={`WHISH LIST (${wishlistItems})`} />
+                        <ListItem component={Link} to="/wishlist" disableGutters button onClick={() => openDrawer(false)}>
+                            <ListItemText primary={`WISHLIST (${wishlistItems})`} />
                         </ListItem>
-                        <ListItem component={Link} to="/" disableGutters button onClick={() => openDrawer(false)}>
-                            <ListItemText primary="LOGIN / REGISTER" />
+                        <ListItem component={Link} to={authenticated ? '/account' : '/account/login'} disableGutters button onClick={() => openDrawer(false)}>
+                            <ListItemText primary={authenticated ? 'ACCOUNT' : 'LOGIN / REGISTER'} />
                         </ListItem>
-                        <ListItem component={Link} to="/" disableGutters button onClick={() => openDrawer(false)}>
+                        <ListItem component={Link} to="/customer-service" disableGutters button onClick={() => openDrawer(false)}>
                             <ListItemText primary="CUSTOMER SERVICE" />
                         </ListItem>
                     </List>

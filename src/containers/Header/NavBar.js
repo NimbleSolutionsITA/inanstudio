@@ -1,4 +1,5 @@
 import React from "react";
+import {Divider} from "@material-ui/core";
 import Link from "../../components/Link";
 import styled from "styled-components";
 
@@ -20,46 +21,50 @@ const NavTools = styled.div`
 const NavBar = ({navLinks, cartItems, wishlistItems, currentPath, authenticated}) => {
 
     return (
-        <NavWrapper>
-            {navLinks.map(link => (
-                <Link
-                    key={link.name}
-                    color="inherit"
-                    style={{marginRight: '20px'}}
-                    to={link.url}
-                    active={currentPath.startsWith(link.url)}
-                >
-                    {link.name}
-                </Link>
-            ))}
-            <NavTools>
-                <Link
-                    color="inherit"
-                    style={{marginRight: '20px'}}
-                    to={authenticated ? '/account' : '/account/login'}
-                    active={currentPath.startsWith('/account')}
-                >
-                    {authenticated ? 'ACCOUNT' : 'LOGIN'}
-                </Link>
+        <React.Fragment>
+            {currentPath === '/checkout' ? <Divider /> :
+                <NavWrapper>
+                    {navLinks.map(link => (
+                        <Link
+                            key={link.name}
+                            color="inherit"
+                            style={{marginRight: '20px'}}
+                            to={link.url}
+                            isActive={currentPath.startsWith(link.url)}
+                        >
+                            {link.name}
+                        </Link>
+                    ))}
+                    <NavTools>
+                        <Link
+                            color="inherit"
+                            style={{marginRight: '20px'}}
+                            to={authenticated ? '/account' : '/account/login'}
+                            isActive={currentPath.startsWith('/account')}
+                        >
+                            {authenticated ? 'ACCOUNT' : 'LOGIN'}
+                        </Link>
 
-                <Link
-                    color="inherit"
-                    style={{marginRight: '20px'}}
-                    to="/wishlist"
-                    active={currentPath === '/wishlist'}
-                >
-                    WISHLIST ({wishlistItems && `${wishlistItems}`})
-                </Link>
-                <Link
-                    color="inherit"
-                    style={{marginRight: '20px'}}
-                    to="/bag"
-                    active={currentPath === '/bag'}
-                >
-                    BAG ({cartItems && `${cartItems}`})
-                </Link>
-            </NavTools>
-        </NavWrapper>
+                        <Link
+                            color="inherit"
+                            style={{marginRight: '20px'}}
+                            to="/wishlist"
+                            isActive={currentPath === '/wishlist'}
+                        >
+                            WISHLIST ({wishlistItems && `${wishlistItems}`})
+                        </Link>
+                        <Link
+                            color="inherit"
+                            style={{marginRight: '20px'}}
+                            to="/bag"
+                            isActive={currentPath === '/bag'}
+                        >
+                            BAG ({cartItems && `${cartItems}`})
+                        </Link>
+                    </NavTools>
+                </NavWrapper>
+            }
+        </React.Fragment>
     )
 }
 

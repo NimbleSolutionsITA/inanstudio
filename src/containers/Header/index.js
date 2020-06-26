@@ -63,6 +63,7 @@ const Header = (props) => {
                 <React.Fragment>
                     <AppBar
                         ref={headerEl}
+                        authenticated={props.authenticated}
                         open={props.open}
                         openDrawer={props.openDrawer}
                         isMobile={isMobile}
@@ -97,7 +98,7 @@ const Header = (props) => {
             )}
         </React.Fragment>
 
-    ), [isMobile, props.open, props.openDrawer, props.news, props.categories, props.headerHeight, props.headerColor, navLinks, cartItems, wishListItems, location.pathname, query])
+    ), [isMobile, props.authenticated, props.open, props.openDrawer, props.news, props.categories, props.headerHeight, props.headerColor, navLinks, cartItems, wishListItems, location.pathname, query])
 
 }
 

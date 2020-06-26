@@ -3,7 +3,15 @@
  * AuthProvider actions
  *
  */
-import {CHECK_LOGIN, LOGIN, LOGOUT, SET_USER_DATA, SET_LOGIN_FAILED} from '../../constants';
+import {
+  CHECK_LOGIN,
+  LOGIN,
+  LOGOUT,
+  SET_USER_DATA,
+  SET_LOGIN_FAILED,
+  SET_AUTHENTICATED,
+  SET_USER_INFO
+} from '../../constants';
 
 
 export function checkLogin() {
@@ -44,5 +52,18 @@ export function setLoginFailed(error) {
     payload: {
       error,
     },
+  };
+}
+
+export function setUserInfo(userInfo) {
+  return {
+    type: SET_USER_INFO,
+    payload: userInfo,
+  };
+}
+
+export function setAuthenticated() {
+  return {
+    type: SET_AUTHENTICATED,
   };
 }

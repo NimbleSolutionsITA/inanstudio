@@ -2,11 +2,11 @@ import React, {useState} from "react"
 import MailchimpSubscribe from "react-mailchimp-subscribe"
 import {FormControl, TextField} from "@material-ui/core"
 import Link from "../../components/Link"
-import {regExpEmail} from "../../constants";
+import {regExpEmail} from "../../helpers";
 
 
 const NewsletterForm = ({isMobile}) => {
-    const [email, setEmail] = useState(null)
+    const [email, setEmail] = useState('')
     const [subscribed, setSubscribed] = useState(false)
     const [honeypot, setHoneypot] = useState(false)
     const [emailError, setEmailError] = React.useState(null)
@@ -50,7 +50,7 @@ const NewsletterForm = ({isMobile}) => {
                             placeholder={subscribed ? 'THANK YOU FOR SUBSCRIBING' : 'YOUR EMAIL'}
                             required
                             disabled={subscribed}
-                            error={emailError}
+                            error={!!emailError}
                             helperText={emailError}
                             fullWidth
                             type="email"

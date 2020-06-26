@@ -1,25 +1,23 @@
 import { put, takeEvery } from 'redux-saga/effects';
 
-import { setWoocommerceData, setCustomerResponse } from './actions';
+import { setWoocommerceData, setCustomerResponse, setOrderResponse } from './actions';
 
 import {
   baseUrl,
   CREATE_WOOCOMMERCE_CUSTOMER,
   UPDATE_WOOCOMMERCE_CUSTOMER,
   FETCH_WOOCOMMERCE_DATA,
+  CREATE_WOOCOMMERCE_ORDER,
+  UPDATE_WOOCOMMERCE_ORDER,
   woocommerceVersion,
 } from '../../constants';
 
-const myHeaders = new Headers();
-const encodedData = window.btoa(process.env.REACT_APP_WOOCOMMERCE_CLIENT + ':' + process.env.REACT_APP_WOOCOMMERCE_SECRET);
-const authorizationHeaderString = 'Basic ' + encodedData;
-myHeaders.append("Authorization", authorizationHeaderString);
-myHeaders.append("Content-Type", 'application/json')
+import {WCHeaders} from "../../constants";
 
 function* fetchData({ payload: { key, apiPath } }) {
   const requestOptions = {
     method: 'GET',
-    headers: myHeaders,
+    headers: WCHeaders(),
     redirect: 'follow'
   };
   const data = yield fetch(`${baseUrl}wp-json/${woocommerceVersion}/${apiPath}`, requestOptions)
@@ -40,7 +38,7 @@ function* createCustomer({ payload: { data } }) {
       last_name: data.lastName,
       password: data.password,
     }),
-    headers: myHeaders,
+    headers: WCHeaders(),
     redirect: 'follow'
   };
   const res = yield fetch(`${baseUrl}wp-json/${woocommerceVersion}/customers`, requestOptions)
@@ -62,7 +60,7 @@ function* updateCustomer({ payload: { id, data } }) {
   const requestOptions = {
     method: 'PUT',
     body: JSON.stringify(body),
-    headers: myHeaders,
+    headers: WCHeaders(),
     redirect: 'follow'
   };
   const res = yield fetch(`${baseUrl}wp-json/${woocommerceVersion}/customers/${id}`, requestOptions)
@@ -71,8 +69,37 @@ function* updateCustomer({ payload: { id, data } }) {
   yield put(setCustomerResponse(res))
 }
 
+function* createOrder({ payload: { order } }) {
+  const requestOptions = {
+    method: 'POST',
+    body: JSON.stringify(order),
+    headers: WCHeaders(),
+    redirect: 'follow'
+  };
+  const res = yield fetch(`${baseUrl}wp-json/${woocommerceVersion}/orders`, requestOptions)
+      .then(response => response.json())
+      .catch(error => error);
+  yield put(setOrderResponse(res))
+}
+
+function* updateOrder({ payload: { id, order } }) {
+  const requestOptions = {
+    method: 'PUT',
+    body: JSON.stringify(order),
+    headers: WCHeaders(),
+    redirect: 'follow'
+  };
+  const res = yield fetch(`${baseUrl}wp-json/${woocommerceVersion}/orders/${id}`, requestOptions)
+      .then(response => response.json())
+      .catch(error => error);
+  console.log(res);
+  yield put(setOrderResponse(res))
+}
+
 export default function* woocommerceProviderSaga() {
   yield takeEvery(FETCH_WOOCOMMERCE_DATA, fetchData);
   yield takeEvery(CREATE_WOOCOMMERCE_CUSTOMER, createCustomer);
   yield takeEvery(UPDATE_WOOCOMMERCE_CUSTOMER, updateCustomer);
+  yield takeEvery(CREATE_WOOCOMMERCE_ORDER, createOrder);
+  yield takeEvery(UPDATE_WOOCOMMERCE_ORDER, updateOrder);
 }

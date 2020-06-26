@@ -3,7 +3,8 @@ import Button from "../../../components/Button";
 import RightDrawer from "../../../components/RightDrawer";
 import {FormControl, TextField, Typography} from "@material-ui/core";
 import styled from "styled-components";
-import {baseUrl, regExpEmail} from "../../../constants";
+import {baseUrl} from "../../../constants";
+import {regExpEmail} from "../../../helpers";
 
 const GetNotifiedTitleWrapper = styled.div`
   padding: 10px 0;
@@ -78,7 +79,8 @@ const GetNotified = ({ isMobile, leatherType, colorType, sizeType, itemId, produ
                                 <TextField
                                     placeholder="ENTER YOUR EMAIL"
                                     required
-                                    error={emailError}
+                                    autoComplete="email"
+                                    error={!!emailError}
                                     label="EMAIL"
                                     helperText={emailError}
                                     fullWidth

@@ -16,7 +16,7 @@ const breakpoints = createBreakpoints({
         sm: 735,
         md: 735,
         lg: 925,
-        xl: 1280,
+        xl: 926,
     },
 });
 

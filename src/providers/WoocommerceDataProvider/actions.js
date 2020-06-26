@@ -8,7 +8,10 @@ import { FETCH_WOOCOMMERCE_DATA,
   SET_WOOCOMMERCE_DATA,
   CREATE_WOOCOMMERCE_CUSTOMER,
   SET_WOOCOMMERCE_CUSTOMER_RESPONSE,
-  UPDATE_WOOCOMMERCE_CUSTOMER
+  UPDATE_WOOCOMMERCE_CUSTOMER,
+  CREATE_WOOCOMMERCE_ORDER,
+  UPDATE_WOOCOMMERCE_ORDER,
+  SET_WOOCOMMERCE_ORDER_RESPONSE,
 } from '../../constants';
 
 export function fetchWoocommerceData(key, apiPath) {
@@ -51,6 +54,32 @@ export function updateCustomer(id, data) {
     payload: {
       id,
       data,
+    },
+  };
+}
+
+export function createOrder(order) {
+  return {
+    type: CREATE_WOOCOMMERCE_ORDER,
+    payload: {
+      order,
+    },
+  };
+}
+export function updateOrder(id, order) {
+  return {
+    type: UPDATE_WOOCOMMERCE_ORDER,
+    payload: {
+      id,
+      order,
+    },
+  };
+}
+export function setOrderResponse(response) {
+  return {
+    type: SET_WOOCOMMERCE_ORDER_RESPONSE,
+    payload: {
+      response,
     },
   };
 }

@@ -49,7 +49,7 @@ const Filters = ({categories, activeCategory, isMobile}) => {
                     style={{
                         marginRight: !isMobile && '20px',
                     }}
-                    active={activeCategory === category.slug}
+                    isActive={activeCategory === category.slug}
                     to={`/shop?category=${category.slug}`}
                 >
                     {category.name}

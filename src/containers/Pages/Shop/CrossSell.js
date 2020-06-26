@@ -1,6 +1,5 @@
 import React from "react"
 import CrossSellItem from "./CrossSellItem"
-import SwipeableViews from 'react-swipeable-views'
 import {Divider, Grid, Typography} from "@material-ui/core"
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
@@ -21,20 +20,6 @@ const responsive = {
         items: 2,
         slidesToSlide: 1 // optional, default to 1.
     }
-};
-
-const styles = {
-    root: {
-        padding: '0 100px 0 0',
-    },
-    slideContainer: {
-        padding: '0 5px 0 0',
-    },
-    slide: {
-        padding: 0,
-        maxWidth: 200,
-        height: '100%',
-    },
 };
 
 const CrossSell = ({items, isMobile}) => {

@@ -8,15 +8,15 @@ import AddressBook from "./AddressBook";
 import useWoocommerceData from "../../../providers/WoocommerceDataProvider"
 
 const Profile = ({userId, woocommerce}) => {
-    const [value, setValue] = useState(0)
     useWoocommerceData(`customers/${userId}`)
-    const handleChange = (newValue) => {
-        setValue(newValue)
-    }
     const userInfo = woocommerce[`customers-${userId}`]
+    const [value, setValue] = useState(0)
     const dispatch = useDispatch()
     const handleLogout = () => {
         dispatch(logout())
+    }
+    const handleChange = (newValue) => {
+        setValue(newValue)
     }
     return (
         <Grid container spacing={4} style={{paddingTop: '30px'}}>

@@ -7,8 +7,10 @@ import CartIcon from "../../components/svg/CartIcon";
 import INAN from "../../components/svg/INAN";
 import Container from "../../components/Container";
 import InAnLogo from "../../components/svg/InAnLogo";
+import {useDispatch} from "react-redux";
+import {openDrawer} from "./actions";
 
-const AppBar = forwardRef(({children, authenticated, open, openDrawer, navLinks, cartItems, wishlistItems}, headerEl) => {
+const AppBar = forwardRef(({children, authenticated, open, navLinks, cartItems, wishlistItems}, headerEl) => {
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -56,6 +58,10 @@ const AppBar = forwardRef(({children, authenticated, open, openDrawer, navLinks,
         }
     }));
     const classes = useStyles()
+    const dispatch = useDispatch()
+    const handleOpenDrawer = open => {
+        dispatch(openDrawer(open))
+    }
 
     return (
         <div className={classes.root}>
@@ -68,7 +74,7 @@ const AppBar = forwardRef(({children, authenticated, open, openDrawer, navLinks,
                     <IconButton className={classes.toolbarIcons} color="inherit" aria-label="menu">
                         <CartIcon color={open ? '#fff' : '#000'} height={20} open={open} items={cartItems} />
                     </IconButton>
-                    <IconButton onClick={() => openDrawer(!open)} edge="end" className={classes.toolbarIcons} color="inherit" aria-label="menu">
+                    <IconButton onClick={() => handleOpenDrawer(!open)} edge="end" className={classes.toolbarIcons} color="inherit" aria-label="menu">
                         <BurgerIcon color={open ? '#fff' : '#000'} open={open}/>
                     </IconButton>
                 </Toolbar>
@@ -78,27 +84,27 @@ const AppBar = forwardRef(({children, authenticated, open, openDrawer, navLinks,
                 classes={{paper: classes.drawerRoot}}
                 anchor="right"
                 open={open}
-                onClose={() => openDrawer(false)}
-                onOpen={() => openDrawer(true)}
+                onClose={() => handleOpenDrawer(false)}
+                onOpen={() => handleOpenDrawer(true)}
             >
                 <Container style={{height: '100%', position: 'relative'}}>
                     <List className={classes.drawerNavContainer}>
                         {navLinks.map((link, index) => (
-                            <ListItem component={Link} to={link.url} disableGutters button key={link.name} onClick={() => openDrawer(false)}>
+                            <ListItem component={Link} to={link.url} disableGutters button key={link.name} onClick={() => handleOpenDrawer(false)}>
                                 <ListItemText primary={link.name} />
                             </ListItem>
                         ))}
                         <ListItem component="div" style={{flexGrow: 1}} />
-                        <ListItem component={Link} to="/bag" disableGutters button onClick={() => openDrawer(false)}>
+                        <ListItem component={Link} to="/bag" disableGutters button onClick={() => handleOpenDrawer(false)}>
                             <ListItemText primary={`SHOPPING BAG (${cartItems})`} />
                         </ListItem>
-                        <ListItem component={Link} to="/wishlist" disableGutters button onClick={() => openDrawer(false)}>
+                        <ListItem component={Link} to="/wishlist" disableGutters button onClick={() => handleOpenDrawer(false)}>
                             <ListItemText primary={`WISHLIST (${wishlistItems})`} />
                         </ListItem>
-                        <ListItem component={Link} to={authenticated ? '/account' : '/account/login'} disableGutters button onClick={() => openDrawer(false)}>
+                        <ListItem component={Link} to={authenticated ? '/account' : '/account/login'} disableGutters button onClick={() => handleOpenDrawer(false)}>
                             <ListItemText primary={authenticated ? 'ACCOUNT' : 'LOGIN / REGISTER'} />
                         </ListItem>
-                        <ListItem component={Link} to="/customer-service" disableGutters button onClick={() => openDrawer(false)}>
+                        <ListItem component={Link} to="/customer-service" disableGutters button onClick={() => handleOpenDrawer(false)}>
                             <ListItemText primary="CUSTOMER SERVICE" />
                         </ListItem>
                     </List>

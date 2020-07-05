@@ -14,14 +14,22 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     margin: 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 11px;
-    line-height: 18px;
+    font-size: 10px;
+    line-height: 12px;
     text-transform: uppercase;
   }
   ul {
     padding-inline-start: 16px;
-        margin-block-start: 0;
+    margin-block-start: 0;
     margin-block-end: 0;
+  }
+  li {}
+  a {
+    color: #000;
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: line-through;
   }
   @keyframes logoAnimation {
     0% { opacity: 0; }

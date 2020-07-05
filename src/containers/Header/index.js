@@ -1,9 +1,8 @@
 import React, {useMemo, useRef, useEffect} from "react";
 import {useLocation} from "react-router";
-import {connect} from "react-redux";
-import useWoocommerceData from "../../providers/WoocommerceDataProvider";
+import {useDispatch, useSelector} from "react-redux";
 
-import {setHeaderHeight, setHeaderColor, openDrawer} from "./actions";
+import {setHeaderHeight, setHeaderColor} from "./actions";
 import styled from "styled-components";
 import {useMediaQuery, useTheme} from "@material-ui/core";
 import NavBar from './NavBar';
@@ -19,16 +18,14 @@ const HeaderWrapper = styled.div`
   color: ${({color}) => color};
   z-index: 2;
   transition: fill .25s ease;
-  background-color: ${({pathname}) => pathname === '/' ? 'transparent' : '#fff'};
+  background-color: ${({bgColor}) => bgColor};
 `;
 
 function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-const Header = (props) => {
-    useWoocommerceData('products/categories', {})
-
+const Header = ({news, categories}) => {
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
 
@@ -39,23 +36,41 @@ const Header = (props) => {
         {name: 'made to order', url: '/made-to-order'},
         {name: 'collection', url: '/collection'},
         {name: 'about', url: '/about'},
-        {name: 'stockist', url: '/stockist'},
+        {name: 'stockists', url: '/stockists'},
     ]
-    const cartItems = props.cart.length;
-    const wishListItems = props.wishlist.length;
+    const dispatch = useDispatch()
+    const { authenticated  } = useSelector(state => state.user)
+    const cart = useSelector(state => state.cart)
+    const wishlist = useSelector(state => state.wishlist)
+    const { headerColor, height, open  } = useSelector(state => state.header)
+
+    const cartItems = cart.length;
+    const wishListItems = wishlist.length;
 
     let location = useLocation()
     let query = useQuery()
 
+    const bgColor = () => {
+        switch (location.pathname) {
+            case '/':
+                return 'transparent'
+            case '/about':
+                return '#000'
+            default:
+                return '#fff'
+        }
+    }
+
     useEffect(() => {
-        if(headerEl.current?.offsetHeight && headerEl.current.offsetHeight !== props.headerHeight) {
-            props.setHeaderHeight(headerEl.current.offsetHeight)
+        if(headerEl.current?.offsetHeight && headerEl.current.offsetHeight !== height) {
+            dispatch(setHeaderHeight(headerEl.current.offsetHeight))
             if(isMobile) {
                 document.documentElement.style.scrollPaddingTop = `${headerEl.current.offsetHeight}px`
             }
         }
-        if(location.pathname !== '/') props.setHeaderColor('#000', '#000')
-    }, [isMobile, location.pathname, props])
+        if(location.pathname === '/about') dispatch(setHeaderColor('#fff', '#fff'))
+        else if(location.pathname !== '/') dispatch(setHeaderColor('#000', '#000'))
+    }, [dispatch, height, isMobile, location.pathname])
 
     return useMemo(() => (
         <React.Fragment>
@@ -63,61 +78,42 @@ const Header = (props) => {
                 <React.Fragment>
                     <AppBar
                         ref={headerEl}
-                        authenticated={props.authenticated}
-                        open={props.open}
-                        openDrawer={props.openDrawer}
+                        authenticated={authenticated}
+                        open={open}
                         isMobile={isMobile}
                         navLinks={navLinks}
                         cartItems={cartItems}
                         wishlistItems={wishListItems}
                     >
-                        {props.news?.length > 0 && !props.open && <NewsFeed isMobile={isMobile} currentNews={props.news} />}
-                        {location.pathname === '/shop' && props.categories && (
-                            <Filters isMobile={isMobile} categories={props.categories} activeCategory={query.get('category') || 'view-all'} />
+                        {news?.length > 0 && !open && <NewsFeed isMobile={isMobile} currentNews={news} />}
+                        {location.pathname === '/shop' && categories && (
+                            <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />
                         )}
                     </AppBar>
-                    <div style={{width: '100%', height: `calc(${props.headerHeight}px`}} />
+                    <div style={{width: '100%', height: `calc(${height}px`}} />
                 </React.Fragment>
             ) : (
-                <HeaderWrapper ref={headerEl} color={props.headerColor} pathname={location.pathname}>
+                <HeaderWrapper ref={headerEl} color={headerColor} bgColor={bgColor}>
                     <Container>
-                        {props.news?.length > 0 && <NewsFeed isMobile={isMobile} currentNews={props.news} />}
-                        <LogoBar fill={props.headerColor} height={43} />
+                        {news?.length > 0 && <NewsFeed isMobile={isMobile} currentNews={news} />}
+                        <LogoBar fill={headerColor} height={43} />
                         <NavBar
                             navLinks={navLinks}
                             cartItems={cartItems}
                             wishlistItems={wishListItems}
                             currentPath={location.pathname}
-                            authenticated={props.authenticated}
+                            authenticated={authenticated}
                         />
-                        {location.pathname.startsWith('/shop') && props.categories && (
-                            <Filters isMobile={isMobile} categories={props.categories} activeCategory={query.get('category') || 'view-all'} />
+                        {location.pathname.startsWith('/shop') && categories && (
+                            <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />
                         )}
                     </Container>
                 </HeaderWrapper>
             )}
         </React.Fragment>
 
-    ), [isMobile, props.authenticated, props.open, props.openDrawer, props.news, props.categories, props.headerHeight, props.headerColor, navLinks, cartItems, wishListItems, location.pathname, query])
+    ), [isMobile, authenticated, open, dispatch, navLinks, cartItems, wishListItems, news, location.pathname, categories, query, height, headerColor])
 
 }
 
-const mapStateToProps = state => ({
-    authenticated: state.user.authenticated,
-    headerColor: state.header.headerColor,
-    headerColorMobile: state.header.headerColorMobile,
-    news: state.wordpress['news-feed'],
-    headerHeight: state.header.height,
-    open: state.header.open,
-    cart: state.cart,
-    wishlist: state.wishlist,
-    categories: state.woocommerce['products-categories'],
-})
-
-const mapDispatchToProps = {
-    setHeaderHeight,
-    setHeaderColor,
-    openDrawer,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default Header;

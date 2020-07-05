@@ -18,8 +18,10 @@ const AddToBag = ({itemId, name, price, leather, size, color, image, slug, child
     const dispatch = useDispatch()
 
     const handleAddToCart = () => {
-        dispatch(addCartItem(itemId, name, price, leather, size, color, image, slug, 1))
-        setOpen(true)
+        if(itemId) {
+            dispatch(addCartItem(itemId, name, price, leather, size, color, image, slug, 1))
+            setOpen(true)
+        }
     }
 
     return (

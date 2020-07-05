@@ -9,18 +9,23 @@ import {
   FETCH_WOOCOMMERCE_DATA,
   CREATE_WOOCOMMERCE_ORDER,
   UPDATE_WOOCOMMERCE_ORDER,
+  DELETE_WOOCOMMERCE_ORDER,
   woocommerceVersion,
 } from '../../constants';
 
 import {WCHeaders} from "../../constants";
 
-function* fetchData({ payload: { key, apiPath } }) {
+function* fetchData({ payload: { key, apiPath, params } }) {
   const requestOptions = {
     method: 'GET',
     headers: WCHeaders(),
     redirect: 'follow'
   };
-  const data = yield fetch(`${baseUrl}wp-json/${woocommerceVersion}/${apiPath}`, requestOptions)
+  const url = new URL(`${baseUrl}wp-json/${woocommerceVersion}/${apiPath}`);
+  if (params)
+    url.search = new URLSearchParams(params).toString();
+
+  const data = yield fetch(url, requestOptions)
       .then(response => response.json())
       .catch(error => error.code);
 
@@ -92,9 +97,21 @@ function* updateOrder({ payload: { id, order } }) {
   const res = yield fetch(`${baseUrl}wp-json/${woocommerceVersion}/orders/${id}`, requestOptions)
       .then(response => response.json())
       .catch(error => error);
-  console.log(res);
   yield put(setOrderResponse(res))
 }
+
+function* deleteOrder({ payload: { id } }) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: WCHeaders(),
+    redirect: 'follow'
+  };
+  yield fetch(`${baseUrl}wp-json/${woocommerceVersion}/orders/${id}`, requestOptions)
+      .then(response => response.json())
+      .catch(error => error);
+  yield put(setOrderResponse({}))
+}
+
 
 export default function* woocommerceProviderSaga() {
   yield takeEvery(FETCH_WOOCOMMERCE_DATA, fetchData);
@@ -102,4 +119,5 @@ export default function* woocommerceProviderSaga() {
   yield takeEvery(UPDATE_WOOCOMMERCE_CUSTOMER, updateCustomer);
   yield takeEvery(CREATE_WOOCOMMERCE_ORDER, createOrder);
   yield takeEvery(UPDATE_WOOCOMMERCE_ORDER, updateOrder);
+  yield takeEvery(DELETE_WOOCOMMERCE_ORDER, deleteOrder);
 }

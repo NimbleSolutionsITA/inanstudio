@@ -1,28 +1,22 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createSelector } from 'reselect';
 
 import _ from 'lodash';
 
 import { fetchWoocommerceData } from './actions';
 
-const makeWoocommerceDataSelector = () =>
-  createSelector(
-    (state, key) => state.woocommerce[key],
-    (__, ___, fallback) => fallback,
-    (data, fallback) => data || fallback,
-  );
-
-function useWoocommerceData(APIPath, fallback = {}) {
+function useWoocommerceData(APIPath, params) {
   const [key] = useState(_.kebabCase(APIPath));
 
   const dispatch = useDispatch();
-  const selectWoocommerceData = useMemo(makeWoocommerceDataSelector, []);
+
+  const data = useSelector(state => state.woocommerce[key])
 
   useEffect(() => {
-    dispatch(fetchWoocommerceData(key, APIPath));
-  }, [APIPath, dispatch, key]);
-  return useSelector(state => selectWoocommerceData(state, key, fallback));
+    if (!data)
+      dispatch(fetchWoocommerceData(key, APIPath, params));
+  }, [APIPath, data, dispatch, key, params]);
+  return data;
 }
 
 export default useWoocommerceData;

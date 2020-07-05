@@ -54,7 +54,8 @@ const materialTheme = {
             fontSize: 60,
             fontWeight: 'bold',
             textTransform: 'uppercase',
-            lineHeight: '60px',
+            lineHeight: '50px',
+            padding: '5px 0',
             [breakpoints.down('sm')]: {
                 fontSize: 40,
                 lineHeight: '35px',
@@ -78,6 +79,7 @@ const materialTheme = {
         body1: {
             fontSize: 10,
             lineHeight: '12px',
+            padding: '5px 0',
             [breakpoints.down('sm')]: {
                 fontSize: 11,
             },

@@ -12,14 +12,16 @@ import { FETCH_WOOCOMMERCE_DATA,
   CREATE_WOOCOMMERCE_ORDER,
   UPDATE_WOOCOMMERCE_ORDER,
   SET_WOOCOMMERCE_ORDER_RESPONSE,
+  DELETE_WOOCOMMERCE_ORDER,
 } from '../../constants';
 
-export function fetchWoocommerceData(key, apiPath) {
+export function fetchWoocommerceData(key, apiPath, params) {
   return {
     type: FETCH_WOOCOMMERCE_DATA,
     payload: {
       key,
       apiPath,
+      params,
     },
   };
 }
@@ -75,11 +77,20 @@ export function updateOrder(id, order) {
     },
   };
 }
+export function deleteOrder(id) {
+  return {
+    type: DELETE_WOOCOMMERCE_ORDER,
+    payload: {
+      id,
+    },
+  };
+}
 export function setOrderResponse(response) {
   return {
     type: SET_WOOCOMMERCE_ORDER_RESPONSE,
     payload: {
-      response,
+      error: response.message,
+      data: response.id ? response : null,
     },
   };
 }

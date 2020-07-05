@@ -3,7 +3,7 @@ import {Button as MaterialButton, makeStyles} from '@material-ui/core';
 import {Link as RouterLink} from 'react-router-dom';
 
 const Button = (props) => {
-    const {disableGutters, disablePadding, inactive, disableHover, children, ...rest} = props
+    const {disableGutters, disablePadding, inactive, disableHover, children, lineThrough, ...rest} = props
     const useStyles = makeStyles({
         root: {
             borderRadius: 0,
@@ -14,8 +14,10 @@ const Button = (props) => {
             paddingBottom: disablePadding && '2px',
             color: inactive && '#999',
             minWidth: '20px',
+            transition: lineThrough && 'textDecoration .75s ease',
             '&:hover': {
                 backgroundColor: disableHover && 'transparent',
+                textDecoration: lineThrough && 'line-through'
             }
         },
     });

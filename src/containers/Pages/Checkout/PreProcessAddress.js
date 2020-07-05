@@ -11,7 +11,7 @@ import Button from "../../../components/Button"
 import AddressForm from "../Account/AddressForm"
 import {regExpEmail} from "../../../helpers";
 
-const PreProcessAddress = ({isGuest, address, setAddress, user, woocommerce, creatingUser, userCreated, updateCustomer, error, createOrder, cart}) => {
+const PreProcessAddress = ({isGuest, address, setAddress, user, woocommerce, creatingUser, userCreated, updateCustomer, error, createOrder, cart, userInfo}) => {
     const emptyAddress = {
         firstName: '',
         lastName: '',
@@ -22,7 +22,6 @@ const PreProcessAddress = ({isGuest, address, setAddress, user, woocommerce, cre
         country: '',
         state: '',
     }
-    const userInfo = isGuest ? null : woocommerce[`customers-${user.id}`]
     const shippingWP = isGuest ? emptyAddress : userInfo.shipping
     const billingWP = isGuest ? emptyAddress : userInfo.billing
     const initialState = (address) => {
@@ -216,7 +215,6 @@ const mapStateToProps = state => ({
     creatingUser: state.woocommerce.creatingUser,
     userCreated: state.woocommerce.userCreated,
     error: state.woocommerce.error,
-    woocommerce: state.woocommerce,
     user: state.user,
     cart: state.cart,
 })

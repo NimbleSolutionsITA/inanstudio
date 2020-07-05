@@ -1,10 +1,11 @@
 import React from "react"
-import {connect} from "react-redux"
+import {useSelector} from "react-redux"
 import {useHistory, Route,} from "react-router"
 
 
-const PrivateRoute = ({authenticated, ...props}) => {
+const PrivateRoute = ({...props}) => {
     let history = useHistory()
+    const {authenticated} = useSelector(state => state.user)
     return (
         <React.Fragment>
             {authenticated ? <Route {...props} /> : history.goBack()}
@@ -12,8 +13,4 @@ const PrivateRoute = ({authenticated, ...props}) => {
     )
 }
 
-const mapStateToProps = (state) => ({
-    authenticated: state.user.authenticated,
-})
-
-export default connect(mapStateToProps)(PrivateRoute)
+export default PrivateRoute

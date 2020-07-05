@@ -1,6 +1,5 @@
 import React from "react"
 import useWoocommerceData from "../../../providers/WoocommerceDataProvider"
-import {useSelector} from "react-redux"
 import {
     Grid,
 } from "@material-ui/core"
@@ -12,8 +11,7 @@ import CrossSell from "./CrossSell";
 import ModalImage from "../../../components/ModalImage";
 
 const ProductView = ({products, prodId, colors, isMobile, sizeGuide}) => {
-    useWoocommerceData(`products/${prodId}/variations`, {})
-    const variations = useSelector(state => state.woocommerce[`products-${prodId}-variations`])
+    const variations = useWoocommerceData(`products/${prodId}/variations`, {per_page: 100})
     const product = products.filter(prod => prod.id === prodId)[0]
     return (
         <React.Fragment>

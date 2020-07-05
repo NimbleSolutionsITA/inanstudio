@@ -52,7 +52,6 @@ const ProductCard = ({product, isMobile}) => {
     const dispatch = useDispatch()
     const handleClick = () => {
         dispatch(addWishlistItem(product.id, 1))
-        console.log('added to wishlist')
     }
     return (
         <CardWrapper>

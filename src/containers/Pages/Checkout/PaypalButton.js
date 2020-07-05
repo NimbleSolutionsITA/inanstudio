@@ -23,9 +23,9 @@ const PaypalButton = ({setPaypalError, setPaypalSuccess}) => {
                     });
                 },
                 onApprove: () => {
+                    setPaypalSuccess(order);
                     dispatch(updateOrder(order.id, {set_paid: true}))
                     dispatch(destroyCart())
-                    setPaypalSuccess(order);
                 },
                 onError: err => {
                     setPaypalError(err);

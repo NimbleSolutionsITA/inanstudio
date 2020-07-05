@@ -17,7 +17,7 @@ const Account = () => {
                 <Route exact path="/account/login" component={Login} />
                 <Route exact path="/account/register" component={Register} />
                 <Route exact path="/account/reset-password" component={ResetPassword} />
-                <PrivateRoute exact path="/account" component={Profile} />
+                <PrivateRoute path="/account" component={Profile} />
             </Switch>
         </Container>
     )

@@ -11,16 +11,18 @@
 export const baseUrl = 'https://wp.inanstudio.com/';
 export const woocommerceVersion = 'wc/v3';
 
-export const FETCH_WOOCOMMERCE_DATA = 'WoocommerceDataProvider/FETCH_DATA';
-export const SET_WOOCOMMERCE_DATA = 'WoocommerceDataProvider/SET_DATA';
 export const FETCH_WORDPRESS_DATA = 'WordpressDataProvider/FETCH_DATA';
 export const SET_WORDPRESS_DATA = 'WordpressDataProvider/SET_DATA';
-export const CREATE_WOOCOMMERCE_CUSTOMER = 'WordpressDataProvider/CREATE_CUSTOMER';
-export const SET_WOOCOMMERCE_CUSTOMER_RESPONSE = 'WordpressDataProvider/SET_CUSTOMER_RESPONSE';
-export const UPDATE_WOOCOMMERCE_CUSTOMER = 'WordpressDataProvider/UPDATE_CUSTOMER';
-export const CREATE_WOOCOMMERCE_ORDER = 'WordpressDataProvider/CREATE_ORDER';
-export const UPDATE_WOOCOMMERCE_ORDER = 'WordpressDataProvider/UPDATE_ORDER';
-export const SET_WOOCOMMERCE_ORDER_RESPONSE = 'WordpressDataProvider/SET_WOOCOMMERCE_ORDER_RESPONSE';
+
+export const FETCH_WOOCOMMERCE_DATA = 'WoocommerceDataProvider/FETCH_DATA';
+export const SET_WOOCOMMERCE_DATA = 'WoocommerceDataProvider/SET_DATA';
+export const CREATE_WOOCOMMERCE_CUSTOMER = 'WoocommerceDataProvider/CREATE_CUSTOMER';
+export const SET_WOOCOMMERCE_CUSTOMER_RESPONSE = 'WoocommerceDataProvider/SET_CUSTOMER_RESPONSE';
+export const UPDATE_WOOCOMMERCE_CUSTOMER = 'WoocommerceDataProvider/UPDATE_CUSTOMER';
+export const CREATE_WOOCOMMERCE_ORDER = 'WoocommerceDataProvider/CREATE_ORDER';
+export const UPDATE_WOOCOMMERCE_ORDER = 'WoocommerceDataProvider/UPDATE_ORDER';
+export const DELETE_WOOCOMMERCE_ORDER = 'WoocommerceDataProvider/DELETE_WOOCOMMERCE_ORDER';
+export const SET_WOOCOMMERCE_ORDER_RESPONSE = 'WoocommerceDataProvider/SET_WOOCOMMERCE_ORDER_RESPONSE';
 
 export const ADD_CART_ITEM = 'Cart/ADD_CART_ITEM';
 export const UPDATE_CART_ITEM = 'Cart/UPDATE_CART_ITEM';

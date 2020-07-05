@@ -1,15 +1,15 @@
 import React from "react";
-import ProductCard from "./ProductCard";
+import ItemCard from "./ItemCard";
 import useWoocommerceData from "../../../providers/WoocommerceDataProvider";
 
-const CrossSellItem = ({id}) => {
+const OrderItem = ({id, item}) => {
     const product = useWoocommerceData(`products/${id}`)
 
     return (
         <React.Fragment>
-            {product && <ProductCard product={product} />}
+            {product && <ItemCard product={product} item={item} />}
         </React.Fragment>
     )
 }
 
-export default CrossSellItem
+export default OrderItem

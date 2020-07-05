@@ -8,7 +8,7 @@
 import React from 'react';
 import useWoocommerceData from "../../../providers/WoocommerceDataProvider";
 import {useParams, useHistory, useLocation} from "react-router";
-import {connect} from "react-redux";
+import {useSelector} from "react-redux";
 import {useMediaQuery, useTheme} from "@material-ui/core";
 import GridView from "./GridView";
 import ProductView from "./ProductView";
@@ -18,16 +18,17 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-function Shop({headerHeight, products, categories, colors, sizeGuide}) {
+function Shop({categories}) {
+    const headerHeight = useSelector(state => state.header.height)
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
     let { slug } = useParams();
     let query = useQuery();
     let history = useHistory();
     let prodId;
-    useWoocommerceData('products', {})
-    useWoocommerceData('products/attributes/4/terms', {})
-    useWordpressData('size_guide', [])
+    const products = useWoocommerceData('products', {})
+    const colors = useWoocommerceData('products/attributes/4/terms', {})
+    const sizeGuide = useWordpressData('size_guide', [])
     if(slug && products) {
         prodId = products.filter(prod => prod.slug === slug)[0]?.id
         if (!prodId) history.push('/error/product/404')
@@ -50,12 +51,4 @@ function Shop({headerHeight, products, categories, colors, sizeGuide}) {
     );
 }
 
-const mapStateToProps = state => ({
-    headerHeight: state.header.height,
-    products: state.woocommerce.products,
-    categories: state.woocommerce['products-categories'],
-    colors: state.woocommerce['products-attributes-4-terms'],
-    sizeGuide: state.wordpress['size-guide'],
-})
-
-export default connect(mapStateToProps)(Shop);
+export default Shop;

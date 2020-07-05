@@ -22,12 +22,12 @@ const PaymentSuccess = ({order, cart}) => {
             <br />
             <Typography>
                 <b>ADDRESS:</b><br />
-                {order.shipping.address_1}
+                {order.shipping.address_1} - {order.shipping.postcode} - {order.shipping.city}{order.shipping.state && order.shipping.state !== order.shipping.city && ` - ${order.shipping.state}`} - {order.shipping.country}
             </Typography>
             <br />
             <Typography>
                 <b>DATE:</b><br />
-                {order.date_created}
+                {order.date_created.slice(0,10)}
             </Typography>
             <br />
             <Divider light />

@@ -6,12 +6,17 @@
  */
 
 import React from 'react';
+import Container from "../../../components/Container";
+import {Divider, Typography} from "@material-ui/core";
 
 function Collection() {
     return (
-        <React.Fragment>
-            Collection
-        </React.Fragment>
+        <Container headerPadding>
+            <React.Fragment>
+                <Typography variant="h1">Collection</Typography>
+                <Divider />
+            </React.Fragment>
+        </Container>
     );
 }
 

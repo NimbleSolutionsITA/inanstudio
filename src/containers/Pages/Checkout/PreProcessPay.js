@@ -7,7 +7,7 @@ import Button from "../../../components/Button";
 import CartItems from "./CartItems";
 
 const PreProcessPay = ({setIsCheckoutReady}) => {
-    const [coupon, setCoupon] = useState(null)
+    const [coupon, setCoupon] = useState('')
     const order = useSelector(state => state.woocommerce.currentOrder)
     const cart = useSelector(state => state.cart)
     const error = useSelector(state => state.woocommerce.error)
@@ -27,7 +27,6 @@ const PreProcessPay = ({setIsCheckoutReady}) => {
     const handleApplyCoupon = () => {
         dispatch(updateOrder(order.id, {coupon_lines: [{code: coupon}]}))
     }
-
     return (
         <React.Fragment>
             <Typography variant="h2">Products</Typography>
@@ -37,11 +36,11 @@ const PreProcessPay = ({setIsCheckoutReady}) => {
             <Typography variant="h2">Summary</Typography>
             <FormControl fullWidth>
                 <TextField
-                    disabled={!order && !coupon}
+                    disabled={!order?.id && !coupon}
                     placeholder="ENTER YOUR CODE"
                     required
                     autoComplete="off"
-                    error={order && coupon && !!error}
+                    error={!!order && !!coupon && !!error}
                     label="PROMOTIONAL CODE"
                     helperText={order && coupon && error}
                     fullWidth
@@ -58,7 +57,7 @@ const PreProcessPay = ({setIsCheckoutReady}) => {
                     style={{float: 'right', margin: '10px 0', minWidth: '100px'}}
                     variant="outlined"
                     color="secondary"
-                    disabled={!order}
+                    disabled={!order?.id && !coupon}
                     onClick={handleApplyCoupon}
                 >
                     {order && coupon && loading ? <CircularProgress color="secondary" size={15} /> : 'apply code'}
@@ -71,23 +70,29 @@ const PreProcessPay = ({setIsCheckoutReady}) => {
                 </div>
                 <div style={{display: 'flex'}}>
                     <div style={{flexGrow: 1}}>SHIPPING</div>
-                    <div>{formatPrice(order ? order.shipping_total : 0)}</div>
+                    <div>{formatPrice(order?.id ? order.shipping_total : 0)}</div>
                 </div>
                 <div style={{display: 'flex'}}>
                     <div style={{flexGrow: 1}}>TAX</div>
-                    <div>{formatPrice(order ? order.total_tax : 0)}</div>
+                    <div>{formatPrice(order?.id ? order.total_tax : 0)}</div>
                 </div>
+                {order && order.discount_total !== '0.00' && (
+                    <div style={{display: 'flex'}}>
+                        <div style={{flexGrow: 1}}>DISCOUNT</div>
+                        <div>- {formatPrice(order?.discount_total)}</div>
+                    </div>
+                )}
                 <Divider style={{marginTop: '10px', marginBottom: '5px'}} />
                 <div style={{display: 'flex'}}>
                     <div style={{flexGrow: 1}}><Typography variant="h2">TOTAL</Typography></div>
-                    <div><Typography variant="h2">{formatPrice(order ? order.total : cart.map(i => i.qty * i.price).reduce((i, sum) =>  i + sum))}</Typography></div>
+                    <div><Typography variant="h2">{formatPrice(order?.id ? order.total : cart.map(i => i.qty * i.price).reduce((i, sum) =>  i + sum))}</Typography></div>
                 </div>
             </div>
             <div style={{margin: '20px 0'}}>
-                <Button disabled={!order} fullWidth variant="contained" onClick={handleCheckout} color="secondary" style={{marginTop: '10px'}}>Checkout</Button>
+                <Button disabled={!order?.id} fullWidth variant="contained" onClick={handleCheckout} color="secondary" style={{marginTop: '10px'}}>Checkout</Button>
             </div>
-            <Button disabled={!order} inactive disableGutters disablePadding to="/returns">Shipping and returns</Button><br />
-            <Button disabled={!order} inactive disableGutters disablePadding to="/customer-service">need help?</Button>
+            <Button disabled={!order?.id} inactive disableGutters disablePadding to="/returns">Shipping and returns</Button><br />
+            <Button disabled={!order?.id} inactive disableGutters disablePadding to="/customer-service">need help?</Button>
         </React.Fragment>
     )
 }

@@ -1,12 +1,12 @@
 import React, {useState} from 'react'
 import {FormControl, Grid, TextField} from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import {useSelector} from "react-redux";
+import useWoocommerceData from "../../../providers/WoocommerceDataProvider";
 
 const AddressForm = ({data, setData, dataError, setDataError}) => {
-    const countries = useSelector(state => state.woocommerce['data-countries'])
+    const countries = useWoocommerceData('data/countries', [])
     const [states, setStates] = useState([])
-    const countryList = countries.map(c => {
+    const countryList = countries?.map(c => {
         return {name: c.name, code: c.code}
     })
     const handleChange = (event, field) => {

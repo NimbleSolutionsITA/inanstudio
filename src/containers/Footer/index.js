@@ -26,10 +26,10 @@ const FooterWrapper = styled.div`
 `
 const footerLinks = [
     {name: 'Customer service', url: '/customer-service'},
-    {name: 'Shipping', url: '/shipping'},
+    {name: 'Shipping', url: '/customer-service/shipping'},
     {name: 'Legal area', url: '/legal-area'},
-    {name: 'Returns', url: '/returns'},
-    {name: 'Contact', url: '/contact'},
+    {name: 'Returns', url: '/customer-service/returns'},
+    {name: 'Contact', url: '/customer-service'},
 ]
 const Footer = () => {
     const muiTheme = useTheme()

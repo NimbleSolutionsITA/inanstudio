@@ -17,8 +17,8 @@ export function setHeaderColor(headerColor, headerColorMobile) {
   return {
     type: SET_HEADER_COLOR,
     payload: {
-      headerColor,
-      headerColorMobile,
+      color: headerColor,
+      colorMobile: headerColorMobile,
     },
   };
 }

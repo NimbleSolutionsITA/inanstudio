@@ -1,16 +1,20 @@
 import React, {useState} from 'react'
-import {connect} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {Typography, TextField, FormControl, CircularProgress} from "@material-ui/core"
 import {regExpEmail} from "../helpers";
 import {login} from "../providers/AuthProvider/actions"
 import Button from "../components/Button"
 import Link from "../components/Link";
 
-const LoginForm = ({authenticating, login, error}) => {
+const LoginForm = () => {
     const [email, setEmail] = React.useState('')
     const [emailError, setEmailError] = React.useState(false)
     const [password, setPassword] = useState( '' )
     const [passwordError, setPasswordError] = React.useState('')
+
+    const dispatch = useDispatch()
+    const { authenticating, error } = useSelector(state => state.user)
+
     const handleChange = (event) => {
         if (event.target.type === 'email') {
             setEmailError(false)
@@ -33,7 +37,7 @@ const LoginForm = ({authenticating, login, error}) => {
             setPasswordError('YOUR PASSWORD IS REQUIRED')
             return
         }
-        else login(email, password);
+        else dispatch(login(email, password));
     }
     return (
         <form>
@@ -79,14 +83,5 @@ const LoginForm = ({authenticating, login, error}) => {
         </form>
     )
 }
-const mapStateToProps = state => ({
-    authenticated: state.user.authenticated,
-    authenticating: state.user.authenticating,
-    error: state.user.error,
-})
 
-const mapDispatchToProps = {
-    login,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoginForm)
+export default LoginForm

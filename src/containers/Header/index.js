@@ -72,6 +72,8 @@ const Header = ({news, categories}) => {
         else if(location.pathname !== '/') dispatch(setHeaderColor('#000', '#000'))
     }, [dispatch, height, isMobile, location.pathname])
 
+    const cPath = location.pathname.substring(location.pathname.lastIndexOf('/') + 1)
+
     return useMemo(() => (
         <React.Fragment>
             {isMobile ? (
@@ -107,12 +109,15 @@ const Header = ({news, categories}) => {
                         {location.pathname.startsWith('/shop') && categories && (
                             <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />
                         )}
+                        {location.pathname.startsWith('/collection') && categories && (
+                            <Filters isCollection isMobile={isMobile} categories={categories.filter(ct => ct.slug !== 'view-all')} activeCategory={cPath === 'collection' ? categories.filter(ct => ct.slug !== 'view-all')[0].slug : cPath} />
+                        )}
                     </Container>
                 </HeaderWrapper>
             )}
         </React.Fragment>
 
-    ), [isMobile, authenticated, open, dispatch, navLinks, cartItems, wishListItems, news, location.pathname, categories, query, height, headerColor])
+    ), [isMobile, authenticated, open, navLinks, cartItems, wishListItems, news, location.pathname, categories, query, height, headerColor, bgColor, cPath])
 
 }
 

@@ -50,11 +50,25 @@ const GlobalStyle = createGlobalStyle`
     animation-timing-function: step-end;
     animation-delay: 2s;
   }
-  .react-multi-carousel-list {
-    overflow: visible;
-  }
   .carousel-item-padding-40-px {
     padding-right: 10px;
+  }
+  .react-multiple-carousel__arrow {
+    background: transparent;
+    top: calc(50% - 30px);
+    z-index: 1200;
+  }
+  .react-multiple-carousel__arrow::before {
+    color: #000;
+  }
+  .react-multiple-carousel__arrow:hover {
+    background: transparent;
+  }
+  .react-multiple-carousel__arrow--left {
+    left: -6%;
+  }
+  .react-multiple-carousel__arrow--right {
+    right: -6%;
   }
   .ohnohoney{
       opacity: 0;
@@ -64,13 +78,13 @@ const GlobalStyle = createGlobalStyle`
       height: 0;
       width: 0;
       z-index: -1;
-    }
-    @media (min-width: 735px) {
+  }
+  @media (min-width: 735px) {
       html,
       body {
         font-size: 10px;
       }
-    }
+  }
 `;
 
 export default GlobalStyle;

@@ -30,7 +30,6 @@ function MadeToOrder() {
             ...(content.acf.gallery9 ? [{src:  content.acf.gallery9, alt: 'made to order gallery 9'}] : []),
         ]
         body1 = _.template(content.acf.body1)
-        console.log(content.acf.gallery4 && {src:  content.acf.gallery3, alt: 'made to order gallery 4'})
     }
     return (
         <Container headerPadding>

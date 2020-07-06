@@ -42,7 +42,7 @@ function App(props) {
                 <Route path="/shop/:slug?" component={() => <Shop categories={categories} />} />
                 <Route exact path="/about" component={About} />
                 <Route exact path="/made-to-order" component={MadeToOrder} />
-                <Route exact path="/collection" component={Collection} />
+                <Route exact path="/collection/:slug?" component={Collection} />
                 <Route exact path="/stockists" component={Stockists} />
                 <Route exact path="/bag" component={ShoppingBag} />
                 <Route exact path="/wishlist" component={Wishlist} />

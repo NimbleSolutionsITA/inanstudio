@@ -18,7 +18,7 @@ const FilterMobileWrapper = styled.div`
   border-top: ${({isMobile}) => isMobile && '1px solid'};
 `
 
-const Filters = ({categories, activeCategory, isMobile}) => {
+const Filters = ({categories, activeCategory, isMobile, isCollection}) => {
     const useStyles = makeStyles({
         drawerNavContainer: {
             display: 'flex',
@@ -40,7 +40,7 @@ const Filters = ({categories, activeCategory, isMobile}) => {
                     disableGutters
                     button
                 >
-                    <Link onClick={() => setOpen(false)} color="secondary" to={`/shop?category=${category.slug}`}><ListItemText primary={category.name} /></Link>
+                    <Link onClick={() => setOpen(false)} color="secondary" to={isCollection ? `/collection/${category.slug}` : `/shop?category=${category.slug}`}><ListItemText primary={category.name} /></Link>
                 </ListItem>
             ) : (
                 <Link
@@ -50,7 +50,7 @@ const Filters = ({categories, activeCategory, isMobile}) => {
                         marginRight: !isMobile && '20px',
                     }}
                     isActive={activeCategory === category.slug}
-                    to={`/shop?category=${category.slug}`}
+                    to={isCollection ? `/collection/${category.slug}` : `/shop?category=${category.slug}`}
                 >
                     {category.name}
                 </Link>

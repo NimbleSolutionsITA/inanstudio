@@ -14,7 +14,7 @@ const GlobalStyle = createGlobalStyle`
     width: 100%;
     margin: 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    font-size: 10px;
+    font-size: 11px;
     line-height: 12px;
     text-transform: uppercase;
   }
@@ -78,6 +78,15 @@ const GlobalStyle = createGlobalStyle`
       height: 0;
       width: 0;
       z-index: -1;
+  }
+  input:-webkit-autofill,
+    input:-webkit-autofill:hover, 
+    input:-webkit-autofill:focus, 
+    input:-webkit-autofill:active  {
+        -webkit-box-shadow: 0 0 0 30px #fff inset !important;
+  }
+  input[type="text"] {
+      font-size: inherit;
   }
   @media (min-width: 735px) {
       html,

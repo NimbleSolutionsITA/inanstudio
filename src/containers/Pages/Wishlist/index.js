@@ -10,8 +10,6 @@ const Wishlist = () => {
     const wishlist = useSelector(state => state.wishlist)
     return (
         <Container headerPadding>
-            <Typography variant="h1" component="h1">WISHLIST</Typography>
-            <Divider />
             <br />
             {wishlist.length ?
                 <SplitLayout

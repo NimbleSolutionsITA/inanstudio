@@ -9,6 +9,7 @@ import Container from "../../components/Container";
 import InAnLogo from "../../components/svg/InAnLogo";
 import {useDispatch} from "react-redux";
 import {openDrawer} from "./actions";
+import {useHistory} from "react-router";
 
 const AppBar = forwardRef(({children, authenticated, open, navLinks, cartItems, wishlistItems}, headerEl) => {
 
@@ -34,9 +35,10 @@ const AppBar = forwardRef(({children, authenticated, open, navLinks, cartItems, 
         },
         appBarRoot: {
             backgroundColor: open ? 'transparent' : '#fff',
-            zIndex: theme.zIndex.modal+1,
+            zIndex: theme.zIndex.modal+2,
         },
         drawerRoot: {
+            zIndex: theme.zIndex.modal+1,
             height: window.innerHeight,
             width: '100%',
             backgroundColor: '#000',
@@ -59,8 +61,12 @@ const AppBar = forwardRef(({children, authenticated, open, navLinks, cartItems, 
     }));
     const classes = useStyles()
     const dispatch = useDispatch()
+    const history = useHistory()
     const handleOpenDrawer = open => {
         dispatch(openDrawer(open))
+    }
+    const handleBagClick = () => {
+        history.push('/bag')
     }
 
     return (
@@ -71,7 +77,7 @@ const AppBar = forwardRef(({children, authenticated, open, navLinks, cartItems, 
                         <Link to="/"><INAN height={30} color={open ? '#fff' : '#000'} /></Link>
                     </IconButton>
                     <div style={{flex: 1}} />
-                    <IconButton className={classes.toolbarIcons} color="inherit" aria-label="menu">
+                    <IconButton onClick={handleBagClick} className={classes.toolbarIcons} color="inherit" aria-label="menu">
                         <CartIcon color={open ? '#fff' : '#000'} height={20} open={open} items={cartItems} />
                     </IconButton>
                     <IconButton onClick={() => handleOpenDrawer(!open)} edge="end" className={classes.toolbarIcons} color="inherit" aria-label="menu">

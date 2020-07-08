@@ -11,8 +11,11 @@ import Minus from "@material-ui/icons/Remove";
 
 const useStyles = makeStyles((theme) => ({
     expansionPanel: {
+        marginTop: 0,
+        marginBottom: 0,
         textTransform: 'uppercase',
         '&.Mui-expanded': {
+            marginBottom: 0,
             marginTop: 0,
         },
         '&::before': {
@@ -20,7 +23,9 @@ const useStyles = makeStyles((theme) => ({
         },
         [theme.breakpoints.down('sm')]: {
             marginTop: '10px',
+            marginBottom: 0,
             '&.Mui-expanded': {
+                marginBottom: 0,
                 marginTop: '10px',
             },
         },
@@ -33,9 +38,9 @@ const useStyles = makeStyles((theme) => ({
         },
     },
     expansionPanelSummaryContent: {
-        margin: '5px 0',
+        margin: '0',
         '&.Mui-expanded': {
-            margin: '5px 0',
+            margin: '0',
         },
     },
     expandIcon: {

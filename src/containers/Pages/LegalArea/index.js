@@ -24,8 +24,6 @@ const LegalArea = () => {
 
     return (
         <Container headerPadding>
-            <Typography variant="h1" component="h1">Legal Area</Typography>
-            <Divider />
             <Grid container spacing={4} style={{paddingTop: '30px'}}>
                 <Grid item xs={12} md={4}>
                     <Button inactive={pathname !== '/legal-area'} disableRipple lineThrough disableGutters disablePadding disableHover to="/legal-area"><Typography variant="h3" component="h3">{termsOfUse?.title.rendered}</Typography></Button>

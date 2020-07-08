@@ -20,7 +20,7 @@ const Cta = styled.div`
   width: 100%;
   border-bottom: 1px solid;
   text-align: right;
-  margin-top: -35px;
+  margin-top: -30px;
   text-transform: uppercase;
 `;
 

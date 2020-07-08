@@ -8,7 +8,7 @@ const Container = (props) => {
     const headerHeight = useSelector(state => state.header.height)
     const {headerPadding, children, ...rest} = props
     return (
-        <div style={headerPadding && {width: !isMobile && '100vw', paddingTop: !isMobile && headerHeight, paddingBottom: '40px'}}>
+        <div style={headerPadding && {width: !isMobile && '100%', paddingTop: !isMobile && headerHeight, paddingBottom: props.noPaddingBottom ? 0 : '40px'}}>
             <MuiContainer fixed maxWidth="xl" {...rest}>
                 {children}
             </MuiContainer>

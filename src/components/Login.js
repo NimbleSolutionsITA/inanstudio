@@ -60,7 +60,7 @@ const LoginForm = () => {
                 />
             </FormControl>
             <div style={{position: 'relative', marginTop: '10px', marginBottom: '25px'}}>
-                <Link style={{position: 'absolute', top: '5px', right: 0, zIndex: 1}} color="error" to="/account/reset-password">Forgot Password?</Link>
+                <Link style={{position: 'absolute', top: '10px', right: 0, zIndex: 1}} color="error" to="/account/reset-password">Forgot Password?</Link>
                 <FormControl fullWidth>
                     <TextField
                         placeholder="ENTER YOUR PASSWORD"

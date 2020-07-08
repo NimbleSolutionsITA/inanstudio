@@ -57,10 +57,10 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide}) => {
                         <Collapse in={openDetails}>
                             <RichText style={{padding: '0 0 1rem'}}>{product.description}</RichText>
                         </Collapse>
-                        <Link color="secondary" onClick={() => setOpenDetails(!openDetails)}><b>{openDetails ? 'less details' : 'more details'}</b></Link>
+                        <Link color="inherit" onClick={() => setOpenDetails(!openDetails)}><b>{openDetails ? 'less details' : 'more details'}</b></Link>
+                        <Divider style={{marginTop: '5px'}} />
                     </React.Fragment>
                 )}
-                {!isMobile && <Divider />}
                 {isVeganOption && (
                     <React.Fragment>
                         <ExpansionPanel title={<Typography><b>Leather type :</b> {leatherType || leatherOptions[0]}</Typography>}>
@@ -96,7 +96,7 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide}) => {
                         <Collapse in={openDetails}>
                             <RichText style={{padding: '0 0 1rem'}}>{product.description}</RichText>
                         </Collapse>
-                        <Link color="secondary" onClick={() => setOpenDetails(!openDetails)}><b>{openDetails ? 'less details' : 'more details'}</b></Link>
+                        <Link style={{paddingBottom: '5px'}} color="inherit" onClick={() => setOpenDetails(!openDetails)}><b>{openDetails ? 'less details' : 'more details'}</b></Link>
                     </React.Fragment>
                 )}
                 <AddToBagWrapper>
@@ -117,22 +117,22 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide}) => {
                 {!isMobile && <Divider />}
                 <ExpansionPanel plusMinus title={<Typography>Special enquiries</Typography>}>
                     <Typography component="p" variant="body1">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt. <br />
-                        go to : <Link color="secondary"><b>Made to order</b></Link>
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt. <br /><br />
+                        go to : <Link color="inherit" to="/made-to-order"><b>Made to order</b></Link>
                     </Typography>
                 </ExpansionPanel>
                 <Divider />
                 <ExpansionPanel plusMinus title={<Typography>Product care</Typography>}>
                     <Typography component="p" variant="body1">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt. <br />
-                        go to : <Link color="secondary"><b>Product care</b></Link>
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt. <br /><br />
+                        go to : <Link color="inherit" to="/customer-service/product-care"><b>Product care</b></Link>
                     </Typography>
                 </ExpansionPanel>
                 <Divider />
                 <ExpansionPanel plusMinus title={<Typography>Shipping and returns</Typography>}>
                     <Typography component="p" variant="body1">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt. <br />
-                        go to : <Link color="secondary"><b>Shipping and returns</b></Link>
+                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt. <br /><br />
+                        go to : <Link color="inherit" to="/customer-service/shipping"><b>Shipping and returns</b></Link>
                     </Typography>
                 </ExpansionPanel>
                 <Divider />

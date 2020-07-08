@@ -10,8 +10,9 @@ const Link = (props) => {
             transition: 'textDecoration .75s ease',
             cursor: 'pointer',
             '&:hover': {
-                textDecoration: !disableHover && 'line-through'
-            },
+                backgroundColor: 'transparent',
+                textDecoration: 'line-through'
+            }
         },
     });
     const classes = useStyles();

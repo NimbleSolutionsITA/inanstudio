@@ -1,5 +1,4 @@
 import React from 'react'
-import {Typography, Divider} from "@material-ui/core"
 import Container from "../../../components/Container"
 import {Route, Switch} from "react-router-dom"
 import PrivateRoute from "../../../components/PrivateRoute"
@@ -10,9 +9,7 @@ import Profile from "./Profile"
 
 const Account = () => {
     return (
-        <Container headerPadding>
-            <Typography variant="h1" component="h1">Account</Typography>
-            <Divider />
+        <Container headerPadding >
             <Switch>
                 <Route exact path="/account/login" component={Login} />
                 <Route exact path="/account/register" component={Register} />

@@ -9,7 +9,7 @@ import Container from "../../components/Container"
 const NavWrapper = styled.div`
   width: 100%;
   border-bottom: ${({isMobile}) => !isMobile && '1px solid'};
-  text-transform: uppercase;
+  padding: 3px 0;
 `;
 
 const FilterMobileWrapper = styled.div`
@@ -34,17 +34,18 @@ const Filters = ({categories, activeCategory, isMobile, isCollection}) => {
         .map(category =>
             isMobile ? (
                 <ListItem
-                    color="secondary"
-                    key={category.id}
+                    key={category.slug}
                     component={Link}
                     disableGutters
                     button
+                    color="inherit"
+                    onClick={() => setOpen(false)} to={isCollection ? `/collection/${category.slug}` : `/shop?category=${category.slug}`}
                 >
-                    <Link onClick={() => setOpen(false)} color="secondary" to={isCollection ? `/collection/${category.slug}` : `/shop?category=${category.slug}`}><ListItemText primary={category.name} /></Link>
+                    <ListItemText primary={category.name} />
                 </ListItem>
             ) : (
                 <Link
-                    key={category.id}
+                    key={category.slug}
                     color="inherit"
                     style={{
                         marginRight: !isMobile && '20px',
@@ -66,16 +67,18 @@ const Filters = ({categories, activeCategory, isMobile, isCollection}) => {
                                 color="inherit"
                                 style={{
                                     marginRight: '20px',
+                                    padding: '2px 0',
                                     float: 'left',
                                 }}
-                                to="/shop"
+                                to={isCollection ? '/collection' : '/shop'}
                             >
-                                SHOP
+                                {isCollection ? 'COLLECTION' : 'SHOP'}
                             </Link>
                             <Link
                                 color="inherit"
                                 style={{
                                     marginLeft: '20px',
+                                    padding: '2px 0',
                                     float: 'right',
                                 }}
                                 onClick={event => {
@@ -83,18 +86,17 @@ const Filters = ({categories, activeCategory, isMobile, isCollection}) => {
                                     setOpen(true)
                                 }}
                             >
-                                FILTER
+                                {isCollection ? 'PAST COLLECTIONS' : 'FILTER'}
                             </Link>
                         </Container>
                         <RightDrawer open={open} setOpen={setOpen}>
                             <List className={classes.drawerNavContainer} style={{width: '90%'}}>
                                 <ListItem
-                                    color="secondary"
                                     component={Typography}
                                     disableGutters
                                 >
                                     <ListItemText primaryTypographyProps={{variant: 'h5'}}>
-                                        <b>FILTER</b>
+                                        <b>{isCollection ? 'PAST COLLECTIONS' : 'FILTER'}</b>
                                     </ListItemText>
                                 </ListItem>
                                 {FilterLinks}

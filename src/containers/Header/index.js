@@ -11,10 +11,11 @@ import LogoBar from './LogoBar';
 import Container from "../../components/Container";
 import AppBar from "./AppBar";
 import Filters from "./Filters";
+import PageTitle from "./PageTitle";
 
 const HeaderWrapper = styled.div`
   position: fixed;
-  width: 100vw;
+  width: 100%;
   color: ${({color}) => color};
   z-index: 2;
   transition: fill .25s ease;
@@ -74,6 +75,20 @@ const Header = ({news, categories}) => {
 
     const cPath = location.pathname.substring(location.pathname.lastIndexOf('/') + 1)
 
+    const pageTitle = () => {
+        if (location.pathname.startsWith('/account')) return ['account', null]
+        if (location.pathname.startsWith('/made-to-order')) return ['made to order', null]
+        if (location.pathname.startsWith('/about')) return ['about', null]
+        if (location.pathname.startsWith('/stockists')) return ['stockists', null]
+        if (location.pathname.startsWith('/bag')) return ['shopping bag', cartItems]
+        if (location.pathname.startsWith('/wishlist')) return ['wishlist', wishListItems]
+        if (location.pathname.startsWith('/customer-service')) return ['customer service', null]
+        if (location.pathname.startsWith('/legal-area')) return ['legal area', null]
+        return [];
+    }
+
+    console.log(pageTitle())
+
     return useMemo(() => (
         <React.Fragment>
             {isMobile ? (
@@ -88,9 +103,17 @@ const Header = ({news, categories}) => {
                         wishlistItems={wishListItems}
                     >
                         {news?.length > 0 && !open && <NewsFeed isMobile={isMobile} currentNews={news} />}
-                        {location.pathname === '/shop' && categories && (
-                            <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />
+                        {!open && location.pathname.startsWith('/shop') && (
+                            <div style={{width: '100%', height: '20px'}}>
+                                {categories && <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />}
+                            </div>
                         )}
+                        {!open && location.pathname.startsWith('/collection') && (
+                            <div style={{width: '100%', height: '20px'}}>
+                                {categories && <Filters isCollection isMobile={isMobile} categories={categories.filter(ct => ct.slug !== 'view-all')} activeCategory={cPath === 'collection' ? categories.filter(ct => ct.slug !== 'view-all')[0].slug : cPath} />}
+                            </div>
+                        )}
+                        {!open && pageTitle()[0] && <PageTitle title={pageTitle()[0]} amount={pageTitle()[1]} />}
                     </AppBar>
                     <div style={{width: '100%', height: `calc(${height}px`}} />
                 </React.Fragment>
@@ -106,12 +129,17 @@ const Header = ({news, categories}) => {
                             currentPath={location.pathname}
                             authenticated={authenticated}
                         />
-                        {location.pathname.startsWith('/shop') && categories && (
-                            <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />
+                        {location.pathname.startsWith('/shop') && (
+                            <div style={{width: '100%', height: '19px'}}>
+                                {categories && <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />}
+                            </div>
                         )}
-                        {location.pathname.startsWith('/collection') && categories && (
-                            <Filters isCollection isMobile={isMobile} categories={categories.filter(ct => ct.slug !== 'view-all')} activeCategory={cPath === 'collection' ? categories.filter(ct => ct.slug !== 'view-all')[0].slug : cPath} />
+                        {location.pathname.startsWith('/collection') && (
+                            <div style={{width: '100%', height: '19px'}}>
+                                {categories && <Filters isCollection isMobile={isMobile} categories={categories.filter(ct => ct.slug !== 'view-all')} activeCategory={cPath === 'collection' ? categories.filter(ct => ct.slug !== 'view-all')[0].slug : cPath} />}
+                            </div>
                         )}
+                        {!open && pageTitle()[0] && <PageTitle title={pageTitle()[0]} amount={pageTitle()[1]} />}
                     </Container>
                 </HeaderWrapper>
             )}

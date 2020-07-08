@@ -7,7 +7,6 @@ const Button = (props) => {
     const useStyles = makeStyles({
         root: {
             borderRadius: 0,
-            fontSize: '10px',
             paddingRight: disableGutters && 0,
             paddingLeft: disableGutters && 0,
             paddingTop: disablePadding && '2px',
@@ -15,9 +14,9 @@ const Button = (props) => {
             color: inactive && '#999',
             minWidth: '20px',
             transition: lineThrough && 'textDecoration .75s ease',
-            '&:hover': {
-                backgroundColor: disableHover && 'transparent',
-                textDecoration: lineThrough && 'line-through'
+            '&:hover': rest.variant !== 'contained' && rest.variant !== 'outlined' && {
+                backgroundColor: 'transparent',
+                textDecoration: 'line-through'
             }
         },
     });

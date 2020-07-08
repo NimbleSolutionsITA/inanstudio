@@ -11,8 +11,6 @@ const ShoppingBag = () => {
     const cart = useSelector(state => state.cart)
     return (
         <Container headerPadding>
-            <Typography variant="h1" component="h1">SHOPPING BAG</Typography>
-            <Divider />
             <br />
             {cart.length ?
                 <SplitLayout

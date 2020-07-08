@@ -6,9 +6,9 @@ import styled from "styled-components";
 const NavWrapper = styled.div`
   width: 100%;
   height: 20px;
+  line-height: 18px;
   border-top: 1pt solid;
   border-bottom: 1pt solid;
-  text-transform: uppercase;
 `;
 
 const NavTools = styled.div`
@@ -55,7 +55,6 @@ const NavBar = ({navLinks, cartItems, wishlistItems, currentPath, authenticated}
                         </Link>
                         <Link
                             color="inherit"
-                            style={{marginRight: '20px'}}
                             to="/bag"
                             isActive={currentPath === '/bag'}
                         >

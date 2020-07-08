@@ -24,8 +24,6 @@ const CustomerService = () => {
 
     return (
         <Container headerPadding>
-            <Typography variant="h1" component="h1">Customer Service</Typography>
-            <Divider />
             <Grid container spacing={4} style={{paddingTop: '30px'}}>
                 <Grid item xs={12} md={4}>
                     <Button inactive={pathname !== '/customer-service'} disableRipple lineThrough disableGutters disablePadding disableHover to="/customer-service"><Typography variant="h3" component="h3">{contact?.title.rendered}</Typography></Button>

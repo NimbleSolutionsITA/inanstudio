@@ -35,8 +35,6 @@ function MadeToOrder() {
         <Container headerPadding>
             {content && (
                 <React.Fragment>
-                    <Typography variant="h1">{content.title.rendered}</Typography>
-                    <Divider />
                     <Container maxWidth="sm" style={{padding: '0 8%'}}>
                         {gallery && <Carousel images={gallery} />}
                     </Container>

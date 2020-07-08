@@ -67,7 +67,7 @@ const NewsletterForm = ({isMobile}) => {
                     <label className="ohnohoney" htmlFor="name" />
                     <input className="ohnohoney" autoComplete="off" type="name" id="name" name="name" placeholder="Your name here" ref={node => setHoneypot(node?.value)} />
                     {isMobile && (
-                        <Link style={{float: 'right'}} onClick={e => submit(e, subscribe)}>SUSCRIBE</Link>
+                        <Link style={{float: 'right'}} onClick={e => submit(e, subscribe)}>SUBSCRIBE</Link>
                     )}
                 </div>
             )}

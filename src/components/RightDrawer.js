@@ -10,7 +10,7 @@ const RightDrawer = ({open, setOpen, children}) => {
     const useStyles = makeStyles(theme => ({
         drawerRoot: {
             height: window.innerHeight,
-            width: '100vw',
+            width: '100%',
             paddingTop: `calc(${headerHeight}px + 10px)`,
             textTransform: 'uppercase',
             zIndex:0,

@@ -55,9 +55,10 @@ const materialTheme = {
             fontWeight: 'bold',
             textTransform: 'uppercase',
             lineHeight: '50px',
-            padding: '5px 0',
+            padding: '12px 0 2px',
             [breakpoints.down('sm')]: {
                 fontSize: 40,
+                padding: '8px 0 2px',
                 lineHeight: '35px',
             },
         },
@@ -113,10 +114,38 @@ const materialTheme = {
             }
         },
         MuiInputLabel: {
+            root: {
+              fontSize: 10,
+              [breakpoints.down('sm')]: {
+                fontSize: 11,
+              },
+            },
             formControl: {
                 top: '8px',
+            },
+            shrink: {
+                transform: 'translate(0, 1.5px) scale(1)',
+            },
+        },
+        MuiTableCell: {
+            root: {
+                padding: '5px 20px 5px 0',
             }
-        }
+        },
+        MuiButton: {
+            root: {
+                paddingTop: '1px',
+                paddingBottom: '1px',
+                fontSize: '10px',
+                [breakpoints.down('sm')]: {
+                    fontSize: '11px',
+                },
+            },
+            outlined: {
+                paddingTop: 0,
+                paddingBottom: 0,
+            },
+        },
     },
 };
 

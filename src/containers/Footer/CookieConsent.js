@@ -4,8 +4,14 @@ import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
 import {IconButton} from "@material-ui/core";
 
 const ConsentWrapper = styled.div`
-  position: relative;
   width: 100%;
+  bottom: 0;
+  position: sticky;
+  background: #ffffffe6 0 0 no-repeat padding-box;
+  box-shadow: 0px -1px 0px #989ea1;
+  align-items: center;
+  flex-direction: row;
+  justify-content: center;
   text-transform: uppercase;
   color: #000;
   border-bottom: 1px solid;

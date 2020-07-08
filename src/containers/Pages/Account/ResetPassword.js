@@ -7,11 +7,13 @@ import {
     FormControl,
     Grid, IconButton, InputAdornment,
     TextField,
-    Typography
+    Typography, useMediaQuery, useTheme
 } from "@material-ui/core";
 import Button from "../../../components/Button";
 
 const ResetPassword = () => {
+    const muiTheme = useTheme()
+    const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
     const [data, setData] = useState({
         email: null,
         password: null,
@@ -97,10 +99,10 @@ const ResetPassword = () => {
         }
     }
     return (
-        <Grid style={{marginTop: '20px'}} container spacing={4}>
+        <Grid style={{marginTop: isMobile ? 0 : '20px'}} container spacing={isMobile ? 0 : 4}>
             <Grid item xs={12} md={12}>
                 <Typography variant="h1" component="h1">Reset password</Typography>
-                <Divider />
+                {!isMobile && <Divider />}
                 {!data.resetSuccess && data.emailSent ? (
                     <Typography variant="body1" component="p">{data.emailSent}</Typography>
                 ) : (
@@ -115,6 +117,9 @@ const ResetPassword = () => {
                         <form>
                             <FormControl fullWidth style={{marginTop: '10px'}}>
                                 <TextField
+                                    InputLabelProps={{
+                                        disableAnimation: true
+                                    }}
                                     placeholder="ENTER YOUR EMAIL"
                                     required
                                     error={!!dataError.email}
@@ -124,14 +129,14 @@ const ResetPassword = () => {
                                     type="email"
                                     value={data.email}
                                     onChange={(event) => handleChange(event, 'email')}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
                                 />
                             </FormControl>
                             <FormControl fullWidth style={{marginTop: '10px'}}>
                                 <TextField
-                                    placeholder="ENTER THE 4 DIGIT CODE IN THE EMAIL"
+                                    InputLabelProps={{
+                                        disableAnimation: true
+                                    }}
+                                    placeholder="ENTER THE 4 DIGIT CODE RECEIVED BY EMAIL"
                                     required
                                     error={!!dataError.code}
                                     label="code"
@@ -140,9 +145,6 @@ const ResetPassword = () => {
                                     type="number"
                                     value={data.code}
                                     onChange={(event) => handleChange(event, 'code')}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
                                 />
                             </FormControl>
                             <FormControl fullWidth style={{marginTop: '10px'}}>
@@ -157,7 +159,7 @@ const ResetPassword = () => {
                                     value={data.password}
                                     onChange={(event) => handleChange(event, 'password')}
                                     InputLabelProps={{
-                                        shrink: true,
+                                        disableAnimation: true
                                     }}
                                     InputProps={{endAdornment:
                                             <InputAdornment position="end">
@@ -184,10 +186,8 @@ const ResetPassword = () => {
                                     type={data.showConfirmPassword ? 'text' : 'password'}
                                     value={data.confirmPassword}
                                     onChange={(event) => handleChange(event, 'confirmPassword')}
-                                    InputLabelProps={{
-                                        shrink: true,
-                                    }}
-                                    InputProps={{endAdornment:
+                                    InputProps={{
+                                        endAdornment:
                                             <InputAdornment position="end">
                                                 <IconButton
                                                     aria-label="toggle password visibility"
@@ -199,6 +199,9 @@ const ResetPassword = () => {
                                                 </IconButton>
                                             </InputAdornment>
                                     }}
+                                    InputLabelProps={{
+                                        disableAnimation: true
+                                    }}
                                 />
                             </FormControl>
                             <label className="ohnohoney" htmlFor="name" />
@@ -209,6 +212,7 @@ const ResetPassword = () => {
                         <form>
                             <FormControl fullWidth style={{marginBottom: '20px'}}>
                                 <TextField
+                                    disableAnimation
                                     placeholder="ENTER YOUR EMAIL"
                                     required
                                     error={!!dataError.email}
@@ -219,7 +223,7 @@ const ResetPassword = () => {
                                     value={data.email}
                                     onChange={(event) => handleChange(event, 'email')}
                                     InputLabelProps={{
-                                        shrink: true,
+                                        disableAnimation: true
                                     }}
                                 />
                             </FormControl>

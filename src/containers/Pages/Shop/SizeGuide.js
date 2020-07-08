@@ -13,6 +13,7 @@ import {
     makeStyles
 } from "@material-ui/core"
 import Link from "../../../components/Link"
+import Container from "../../../components/Container"
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -21,13 +22,9 @@ const useStyles = makeStyles((theme) => ({
         top:' 50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
-        backgroundColor: theme.palette.background.paper,
+        backgroundColor: '#fff',
         border: 'none',
         boxShadow: 'none',
-        padding: theme.spacing(2, 4, 3),
-    },
-    table: {
-        minWidth: 900,
     },
 }));
 
@@ -43,43 +40,48 @@ const SizeGuide = ({sizes}) => {
 
     return (
         <React.Fragment>
-            <Link onClick={handleOpen} color="secondary"><b>Size guide</b></Link>
+            <Link style={{lineHeight: '15px'}} onClick={handleOpen} color="inherit"><b>Size guide</b></Link>
             <Modal
                 open={open}
                 onClose={handleClose}
                 aria-labelledby="size-guide"
                 aria-describedby="inan-products-size-guide"
             >
-                <div className={classes.paper}>
-                    <Typography component="h4" variant="h1">Inan</Typography>
-                    <Divider />
-                    <Typography component="h4" variant="h1">Size Guide</Typography>
-                    <Divider />
-                    <TableContainer>
-                        <Table className={classes.table} aria-label="simple table">
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>{" "}</TableCell>
-                                    <TableCell align="right"><Typography component="h3" variant="h3">Adg. measures</Typography></TableCell>
-                                    <TableCell align="right"><Typography component="h3" variant="h3">Wearability</Typography></TableCell>
-                                    <TableCell align="right"><Typography component="h3" variant="h3">Matching size</Typography></TableCell>
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {sizes.map((row) => (
-                                    <TableRow key={row.id}>
-                                        <TableCell component="th" scope="row">
-                                            <Typography component="h3" variant="h3">{row.title.rendered}</Typography>
-                                        </TableCell>
-                                        <TableCell align="right">{row.acf.adj_measures}</TableCell>
-                                        <TableCell align="right">{row.acf.wearability}</TableCell>
-                                        <TableCell align="right">{row.acf.matching_size}</TableCell>
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                </div>
+                <React.Fragment>
+                    <div onClick={handleClose} style={{position: 'absolute', backgroundColor: '#fff', top: 0, left: 0, height: '100vh', width: '100vw'}} />
+                    <div className={classes.paper}>
+                        <Container maxWidth="md">
+                            <Typography component="h4" variant="h1">Inan</Typography>
+                            <Divider />
+                            <Typography component="h4" variant="h1">Size Guide</Typography>
+                            <Divider style={{marginBottom: '35px'}} />
+                            <TableContainer>
+                                <Table className={classes.table} aria-label="simple table">
+                                    <TableHead>
+                                        <TableRow>
+                                            <TableCell>{" "}</TableCell>
+                                            <TableCell><Typography component="h3" variant="h3">Adj. measures</Typography></TableCell>
+                                            <TableCell><Typography component="h3" variant="h3">Wearability</Typography></TableCell>
+                                            <TableCell><Typography component="h3" variant="h3">Matching size</Typography></TableCell>
+                                        </TableRow>
+                                    </TableHead>
+                                    <TableBody>
+                                        {sizes.map((row) => (
+                                            <TableRow key={row.id}>
+                                                <TableCell component="th" scope="row">
+                                                    <Typography component="h3" variant="h3">{row.title.rendered}</Typography>
+                                                </TableCell>
+                                                <TableCell>{row.acf.adj_measures}</TableCell>
+                                                <TableCell>{row.acf.wearability}</TableCell>
+                                                <TableCell>{row.acf.matching_size}</TableCell>
+                                            </TableRow>
+                                        ))}
+                                    </TableBody>
+                                </Table>
+                            </TableContainer>
+                        </Container>
+                    </div>
+                </React.Fragment>
             </Modal>
         </React.Fragment>
     )

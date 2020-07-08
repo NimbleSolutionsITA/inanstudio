@@ -37,21 +37,23 @@ function App(props) {
     return (
         <ThemeProvider theme={createMuiTheme(materialTheme)}>
             <Header categories={categories} news={newsFeed}  />
-            <Switch>
-                <Route exact path="/" component={Home} />
-                <Route path="/shop/:slug?" component={() => <Shop categories={categories} />} />
-                <Route exact path="/about" component={About} />
-                <Route exact path="/made-to-order" component={MadeToOrder} />
-                <Route exact path="/collection/:slug?" component={Collection} />
-                <Route exact path="/stockists" component={Stockists} />
-                <Route exact path="/bag" component={ShoppingBag} />
-                <Route exact path="/wishlist" component={Wishlist} />
-                <Route exact path="/checkout" component={Checkout} />
-                <Route path="/account" component={Account} />
-                <Route path="/customer-service" component={CustomerService} />
-                <Route path="/legal-area" component={LegalArea} />
-                <Route exact path="/error/:section/:code" component={Error} />
-            </Switch>
+            <div style={{minHeight: '100vh', backgroundColor: currentPath.pathname === '/about' && '#000'}}>
+                <Switch>
+                    <Route exact path="/" component={Home} />
+                    <Route path="/shop/:slug?" component={() => <Shop categories={categories} />} />
+                    <Route exact path="/about" component={About} />
+                    <Route exact path="/made-to-order" component={MadeToOrder} />
+                    <Route exact path="/collection/:slug?" component={Collection} />
+                    <Route exact path="/stockists" component={Stockists} />
+                    <Route exact path="/bag" component={ShoppingBag} />
+                    <Route exact path="/wishlist" component={Wishlist} />
+                    <Route exact path="/checkout" component={Checkout} />
+                    <Route path="/account" component={Account} />
+                    <Route path="/customer-service" component={CustomerService} />
+                    <Route path="/legal-area" component={LegalArea} />
+                    <Route exact path="/error/:section/:code" component={Error} />
+                </Switch>
+            </div>
             {currentPath.pathname !== '/checkout' && <Footer />}
             <GlobalStyle />
         </ThemeProvider>

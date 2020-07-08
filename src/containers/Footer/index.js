@@ -9,12 +9,13 @@ import CookieConsent from "./CookieConsent";
 
 const NavWrapper = styled.div`
   width: 100%;
-  height: 18pt;
+  height: 18px;
   border-top: 1pt solid;
   border-bottom: 1pt solid;
   text-transform: uppercase;
   display: flex;
   justify-content: space-between;
+  padding: 2px 0;
 `;
 
 const FooterWrapper = styled.div`
@@ -76,9 +77,9 @@ const Footer = () => {
                             </Grid>
                             <Grid item md={8} lg={6}>
                                 <div style={{display: 'flex', marginBottom: '10px'}}>
-                                    <div style={{marginRight: '10px'}}><b>NEWSLETTER</b> |</div>
+                                    <div style={{marginRight: '10px', padding: '8px 0'}}><b>NEWSLETTER</b> |</div>
                                     <NewsletterForm />
-                                    <div style={{marginLeft: '10px'}}>
+                                    <div style={{marginLeft: '10px', padding: '8px 0'}}>
                                         <Link color="secondary" to="https://instagram.com/inan_studio?igshid=9w5d3f9g9xg3" target="_blank" rel="noopener noreferrer">
                                             <b>Instagram</b>
                                         </Link>

@@ -8,7 +8,7 @@ import {
     IconButton,
     FormControl,
     CircularProgress,
-    FormControlLabel
+    FormControlLabel, useTheme, useMediaQuery
 } from "@material-ui/core"
 import Button from "../../../components/Button"
 import {registerCustomer as registerC} from '../../../providers/WoocommerceDataProvider/actions'
@@ -19,6 +19,8 @@ import Link from "../../../components/Link"
 import {regExpEmail} from "../../../helpers";
 
 const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
+    const muiTheme = useTheme()
+    const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
     const [data, setData] = useState({
         firstName: null,
         lastName: null,
@@ -63,10 +65,10 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
             registerCustomer(data);
     }
     return (
-        <Grid style={{marginTop: '20px'}} container spacing={4}>
+        <Grid style={{marginTop: isMobile ? 0 : '20px'}} container spacing={isMobile ? 0 : 4}>
             <Grid item xs={12} md={12}>
                 <Typography variant="h1" component="h1">Create new account</Typography>
-                <Divider />
+                {!isMobile && <Divider />}
                 {error ? (
                     <Typography color="error" variant="body1" component="p">{error}</Typography>
                 ) : (
@@ -78,7 +80,7 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                     <Typography style={{marginTop: '10px'}} variant="h1" component="h1">CONGRATULATIONS! ACCOUNT CREATED SUCCESSFULLY</Typography>
                 ) : (
                     <form>
-                        <Grid container spacing={4}>
+                        <Grid container spacing={isMobile ? 0 : 4}>
                             <Grid item xs={12} lg={6}>
                                 <FormControl fullWidth style={{marginTop: '10px'}}>
                                     <TextField
@@ -135,7 +137,7 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                 }}
                             />
                         </FormControl>
-                        <Grid container spacing={4}>
+                        <Grid container spacing={isMobile ? 0 : 4}>
                             <Grid item xs={12} lg={6}>
                                 <FormControl fullWidth style={{marginTop: '10px'}}>
                                     <TextField
@@ -215,7 +217,7 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                         <label className="ohnohoney" htmlFor="name" />
                         <input className="ohnohoney" autoComplete="off" type="name" id="name" name="name" placeholder="Your name here" ref={node => () => setData({...data, honeypot: node?.value})} />
                         <Button variant="contained" color="secondary" fullWidth onClick={handleRegister}>{creatingUser ? <CircularProgress size={15} /> : 'register'}</Button>
-                        <Typography style={{marginTop: '5px'}} variant="body1" component="p">BY CLICKING 'REGISTER', YOU AGREE TO OUR <Link color="secondary" to="/privacy-cookies" target="_blank" >TERMS & CONDITIONS AND PRIVACY & COOKIES POLICY.</Link></Typography>
+                        <Typography style={{marginTop: '5px'}} variant="body1" component="p">BY CLICKING 'REGISTER', YOU AGREE TO OUR <Link color="inherit" to="/legal-area/terms-and-conditions" target="_blank" >TERMS & CONDITIONS AND PRIVACY & COOKIES POLICY.</Link></Typography>
                         </form>
                 )}
             </Grid>

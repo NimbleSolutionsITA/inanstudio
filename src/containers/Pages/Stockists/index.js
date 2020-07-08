@@ -21,8 +21,6 @@ function Stockists() {
         <Container headerPadding>
             {shops && (
                 <React.Fragment>
-                    <Typography variant="h1">STOCKISTS</Typography>
-                    <Divider />
                     <br />
                     <br />
                     {cities.map((city, index) => (

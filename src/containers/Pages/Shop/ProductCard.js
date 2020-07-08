@@ -10,10 +10,10 @@ const CardWrapper = styled.div`
     height: 100%;
     display: flex;
     flex-direction: column;
+    padding-bottom: 6px;
 `
 const ImageWrapper = styled.div`
     flex-grow: 1;
-    transition: background-image .25s ease;
     background-image: ${({bg}) => `url(${bg})`};
     background-size: contain;
     background-position: center;
@@ -56,7 +56,7 @@ const ProductCard = ({product, isMobile}) => {
     return (
         <CardWrapper>
             <ImageWrapper bg={product.images[0].src} bgHover={product.images[1].src}>
-                <Button disableHover disableGutters disableRipple onClick={handleClick}>add to wishlist</Button>
+                {!isMobile && <Button disableHover disableGutters disableRipple onClick={handleClick}>add to wishlist</Button>}
                 <Link to={`/shop/${product.slug}`}><img src={product.images[0].src} alt={product.images[0].alt} /></Link>
             </ImageWrapper>
             <ContentWrapper>

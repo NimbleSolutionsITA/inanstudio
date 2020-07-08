@@ -35,7 +35,7 @@ function Shop({categories}) {
     }
 
     return (
-        <div style={{width: !isMobile && '100vw', paddingTop: !isMobile && headerHeight, paddingBottom: '40px'}}>
+        <div style={{width: !isMobile && '100%', paddingTop: !isMobile && headerHeight, paddingBottom: '40px'}}>
             { prodId ? (
                 <ProductView products={products} prodId={prodId} colors={colors} isMobile={isMobile} sizeGuide={sizeGuide} />
             ) : (

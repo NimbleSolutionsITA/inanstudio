@@ -34,6 +34,7 @@ const HomeCover = ({headerHeight, bg, bgMobile, title, isCover, isCoverMobile, c
             opacity: 0,
             width: 'calc(100% - 80px)',
             paddingBottom: '9px',
+            lineHeight: '45px',
             [theme.breakpoints.down('sm')]: {
                 paddingBottom: '16px',
                 width: '100%',

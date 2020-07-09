@@ -22,6 +22,9 @@ const Cta = styled.div`
   text-align: right;
   margin-top: -30px;
   text-transform: uppercase;
+  a {
+    line-height: 18px;
+  }
 `;
 
 const CoverContent = ({color, colorMobile, title, ctaLink, ctaText, isMobile, headerHeight}) => {
@@ -35,9 +38,9 @@ const CoverContent = ({color, colorMobile, title, ctaLink, ctaText, isMobile, he
         title: {
             marginTop: `calc(${headerHeight}px + 5px)`,
             textTransform: 'uppercase',
-            marginLeft: '-3px',
             minHeight: '75px',
             width: 'calc(100% - 80px)',
+            lineHeight: '45px',
             [theme.breakpoints.down('sm')]: {
                 marginTop: '10px',
                 width: '100%',

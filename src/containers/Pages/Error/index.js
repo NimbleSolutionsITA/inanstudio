@@ -5,8 +5,6 @@ import Container from "../../../components/Container";
 
 const Error = () => {
     let { section, code } = useParams();
-    console.log(section === 'collection' && code === 404)
-    console.log(section, code)
     return (
         <Container headerPadding>
             {code === '404' && (

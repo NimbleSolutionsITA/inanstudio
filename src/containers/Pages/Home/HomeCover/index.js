@@ -4,7 +4,8 @@ import styled from 'styled-components';
 import "video-react/dist/video-react.css";
 import '../coverVideoPlayer.css';
 import Container from "../../../../components/Container";
-import CoverVideoPlayer from '../CoverVideoPlayer';
+// import CoverVideoPlayer from '../CoverVideoPlayer';
+import VimeoPlayer from "../../../../components/VideoPlayer/VimeoPlayer";
 
 const CoverWrapper = styled.div`
   min-height:  ${({coverCSSHeight}) => coverCSSHeight};
@@ -34,7 +35,7 @@ const HomeCover = ({headerHeight, bg, bgMobile, title, isCover, isCoverMobile, c
             opacity: 0,
             width: 'calc(100% - 80px)',
             paddingBottom: '9px',
-            lineHeight: '45px',
+            lineHeight: '60px',
             [theme.breakpoints.down('sm')]: {
                 paddingBottom: '16px',
                 width: '100%',
@@ -45,19 +46,11 @@ const HomeCover = ({headerHeight, bg, bgMobile, title, isCover, isCoverMobile, c
     return useMemo(
         () => {
             return(
-                <CoverWrapper coverCSSHeight={'auto'} bg={!video && isMobile ? bgMobile || bg : bg} isCover={isMobile ? isCoverMobile : isCover} video={!!video} showOverlay={showContent}>
+                <CoverWrapper coverCSSHeight={'auto'} bg={!video && (isMobile ? bgMobile || bg : bg)} isCover={isMobile ? isCoverMobile : isCover} video={!!video} showOverlay={showContent}>
                     {!video && isMobile && isCoverMobile && <img src={bgMobile || bg} alt="" style={{width: '100%', opacity: 0}} />}
                     {!video && !isMobile && isCover && <img src={bg} alt="" style={{width: '100%', opacity: 0}} />}
                     {video ? (
-                        <CoverVideoPlayer
-                            poster={isMobile ? bgMobile : bg}
-                            loop={loop}
-                            autoPlay={autoplay}
-                            muted={isMobile && autoplay ? false : mute}
-                            src={video}
-                            color={isMobile ? colorMobile : color}
-                            headerHeight={isMobile ? headerHeight : 0}
-                        />
+                        <VimeoPlayer cover={isMobile ? bgMobile || bg : bg} video={video} loop={loop} autoplay={autoplay} color={isMobile ? colorMobile : color} mute={mute} />
                     ) : (
                         <React.Fragment>
                             <Container style={{paddingTop: isMobile ? 0 : headerHeight}}>

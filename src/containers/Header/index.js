@@ -1,4 +1,4 @@
-import React, {useMemo, useRef, useEffect} from "react";
+import React, {useMemo, useRef, useEffect, useCallback} from "react";
 import {useLocation} from "react-router";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -12,6 +12,7 @@ import Container from "../../components/Container";
 import AppBar from "./AppBar";
 import Filters from "./Filters";
 import PageTitle from "./PageTitle";
+import {checkLogin} from "../../providers/AuthProvider/actions";
 
 const HeaderWrapper = styled.div`
   position: fixed;
@@ -26,18 +27,20 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-const Header = ({news, categories}) => {
+const Header = () => {
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
 
     const headerEl = useRef(null);
 
+    const categories = useSelector(state => state.woocommerce['products-categories'])
+
     const navLinks = [
         {name: 'shop', url: '/shop'},
-        {name: 'made to order', url: '/made-to-order'},
         {name: 'collection', url: '/collection'},
+        {name: 'made to order', url: '/made-to-order'},
         {name: 'about', url: '/about'},
-        {name: 'stockists', url: '/stockists'},
+        // {name: 'stockists', url: '/stockists'},
     ]
     const dispatch = useDispatch()
     const { authenticated  } = useSelector(state => state.user)
@@ -51,7 +54,7 @@ const Header = ({news, categories}) => {
     let location = useLocation()
     let query = useQuery()
 
-    const bgColor = () => {
+    const bgColor = useCallback(() => {
         switch (location.pathname) {
             case '/':
                 return 'transparent'
@@ -60,9 +63,12 @@ const Header = ({news, categories}) => {
             default:
                 return '#fff'
         }
-    }
+    },[location.pathname])
+
+    const user = useSelector(state => state.user)
 
     useEffect(() => {
+        if (!user.authenticated && !user.authenticating) dispatch(checkLogin());
         if(headerEl.current?.offsetHeight && headerEl.current.offsetHeight !== height) {
             dispatch(setHeaderHeight(headerEl.current.offsetHeight))
             if(isMobile) {
@@ -71,11 +77,11 @@ const Header = ({news, categories}) => {
         }
         if(location.pathname === '/about') dispatch(setHeaderColor('#fff', '#fff'))
         else if(location.pathname !== '/') dispatch(setHeaderColor('#000', '#000'))
-    }, [dispatch, height, isMobile, location.pathname])
+    }, [dispatch, height, isMobile, location.pathname, user.authenticated, user.authenticating])
 
     const cPath = location.pathname.substring(location.pathname.lastIndexOf('/') + 1)
 
-    const pageTitle = () => {
+    const pageTitle = useCallback(() => {
         if (location.pathname.startsWith('/account')) return ['account', null]
         if (location.pathname.startsWith('/made-to-order')) return ['made to order', null]
         if (location.pathname.startsWith('/about')) return ['about', null]
@@ -84,10 +90,9 @@ const Header = ({news, categories}) => {
         if (location.pathname.startsWith('/wishlist')) return ['wishlist', wishListItems]
         if (location.pathname.startsWith('/customer-service')) return ['customer service', null]
         if (location.pathname.startsWith('/legal-area')) return ['legal area', null]
+        if (location.pathname.startsWith('/checkout')) return ['checkout', null]
         return [];
-    }
-
-    console.log(pageTitle())
+    },[cartItems, location.pathname, wishListItems])
 
     return useMemo(() => (
         <React.Fragment>
@@ -102,7 +107,7 @@ const Header = ({news, categories}) => {
                         cartItems={cartItems}
                         wishlistItems={wishListItems}
                     >
-                        {news?.length > 0 && !open && <NewsFeed isMobile={isMobile} currentNews={news} />}
+                        {!open && <NewsFeed />}
                         {!open && location.pathname.startsWith('/shop') && (
                             <div style={{width: '100%', height: '20px'}}>
                                 {categories && <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />}
@@ -120,7 +125,7 @@ const Header = ({news, categories}) => {
             ) : (
                 <HeaderWrapper ref={headerEl} color={headerColor} bgColor={bgColor}>
                     <Container>
-                        {news?.length > 0 && <NewsFeed isMobile={isMobile} currentNews={news} />}
+                        <NewsFeed />
                         <LogoBar fill={headerColor} height={43} />
                         <NavBar
                             navLinks={navLinks}
@@ -145,7 +150,7 @@ const Header = ({news, categories}) => {
             )}
         </React.Fragment>
 
-    ), [isMobile, authenticated, open, navLinks, cartItems, wishListItems, news, location.pathname, categories, query, height, headerColor, bgColor, cPath])
+    ), [isMobile, authenticated, open, navLinks, cartItems, wishListItems, location.pathname, categories, query, cPath, pageTitle, height, headerColor, bgColor])
 
 }
 

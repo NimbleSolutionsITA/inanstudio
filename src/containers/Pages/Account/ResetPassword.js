@@ -101,6 +101,8 @@ const ResetPassword = () => {
     return (
         <Grid style={{marginTop: isMobile ? 0 : '20px'}} container spacing={isMobile ? 0 : 4}>
             <Grid item xs={12} md={12}>
+                {isMobile && <br />}
+                {isMobile && <br />}
                 <Typography variant="h1" component="h1">Reset password</Typography>
                 {!isMobile && <Divider />}
                 {!data.resetSuccess && data.emailSent ? (

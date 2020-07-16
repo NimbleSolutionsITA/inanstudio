@@ -66,6 +66,7 @@ const AppBar = forwardRef(({children, authenticated, open, navLinks, cartItems, 
         dispatch(openDrawer(open))
     }
     const handleBagClick = () => {
+        dispatch(openDrawer(false))
         history.push('/bag')
     }
 
@@ -74,7 +75,7 @@ const AppBar = forwardRef(({children, authenticated, open, navLinks, cartItems, 
             <MuiAppBar ref={headerEl} position="fixed" square elevation={0} classes={{root: classes.appBarRoot}}>
                 <Toolbar component={Container}>
                     <IconButton edge="start" className={classes.title} color="inherit">
-                        <Link to="/"><INAN height={30} color={open ? '#fff' : '#000'} /></Link>
+                        <Link onClick={() => handleOpenDrawer(false)} to="/"><INAN height={30} color={open ? '#fff' : '#000'} /></Link>
                     </IconButton>
                     <div style={{flex: 1}} />
                     <IconButton onClick={handleBagClick} className={classes.toolbarIcons} color="inherit" aria-label="menu">
@@ -95,7 +96,7 @@ const AppBar = forwardRef(({children, authenticated, open, navLinks, cartItems, 
             >
                 <Container style={{height: '100%', position: 'relative'}}>
                     <List className={classes.drawerNavContainer}>
-                        {navLinks.map((link, index) => (
+                        {navLinks.map(link => (
                             <ListItem component={Link} to={link.url} disableGutters button key={link.name} onClick={() => handleOpenDrawer(false)}>
                                 <ListItemText primary={link.name} />
                             </ListItem>

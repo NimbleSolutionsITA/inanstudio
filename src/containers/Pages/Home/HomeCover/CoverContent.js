@@ -41,6 +41,9 @@ const CoverContent = ({color, colorMobile, title, ctaLink, ctaText, isMobile, he
             minHeight: '75px',
             width: 'calc(100% - 80px)',
             lineHeight: '45px',
+            '& a:hover': {
+                textDecoration: 'none',
+            },
             [theme.breakpoints.down('sm')]: {
                 marginTop: '10px',
                 width: '100%',
@@ -57,7 +60,6 @@ const CoverContent = ({color, colorMobile, title, ctaLink, ctaText, isMobile, he
                             classes={{ root: classes.title }}
                             variant="h1"
                             component="h1"
-                            to={ctaLink}
                         >
                             <Link disableHover underline="none" color="inherit" to={ctaLink}>{title}</Link>
                         </Typography>

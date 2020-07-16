@@ -2,8 +2,8 @@ import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import MobileStepper from '@material-ui/core/MobileStepper';
 import SwipeableViews from 'react-swipeable-views';
-import VideoPlayer from "./VideoPlayer";
 import ModalImage from "./ModalImage";
+import VimeoPlayer from "./VideoPlayer/VimeoPlayer";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-const Carousel = ({images, poster, src}) => {
+const Carousel = ({images, poster, src, isMobile}) => {
     const classes = useStyles();
     const theme = useTheme();
     const [activeStep, setActiveStep] = React.useState(0);
@@ -69,15 +69,13 @@ const Carousel = ({images, poster, src}) => {
                     {images.map((step, index) => (
                         <div className={classes.imgWrapper}  key={step.src} style={{backgroundImage: `url(${step.src})`}}>
                             {Math.abs(activeStep - index) <= 2 ? (
-                                <ModalImage className={classes.img} url={step.src} alt={step.alt} />
+                                <ModalImage className={classes.img} url={step} alt={step.alt} />
                             ) : null}
                         </div>
                     ))}
-                    <VideoPlayer
-                        key={src}
-                        poster={poster}
-                        src={src}
-                    />
+                    {src && (
+                        <VimeoPlayer video={src} autoplay={!poster && !isMobile} cover={poster} color="#fff" />
+                    )}
                 </SwipeableViews>
             ) : (
                 <SwipeableViews
@@ -89,7 +87,7 @@ const Carousel = ({images, poster, src}) => {
                     {images.map((step, index) => (
                         <div className={classes.imgWrapper}  key={step.src} style={{backgroundImage: `url(${step.src})`}}>
                             {Math.abs(activeStep - index) <= 2 ? (
-                                <ModalImage className={classes.img} url={step.src} alt={step.alt} />
+                                <ModalImage className={classes.img} url={step} alt={step.alt} />
                             ) : null}
                         </div>
                     ))}

@@ -3,7 +3,7 @@ import history from "../../../history";
 import NavigationPrompt from "react-router-navigation-prompt"
 import {useDispatch, useSelector} from "react-redux";
 import {deleteOrder} from "../../../providers/WoocommerceDataProvider/actions";
-import {Grid, Typography, Divider} from "@material-ui/core";
+import {Grid, Typography, Divider, useTheme, useMediaQuery} from "@material-ui/core";
 import Container from "../../../components/Container";
 import Button from "../../../components/Button";
 import LoginForm from "../../../components/Login";
@@ -13,6 +13,8 @@ import PaymentSuccess from "./PaymentSuccess";
 import Dialog from "../../../components/Dialog";
 
 const Checkout = () => {
+    const muiTheme = useTheme()
+    const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
     const [isGuest, setIsGuest] = useState(false)
     const [paypalSuccess, setPaypalSuccess] = useState(null);
     const [paypalError, setPaypalError] = useState(false);
@@ -29,8 +31,6 @@ const Checkout = () => {
     useEffect(() => {
         if (!cart.length && !paypalSuccess) history.goBack()
     })
-
-    console.log({isGuest, paypalSuccess, paypalError, currentOrder, status: currentOrder && currentOrder.status === 'pending'})
 
     return (
         <Container headerPadding>
@@ -50,29 +50,38 @@ const Checkout = () => {
                     />
                 )}
             </NavigationPrompt>
-            <Typography variant="h1">Checkout</Typography>
-            <Divider />
-            <br />
+            {!isMobile  && <br/>}
             {!isGuest && !authenticated ?
                 cart.length &&
                 <Grid container spacing={3}>
                     <Grid item xs={12} md={4} style={{display: 'flex', flexDirection: 'column'}}>
+                        {isMobile  && <br/>}
+                        {isMobile  && <br/>}
+                        {isMobile  && <br/>}
                         <Typography variant="h2">CONTINUE AS GUEST</Typography>
-                        <Divider />
-                        <br />
+                        {!isMobile && (
+                            <React.Fragment>
+                                <Divider />
+                                <br />
+                            </React.Fragment>
+                        )}
                         <Typography>CONTINUE WITHOUT REGISTRATION.</Typography>
                         <div style={{flexGrow: 1}}/>
                         <br />
                         <Button fullWidth variant="contained" color="secondary" onClick={() => setIsGuest(true)}>continue as guest</Button>
                     </Grid>
                     <Grid item xs={12} md={4}>
+                        {isMobile  && <br/>}
+                        {isMobile  && <br/>}
                         <Typography variant="h2">LOGIN</Typography>
-                        <Divider />
+                        {!isMobile  && <Divider/>}
                         <LoginForm />
                     </Grid>
                     <Grid item xs={12} md={4} style={{display: 'flex', flexDirection: 'column'}}>
+                        {isMobile  && <br/>}
+                        {isMobile  && <br/>}
                         <Typography variant="h2">REGISTER</Typography>
-                        <Divider />
+                        {!isMobile  && <Divider/>}
                         <br />
                         <Typography>REGISTER TO COMPLETE CHECKOUT MORE QUICKLY, REVIEW ORDER INFORMATION and much more.</Typography>
                         <div style={{flexGrow: 1, minHeight: '10px'}}/>

@@ -43,14 +43,14 @@ const CrossSell = ({items, isMobile}) => {
                     itemClass="carousel-item-padding-40-px"
                 >
                     {items.map(item => (
-                        <CrossSellItem key={item} id={item}/>
+                        <CrossSellItem isMobile={isMobile} key={item} id={item}/>
                     ))}
                 </Carousel>
             ) : (
                 <Grid container spacing={isMobile ? 1 : 2}>
                     {items.slice(0, 3).map(item => (
                         <Grid xs={6} md={4} item key={item}>
-                            <CrossSellItem id={item}/>
+                            <CrossSellItem isMobile={isMobile} id={item}/>
                         </Grid>
                     ))}
                 </Grid>

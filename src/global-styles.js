@@ -65,10 +65,23 @@ const GlobalStyle = createGlobalStyle`
     background: transparent;
   }
   .react-multiple-carousel__arrow--left {
-    left: -6%;
+    left: -50px;
   }
   .react-multiple-carousel__arrow--right {
-    right: -6%;
+    right: -50px;
+  }
+  .react-multi-carousel-dot-list {
+    bottom: 10px;
+  }
+  .react-multi-carousel-dot button {
+    border: none;
+    background-color: #666;
+    height: 8px;
+    width: 8px;
+    margin-right: 12px;
+  }
+  .react-multi-carousel-dot--active button {
+    background: #000;
   }
   .ohnohoney{
       opacity: 0;

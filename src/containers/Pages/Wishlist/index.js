@@ -1,6 +1,6 @@
 import React from "react";
 import {useSelector} from "react-redux";
-import {Divider, Typography} from "@material-ui/core";
+import {Typography} from "@material-ui/core";
 import Container from "../../../components/Container";
 import Button from "../../../components/Button";
 import CartItem from "../../../components/CartItem";
@@ -16,7 +16,7 @@ const Wishlist = () => {
                     left={wishlist.map(i => <CartItem key={i.id} itemData={i} />)}
                     right={
                         <React.Fragment>
-                            <Button inactive disableGutters disablePadding to="/returns">Shipping and returns</Button><br />
+                            <Button inactive disableGutters disablePadding to="/customer-service/shipping">Shipping and returns</Button><br />
                             <Button inactive disableGutters disablePadding to="/customer-service">need help?</Button>
                         </React.Fragment>
                     }

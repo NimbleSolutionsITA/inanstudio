@@ -83,7 +83,7 @@ function Home(props) {
                 />
             )}
             {props.covers && props.covers.map((cover, index) => (
-                <div key={cover.id} ref={elRefs.current[index]}>
+                <div key={cover.id} ref={elRefs.current[index]} style={{minHeight: index === props.covers.length - 1 && (isMobile ? window.innerHeight - 520 : window.innerHeight - 150)}}>
                     <HomeCover
                         bg={cover.acf.image}
                         bgMobile={cover.acf.image_mobile || cover.acf.image}

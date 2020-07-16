@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import Container from "../../components/Container";
+import {useMediaQuery, useTheme} from "@material-ui/core";
+import {useSelector} from "react-redux";
 
 const NewsContainer = styled.div`
   width: 100%;
@@ -10,16 +12,19 @@ const NewsContainer = styled.div`
   border-top: ${({isMobile}) => isMobile ? '1px solid' : 'none'};
 `;
 
-const NewsFeed = ({currentNews, isMobile}) => {
+const NewsFeed = () => {
+    const muiTheme = useTheme()
+    const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
+    const currentNews = useSelector(state => state.wordpress['news-feed'])
     return (
         <React.Fragment>
-            {isMobile ? (
+            {currentNews?.length > 0 && (isMobile ? (
                 <NewsContainer isMobile={isMobile}>
                     <Container>{currentNews[0].title.rendered}</Container>
                 </NewsContainer>
             ) : (
                 <NewsContainer>{currentNews[0].title.rendered}</NewsContainer>
-            )}
+            ))}
         </React.Fragment>
     )
 }

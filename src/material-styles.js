@@ -134,11 +134,14 @@ const materialTheme = {
         },
         MuiButton: {
             root: {
+                minHeight: '21px',
                 paddingTop: '1px',
                 paddingBottom: '1px',
                 fontSize: '10px',
                 [breakpoints.down('sm')]: {
                     fontSize: '11px',
+                    paddingTop: '3px',
+                    paddingBottom: '3px',
                 },
             },
             outlined: {

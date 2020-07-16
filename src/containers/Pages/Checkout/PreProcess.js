@@ -10,11 +10,12 @@ const PreProcess = ({isGuest, setPaypalSuccess, setPaypalError}) => {
     const [isCheckoutReady, setIsCheckoutReady] = useState(false)
     const user = useSelector(state => state.user)
     const userInfo = useSelector(state => state.woocommerce[`customers-${user.id}`])
+    const loading = useSelector(state => state.woocommerce.creatingOrder)
     return (
         <SplitLayout
             left={<PreProcessAddress userInfo={isGuest ? null : userInfo} address={address} setAddress={setAddress} isGuest={isGuest} />}
             right={isCheckoutReady ?
-                <PaypalButton setPaypalSuccess={setPaypalSuccess} setPaypalError={setPaypalError} /> :
+                !loading && <PaypalButton setPaypalSuccess={setPaypalSuccess} setPaypalError={setPaypalError} /> :
                 <PreProcessPay setIsCheckoutReady={setIsCheckoutReady} address={address} />}
         />
     )

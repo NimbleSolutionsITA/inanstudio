@@ -80,7 +80,7 @@ const Footer = () => {
                                     <div style={{marginRight: '10px', padding: '8px 0'}}><b>NEWSLETTER</b> |</div>
                                     <NewsletterForm />
                                     <div style={{marginLeft: '10px', padding: '8px 0'}}>
-                                        <Link color="secondary" to="https://instagram.com/inan_studio?igshid=9w5d3f9g9xg3" target="_blank" rel="noopener noreferrer">
+                                        <Link color="secondary" to="https://instagram.com/inan_studio" target="_blank" rel="noopener noreferrer">
                                             <b>Instagram</b>
                                         </Link>
                                     </div>

@@ -1,10 +1,9 @@
-import React, {useEffect} from 'react'
+import React, {useMemo} from 'react'
 import {Switch, Route, useLocation} from 'react-router-dom'
-import {useDispatch, useSelector} from "react-redux"
-import {checkLogin} from "./providers/AuthProvider/actions"
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles'
 import materialTheme from './material-styles'
 import useWordpressData from "./providers/WordpressDataProvider"
+import useData from "./providers/WoocommerceDataProvider/useData";
 
 import Home from './containers/Pages/Home'
 import Shop from './containers/Pages/Shop'
@@ -19,28 +18,22 @@ import Error from "./containers/Pages/Error"
 import ShoppingBag from "./containers/Pages/ShoppingBag";
 import Wishlist from "./containers/Pages/Wishlist";
 import Checkout from "./containers/Pages/Checkout";
-import useWoocommerceData from "./providers/WoocommerceDataProvider";
 import MadeToOrder from "./containers/Pages/MadeToOrder";
 import CustomerService from "./containers/Pages/CustomerService";
 import LegalArea from "./containers/Pages/LegalArea";
 
-function App(props) {
+function App() {
+    useData()
     const newsFeed = useWordpressData('news_feed', [])
-    const categories = useWoocommerceData('products/categories')
-    const dispatch = useDispatch()
-    const user = useSelector(state => state.user)
-    useEffect(() => {
-        if (!user.authenticated && !user.authenticating) dispatch(checkLogin());
-    }, [dispatch, props, user.authenticated, user.authenticating])
     const currentPath = useLocation()
 
-    return (
+    return (useMemo(() => (
         <ThemeProvider theme={createMuiTheme(materialTheme)}>
-            <Header categories={categories} news={newsFeed}  />
+            <Header news={newsFeed}  />
             <div style={{minHeight: '100vh', backgroundColor: currentPath.pathname === '/about' && '#000'}}>
                 <Switch>
                     <Route exact path="/" component={Home} />
-                    <Route path="/shop/:slug?" component={() => <Shop categories={categories} />} />
+                    <Route path="/shop/:slug?" component={Shop} />
                     <Route exact path="/about" component={About} />
                     <Route exact path="/made-to-order" component={MadeToOrder} />
                     <Route exact path="/collection/:slug?" component={Collection} />
@@ -57,7 +50,7 @@ function App(props) {
             {currentPath.pathname !== '/checkout' && <Footer />}
             <GlobalStyle />
         </ThemeProvider>
-    )
+    ),[currentPath.pathname, newsFeed]))
 }
 
 export default App

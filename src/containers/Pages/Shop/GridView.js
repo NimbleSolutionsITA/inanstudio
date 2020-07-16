@@ -1,10 +1,10 @@
-import React from "react";
+import React, {useMemo} from "react";
 import Container from "../../../components/Container";
 import {Grid, Typography} from "@material-ui/core";
 import ProductCard from "./ProductCard";
 
 const GridView = ({activeCategory, activeCategoryName, isMobile, products, children}) => {
-    return (
+    return (useMemo(() => (
         <React.Fragment>
             <div style={{borderBottom: isMobile && '1px solid black'}}>
                 <Container style={{display: 'flex'}}>
@@ -14,7 +14,7 @@ const GridView = ({activeCategory, activeCategoryName, isMobile, products, child
             <Container>
                 <Grid container spacing={isMobile ? 1 : 2}>
                     {products && products.filter(prod => prod.categories.map(c => c.slug).indexOf(activeCategory) !== -1).map(product => (
-                        <Grid xs={6} md={4} item key={product.id}>
+                        <Grid key={product.id} xs={6} md={4} item>
                             <ProductCard isMobile={isMobile} product={product} />
                         </Grid>
                     ))}
@@ -22,7 +22,7 @@ const GridView = ({activeCategory, activeCategoryName, isMobile, products, child
             </Container>
             {children}
         </React.Fragment>
-    )
+    ), [activeCategory, activeCategoryName, children, isMobile, products]))
 }
 
 export default GridView;

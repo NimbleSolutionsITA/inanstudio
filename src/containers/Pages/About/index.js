@@ -33,7 +33,7 @@ function About() {
                             <div style={{display: 'flex', justifyContent: 'left', alignItems: 'center', height: '100%'}}><InLogo color="#fff" /></div>
                         </Grid>
                         <Grid item xs={6}>
-                            <img style={{width: '100%', marginBottom: '-5px'}} src={content.acf.image} />
+                            <img style={{width: '100%', marginBottom: '-5px'}} src={content.acf.image} alt="INAN about" />
                         </Grid>
                         <Grid item xs={3}>
                             <div style={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center', height: '100%'}}><AnLogo color="#fff" /></div>

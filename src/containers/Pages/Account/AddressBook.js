@@ -1,14 +1,20 @@
 import React, {useState} from 'react'
-import {updateCustomer as updateC} from '../../../providers/WoocommerceDataProvider/actions'
-import {connect} from "react-redux"
+import {updateCustomer} from '../../../providers/WoocommerceDataProvider/actions'
+import {useDispatch, useSelector} from "react-redux"
 import {
     Typography,
     CircularProgress,
+    Grid, FormGroup, FormControlLabel, FormControl,
 } from "@material-ui/core"
 import Button from "../../../components/Button"
 import AddressForm from "./AddressForm"
+import Checkbox from "../../../components/Checkbox";
 
-const AddressBook = ({userId, creatingUser, userCreated, updateCustomer, shippingWP, billingWP, error}) => {
+const AddressBook = ({userId, shippingWP, billingWP, isMobile}) => {
+    const creatingUser = useSelector(state => state.woocommerce.creatingUser)
+    const userCreated = useSelector(state => state.woocommerce.userCreated)
+    const error = useSelector(state => state.woocommerce.error)
+    const dispatch = useDispatch()
     const initialState = (address) => {
         return {
             firstName: address.first_name,
@@ -36,6 +42,7 @@ const AddressBook = ({userId, creatingUser, userCreated, updateCustomer, shippin
     const [billingData, setBillingData] = useState(initialState(billingWP))
     const [shippingError, setShippingError] = useState(errorInitialState)
     const [billingError, setBillingError] = useState(errorInitialState)
+    const [current, setCurrent] = useState('shipping')
 
     const [data, setData] = useState({
         isShipping: !!shippingWP.address_1,
@@ -78,63 +85,107 @@ const AddressBook = ({userId, creatingUser, userCreated, updateCustomer, shippin
         if (checkAddress(getErrors(shippingData)) && (!data.isBilling || checkAddress(getErrors(billingData))) ) {
             const shipping = saveData(shippingData)
             const billing = saveData(billingData)
-            updateCustomer(userId, {shipping, billing});
+            dispatch(updateCustomer(userId, {shipping, billing}))
+        }
+        else {
+            if (!checkAddress(getErrors(shippingData))) setCurrent('shipping')
+            else setCurrent('billing')
+        }
+    }
+
+    function handleBillingClick() {
+        if(!data.isBilling) {
+            setData({...data, isBilling: true})
+            setCurrent('billing')
+        }
+        else {
+            setData({...data, isBilling: false})
+            setBillingData({
+                firstName: '',
+                lastName: '',
+                company: '',
+                address: '',
+                city: '',
+                postcode: '',
+                country: '',
+                state: '',
+            })
+            setCurrent('shipping')
         }
     }
 
     return (
         <form>
-            <Typography variant="h1" component="h1">Address book</Typography>
+            <Typography variant={isMobile ? 'h2' : 'h1'}  component="h1">Address book</Typography>
             {!error && userCreated && <Typography variant="body1">ADDRESS BOOK SUCCESSFULLY UPDATED</Typography> }
             {userCreated && <Typography variant="body1" color="error">{error}</Typography> }
+            {isMobile && <br />}
             {!data.isShipping && (
                 <React.Fragment>
                     <Typography style={{marginBottom: '10px'}} color="secondary" variant="h1" component="h1">No address saved</Typography>
                     <Button variant="contained" color="secondary" fullWidth onClick={() => setData({...data, isShipping: true})}>add new address</Button>
                 </React.Fragment>
             )}
-            {data.isShipping && (
+            {data.isShipping && current === 'shipping' && (
                 <React.Fragment>
                     <Typography style={{marginTop: '20px'}} variant="h2" component="h2">Shipping address</Typography>
                     <AddressForm data={shippingData} setData={setShippingData} dataError={shippingError} setDataError={setShippingError} />
-                    {!data.isBilling && <div style={{padding: '10px 0 20px', textAlign: 'right'}}><Button disableGutters onClick={() => setData({...data, isBilling: true})}>Add billing address</Button></div>}
                 </React.Fragment>
             )}
-            {data.isBilling && (
+            {data.isBilling && current === 'billing' && (
                 <React.Fragment>
-                    <Typography style={{marginTop: '40px'}} variant="h2" component="h2">Billing address</Typography>
+                    <Typography style={{marginTop: '20px'}} variant="h2" component="h2">Billing address</Typography>
                     <AddressForm data={billingData} setData={setBillingData} dataError={billingError} setDataError={setBillingError} />
-                    <div style={{padding: '10px 0 20px', textAlign: 'right'}}><Button disableGutters onClick={() => {
-                        setData({...data, isBilling: false})
-                        setBillingData({
-                            firstName: '',
-                            lastName: '',
-                            company: '',
-                            address: '',
-                            city: '',
-                            postcode: '',
-                            country: '',
-                            state: '',
-                        })
-                    }}>delete billing address</Button></div>
                 </React.Fragment>
             )}
 
             <label className="ohnohoney" htmlFor="name" />
             <input className="ohnohoney" autoComplete="off" type="name" id="name" name="name" placeholder="Your name here" ref={node => () => setData({...data, honeypot: node?.value})} />
 
-            {data.isShipping && <Button variant="contained" color="secondary" fullWidth onClick={handleSave}>{creatingUser ? <CircularProgress size={15} /> : 'save'}</Button>}
+            <FormControl component="fieldset" style={{width: '100%', padding: '10px 3px'}}>
+                <FormGroup aria-label="position" style={{flexDirection: 'row-reverse'}}>
+                    {data.isBilling && (
+                        <FormControlLabel
+                            style={{marginLeft: '20px', marginRight: 0}}
+                            value="billing"
+                            control={
+                                <Checkbox
+                                    fill
+                                    checked={current === 'billing'}
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                                    onChange={() => setCurrent('billing')}
+                                />}
+                            label="billing"
+                            labelPlacement="end"
+                        />
+                    )}
+                    <FormControlLabel
+                        style={{marginRight: 0}}
+                        value="shipping"
+                        control={
+                            <Checkbox
+                                fill
+                                checked={current === 'shipping'}
+                                inputProps={{ 'aria-label': 'primary checkbox' }}
+                                onChange={() => setCurrent('shipping')}
+                            />}
+                        label="shipping"
+                        labelPlacement="end"
+                    />
+                </FormGroup>
+            </FormControl>
+
+            <Grid container spacing={2}>
+                <Grid item xs={6}>
+                    <Button variant="outlined" color="secondary" fullWidth onClick={handleBillingClick}>{data.isBilling ? 'Remove billing Address': 'Add billing address'}</Button>
+                </Grid>
+                <Grid item xs={6}>
+                    {data.isShipping && <Button variant="contained" color="secondary" fullWidth onClick={handleSave}>{creatingUser ? <CircularProgress size={15} /> : 'save'}</Button>}
+                </Grid>
+            </Grid>
+
         </form>
     )
 }
-const mapStateToProps = state => ({
-    creatingUser: state.woocommerce.creatingUser,
-    userCreated: state.woocommerce.userCreated,
-    error: state.woocommerce.error
-})
 
-const mapDispatchToProps = {
-    updateCustomer: updateC,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddressBook)
+export default AddressBook

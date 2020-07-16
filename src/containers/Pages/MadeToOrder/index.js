@@ -7,13 +7,33 @@
  */
 
 import React from 'react';
-import {Typography, Divider} from "@material-ui/core";
+import {Typography, Divider, useTheme, useMediaQuery, Grid} from "@material-ui/core";
 import useWordpressData from "../../../providers/WordpressDataProvider";
 import Container from "../../../components/Container";
-import Carousel from "../../../components/Carousel";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
 import _ from 'lodash';
 
+const CustomButtonGroupAsArrows = ({ next, previous }) => {
+    return (
+        <React.Fragment>
+            <button
+                onClick={() => previous()}
+                aria-label="Go to previous slide"
+                className="react-multiple-carousel__arrow react-multiple-carousel__arrow--left"
+            />
+            <button
+                onClick={() => next()}
+                aria-label="Go to next slide"
+                className="react-multiple-carousel__arrow react-multiple-carousel__arrow--right"
+            />
+        </React.Fragment>
+    )
+}
+
 function MadeToOrder() {
+    const muiTheme = useTheme()
+    const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
     const content = useWordpressData('pages/339', [])
     let gallery;
     let body1;
@@ -35,9 +55,37 @@ function MadeToOrder() {
         <Container headerPadding>
             {content && (
                 <React.Fragment>
-                    <Container maxWidth="sm" style={{padding: '0 8%'}}>
-                        {gallery && <Carousel images={gallery} />}
-                    </Container>
+                    {gallery && (
+                        <Grid container justify="center" style={{position: 'relative'}}>
+                            <Grid item xs={12} md={7}>
+                                <Carousel
+                                    arrows={false}
+                                    renderButtonGroupOutside={!isMobile}
+                                    customButtonGroup={!isMobile && <CustomButtonGroupAsArrows />}
+                                    showDots={isMobile}
+                                    additionalTransfrom={0}
+                                    centerMode={false}
+                                    draggable
+                                    focusOnSelect={false}
+                                    infinite
+                                    keyBoardControl
+                                    minimumTouchDrag={80}
+                                    responsive={{
+                                        all: {
+                                            breakpoint: { max: 10000, min: 0 },
+                                            items: 1,
+                                        },
+                                    }}
+                                    slidesToSlide={1}
+                                    swipeable
+                                >
+                                    {gallery.map(slide => (
+                                        <img key={slide.src} src={slide.src} alt={slide.alt} style={{width: '100%'}} />
+                                    ))}
+                                </Carousel>
+                            </Grid>
+                        </Grid>
+                    )}
                     <br />
                     <br />
                     <Typography variant="h2">

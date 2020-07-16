@@ -1,17 +1,39 @@
 import React, {useState} from 'react'
-import {updateCustomer as updateC, createOrder} from '../../../providers/WoocommerceDataProvider/actions'
-import {connect} from "react-redux"
+import {updateCustomer, createOrder} from '../../../providers/WoocommerceDataProvider/actions'
+import {useDispatch, useSelector} from "react-redux"
 import {
     Typography,
     Divider,
     CircularProgress,
-    Collapse, TextField, FormControl,
+    Grid,
+    Collapse,
+    TextField,
+    FormControl,
+    FormGroup,
+    FormControlLabel,
 } from "@material-ui/core"
 import Button from "../../../components/Button"
 import AddressForm from "../Account/AddressForm"
 import {regExpEmail} from "../../../helpers";
+import Checkbox from "../../../components/Checkbox";
 
-const PreProcessAddress = ({isGuest, address, setAddress, user, woocommerce, creatingUser, userCreated, updateCustomer, error, createOrder, cart, userInfo}) => {
+const PreProcessAddress = ({isGuest, address, setAddress, userInfo}) => {
+    const continents = useSelector(state => state.woocommerce.continents)
+    const shippingEU = useSelector(state => state.woocommerce['shipping-EU-locations'])
+    const shippingW = useSelector(state => state.woocommerce['shipping-W-locations'])
+    const shippingITcost = useSelector(state => state.woocommerce['shipping-IT']).settings.cost.value
+    const shippingEUcost = useSelector(state => state.woocommerce['shipping-EU']).settings.cost.value
+    const shippingWcost = useSelector(state => state.woocommerce['shipping-W']).settings.cost.value
+    const shippingRcost = useSelector(state => state.woocommerce['shipping-R']).settings.cost.value
+
+    const creatingUser = useSelector(state => state.woocommerce.creatingUser)
+    const userCreated = useSelector(state => state.woocommerce.userCreated)
+    const error = useSelector(state => state.woocommerce.error)
+    const user = useSelector(state => state.user)
+    const cart = useSelector(state => state.cart)
+
+    const dispatch = useDispatch()
+
     const emptyAddress = {
         firstName: '',
         lastName: '',
@@ -49,10 +71,11 @@ const PreProcessAddress = ({isGuest, address, setAddress, user, woocommerce, cre
 
     const [shippingData, setShippingData] = useState(initialState(shippingWP))
     const [editShipping, setEditShipping] = useState(!shippingWP.address_1)
-    const [editBilling, setEditBilling] = useState(!billingWP.address_1)
+    const [editBilling, setEditBilling] = useState(!!billingWP.address_1)
     const [billingData, setBillingData] = useState(initialState(billingWP))
     const [shippingError, setShippingError] = useState(errorInitialState)
     const [billingError, setBillingError] = useState(errorInitialState)
+    const [current, setCurrent] = useState('shipping')
 
     const [guestEmail, setGuestEmail] = useState('')
     const [guestEmailError, setGuestEmailError] = useState(false)
@@ -91,28 +114,24 @@ const PreProcessAddress = ({isGuest, address, setAddress, user, woocommerce, cre
             postcode: address.postcode,
             country: address.country,
             state: address.state,
-            email: guestEmail,
+            email: guestEmail || user.email,
         }
     }
 
-    function handleSaveShipping() {
+    function handleSave() {
         setShippingError(getErrors(shippingData))
+        if (editBilling)
+            setBillingError(getErrors(billingData))
 
-        if (checkAddress(getErrors(shippingData))) {
+        if (checkAddress(getErrors(shippingData)) && (!editBilling || checkAddress(getErrors(billingData)))) {
             const shipping = saveData(shippingData)
-            if(!isGuest) updateCustomer(user.id, {shipping});
-            setEditShipping(!editShipping)
-        }
-    }
-
-    function handleSaveBilling() {
-        setBillingError(getErrors(billingData))
-
-        if (checkAddress(getErrors(billingData)) ) {
-            const billing = saveData(billingData)
-            if(!isGuest) updateCustomer(user.id, {billing});
-            setEditBilling(!editBilling)
-        }
+            if (editBilling) {
+                const billing = saveData(billingData)
+                if(!isGuest) dispatch(updateCustomer(user.id, {shipping, billing}));
+            } else if(!isGuest) dispatch(updateCustomer(user.id, {shipping}));
+            setEditShipping(false)
+        } else if (current === 'shipping' && checkAddress(getErrors(shippingData)))
+            setCurrent('billing')
     }
 
     function handleChangeEmail(event) {
@@ -120,27 +139,53 @@ const PreProcessAddress = ({isGuest, address, setAddress, user, woocommerce, cre
     }
 
     function handleProceed() {
+        let shippingCost
+        if (shippingData.country === 'Italy') shippingCost = shippingITcost
+        else {
+            const continent = continents?.filter(cont => cont.countries.filter(c => c.name === shippingData.country).length > 0)[0]
+            if (shippingEU.filter(zone => zone.code === continent.code || zone.code === shippingData.country).length > 0)
+                shippingCost = shippingEUcost
+            else if (shippingW.filter(zone => zone.code === continent.code || zone.code === shippingData.country).length > 0)
+                shippingCost = shippingWcost
+            else shippingCost = shippingRcost
+        }
         if (isGuest) {
             setGuestEmailError((!guestEmail.match(regExpEmail) || !guestEmail) && 'PLEASE ENTER A VALID EMAIL')
             if (!guestEmail.match(regExpEmail))
                 return
             setAddress({shipping: saveData(shippingData), billing: saveData(billingData)})
-            createOrder({shipping: saveData(shippingData), billing: saveData(billingData, guestEmail), line_items: cartItems})
+            dispatch(createOrder({shipping: saveData(shippingData), billing: saveData(billingData, guestEmail), line_items: cartItems, shipping_lines: [{
+                    method_id: "flat_rate",
+                    method_title: "Flat Rate",
+                    total: shippingCost
+                }]}))
             return
         }
         setAddress({shipping: saveData(shippingData), billing: billingData.address && saveData(billingData)})
-        createOrder({shipping: saveData(shippingData), billing: billingData.address && saveData(billingData), line_items: cartItems, customer_id: user.id})
+        dispatch(createOrder({shipping: saveData(shippingData), billing: billingData.address && saveData(billingData), line_items: cartItems, customer_id: user.id, shipping_lines: [{
+                method_id: "flat_rate",
+                method_title: "Flat Rate",
+                total: shippingCost
+        }]}))
     }
     return (
         <form>
             <Typography variant="h1" component="h1">Address</Typography>
             <Divider />
-            {!error && userCreated && <Typography variant="body1">ADDRESS BOOK SUCCESSFULLY UPDATED</Typography> }
             {userCreated && <Typography variant="body1" color="error">{error}</Typography> }
             <br />
             <Typography style={{float: 'right', margin: '10px 0'}} ><b>Shipping</b></Typography>
             <Typography style={{margin: '10px 0'}}><b>{shippingData.firstName ? `${shippingData.firstName} ${shippingData.lastName}${shippingData.company && `- ${shippingData.company}`}` : 'Name Surname'}</b></Typography>
             <Typography>{shippingData.address ? `${shippingData.address}, ${shippingData.city}, ${shippingData.postcode},${shippingData.state && `${shippingData.state}, `} ${shippingData.country}` : 'Address'}</Typography>
+            {billingData.address && (
+                <React.Fragment>
+                    <Divider />
+                    <br />
+                    <Typography style={{float: 'right', margin: '10px 0'}} ><b>Billing</b></Typography>
+                    <Typography style={{margin: '10px 0'}}><b>{billingData.firstName && billingData.lastName ? `${billingData.firstName} ${billingData.lastName}${billingData.company && `- ${billingData.company}`}` : 'Name Surname'}</b></Typography>
+                    <Typography>{billingData.address ? `${billingData.address}, ${billingData.city}, ${billingData.postcode},${billingData.state && `${billingData.state}, `} ${billingData.country}` : 'Address'}</Typography>
+                </React.Fragment>
+            )}
             {isGuest &&
                 <React.Fragment>
                     <br />
@@ -164,64 +209,92 @@ const PreProcessAddress = ({isGuest, address, setAddress, user, woocommerce, cre
                     </FormControl>
                 </React.Fragment>
             }
-            <div style={{paddingTop: '10px'}}>
-                {editShipping ?
-                    <Button disabled={!!address.shipping} disableGutters onClick={handleSaveShipping}><b>Save</b></Button> :
-                    <Button disabled={!!address.shipping} disableGutters onClick={() => setEditShipping(!editShipping)}><b>Edit</b></Button>
-                }
-            </div>
-            <Collapse in={editShipping && !address.shipping} style={{marginBottom: '20px'}}>
-                <AddressForm data={shippingData} setData={setShippingData} dataError={shippingError} setDataError={setShippingError} />
+
+            <Collapse in={(editShipping && !address.shipping)} style={{marginBottom: '20px'}}>
+                <br />
+                <Divider />
+                <br />
+                <Typography variant="h2">{current}</Typography>
+                <br />
+                {current === 'shipping' && <AddressForm data={shippingData} setData={setShippingData} dataError={shippingError} setDataError={setShippingError} />}
+                {current === 'billing' && <AddressForm data={billingData} setData={setBillingData} dataError={billingError} setDataError={setBillingError} />}
+                <FormControl component="fieldset" style={{width: '100%', padding: '10px 3px'}}>
+                    <FormGroup aria-label="position" style={{flexDirection: 'row-reverse'}}>
+                        {editBilling && (
+                            <FormControlLabel
+                                style={{marginLeft: '20px', marginRight: 0}}
+                                value="billing"
+                                control={
+                                    <Checkbox
+                                        edge="end"
+                                        fill
+                                        checked={current === 'billing'}
+                                        inputProps={{ 'aria-label': 'primary checkbox' }}
+                                        onChange={() => setCurrent('billing')}
+                                    />}
+                                label="billing"
+                                labelPlacement="start"
+                            />
+                        )}
+                        <FormControlLabel
+                            style={{marginRight: 0}}
+                            value="shipping"
+                            control={
+                                <Checkbox
+                                    edge="end"
+                                    fill
+                                    checked={current === 'shipping'}
+                                    inputProps={{ 'aria-label': 'primary checkbox' }}
+                                    onChange={() => setCurrent('shipping')}
+
+                                />}
+                            label="shipping"
+                            labelPlacement="start"
+                        />
+                    </FormGroup>
+                </FormControl>
             </Collapse>
             <Divider/>
-            <Collapse in={data.isBilling}>
-                <br />
-                <Typography style={{float: 'right', margin: '10px 0'}} ><b>Billing</b></Typography>
-                <Typography style={{margin: '10px 0'}}><b>{billingData.firstName && billingData.lastName ? `${billingData.firstName} ${billingData.lastName}${billingData.company && `- ${billingData.company}`}` : 'Name Surname'}</b></Typography>
-                <Typography>{billingData.address ? `${billingData.address}, ${billingData.city}, ${billingData.postcode},${billingData.state && `${billingData.state}, `} ${billingData.country}` : 'Address'}</Typography>
-                <div style={{paddingTop: '10px'}}>
-                    {editBilling ?
-                        <Button disabled={!!address.shipping} disableGutters onClick={handleSaveBilling}><b>Save</b></Button> :
-                        <Button disabled={!!address.shipping} disableGutters onClick={() => setEditBilling(!editBilling)}><b>Edit</b></Button>
-                    }
-                </div>
-                <Collapse in={editBilling && !address.shipping} style={{marginBottom: '20px'}}>
-                    <AddressForm data={billingData} setData={setBillingData} dataError={billingError} setDataError={setBillingError} />
-                </Collapse>
-                <Divider />
-            </Collapse>
+
             <label className="ohnohoney" htmlFor="name" />
             <input className="ohnohoney" autoComplete="new-password" type="name" id="name" name="name" placeholder="Your name here" ref={node => () => setData({...data, honeypot: node?.value})} />
             <br />
-            <Button
-                style={{marginBottom: '20px'}}
-                disabled={!!address.shipping}
-                variant="outlined"
-                color="secondary"
-                fullWidth
-                disableGutters
-                onClick={() => {
-                    setData({...data, isBilling: !data.isBilling})
-                    if (data.isBilling) setBillingData(emptyAddress)
-                }}
-            >
-                {data.isBilling ? 'delete billing address' : 'add billing address'}
-            </Button>
-            <Button disabled={!!address.shipping || editShipping || (data.isBilling && editBilling)} variant="contained" color="secondary" fullWidth onClick={handleProceed}>{creatingUser ? <CircularProgress size={15} /> : 'proceed'}</Button>
+            <Grid container spacing={2}>
+                <Grid item xs={6}>
+                    <Button
+                        style={{marginBottom: '20px'}}
+                        disabled={!!address.shipping}
+                        variant="outlined"
+                        color="secondary"
+                        fullWidth
+                        disableGutters
+                        onClick={() => {
+                            setData({...data, isBilling: !data.isBilling})
+                            if (data.isBilling) {
+                                setEditBilling(false)
+                                setBillingData(emptyAddress)
+                                setCurrent('shipping')
+                            }
+                            else {
+                                setCurrent('billing')
+                                setEditShipping(true)
+                                setEditBilling(true)
+                            }
+                        }}
+                    >
+                        {data.isBilling ? 'same as shipping address' : 'different billing address'}
+                    </Button>
+                </Grid>
+                <Grid item xs={6}>
+                    {editShipping ?
+                        <Button disabled={!!address.shipping} fullWidth diableGutters variant="contained" color="secondary" onClick={handleSave}><b>Save</b></Button> :
+                        <Button disabled={!!address.shipping} fullWidth diableGutters variant="contained" color="secondary"  onClick={() => setEditShipping(true)}><b>Edit</b></Button>
+                    }
+                </Grid>
+            </Grid>
+            <Button disabled={!!address.shipping || editShipping} variant="contained" color="secondary" fullWidth onClick={handleProceed}>{creatingUser ? <CircularProgress size={15} /> : 'proceed'}</Button>
         </form>
     )
 }
-const mapStateToProps = state => ({
-    creatingUser: state.woocommerce.creatingUser,
-    userCreated: state.woocommerce.userCreated,
-    error: state.woocommerce.error,
-    user: state.user,
-    cart: state.cart,
-})
 
-const mapDispatchToProps = {
-    updateCustomer: updateC,
-    createOrder,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(PreProcessAddress)
+export default PreProcessAddress

@@ -38,7 +38,7 @@ function Stockists() {
                                             <Typography >
                                                 <div dangerouslySetInnerHTML={{__html: shop.acf.contacts}} />
                                             </Typography>
-                                            <Typography><a href={shop.acf.website} target="_blank">{new URL(shop.acf.website).host}</a></Typography>
+                                            <Typography><a href={shop.acf.website} target="_blank" rel="noopener noreferrer">{new URL(shop.acf.website).host}</a></Typography>
                                             <br />
                                         </Grid>
                                     ))}

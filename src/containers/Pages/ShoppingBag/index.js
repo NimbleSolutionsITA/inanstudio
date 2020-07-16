@@ -26,7 +26,7 @@ const ShoppingBag = () => {
                             <Button variant="contained" color="secondary" to="/checkout" fullWidth>Checkout</Button>
                             <br />
                             <br />
-                            <Button inactive disableGutters disablePadding to="/returns">Shipping and returns</Button><br />
+                            <Button inactive disableGutters disablePadding to="/customer-service/shipping">Shipping and returns</Button><br />
                             <Button inactive disableGutters disablePadding to="/customer-service">need help?</Button>
                         </React.Fragment>
                     }

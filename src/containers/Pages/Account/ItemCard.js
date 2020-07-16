@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import {Typography, useMediaQuery, useTheme} from "@material-ui/core"
+import {Divider, Grid, Typography, useMediaQuery, useTheme} from "@material-ui/core"
 import Link from "../../../components/Link"
 import {formatPrice} from "../../../helpers";
 
@@ -46,7 +46,33 @@ const ItemCard = ({product, item}) => {
     const size = item.meta_data.filter(attr => attr.key === 'pa_size')[0]?.value
     return (
         <CardWrapper>
-            {product && (
+            {product &&  isMobile ? (
+                <div>
+                    <Grid container spacing={2}>
+                        <Grid item xs={5}>
+                            <img width="100%" src={product.images[0].src} alt={product.images[0].alt} />
+                        </Grid>
+                        <Grid item xs={7} style={{display: 'flex', flexDirection: 'column'}}>
+                            <Typography><b>
+                                {product.name}<br/>
+                                {formatPrice(item.price)}
+                            </b></Typography>
+                            <br />
+                            <Typography>
+                                {leatherType && `leather type: ${leatherType}`}
+                                {leatherType && <br />}
+                                {size && `size: ${size}`}
+                                {size && <br />}
+                                {color && `color: ${color}`}
+                                {color && <br />}
+                                {`quantity: ${item.quantity}`}
+                            </Typography>
+                            <div style={{minHeight: '10px', flexGrow: 1}} />
+                            <Typography style={{padding: '10px 0'}}>{`subtotal: ${formatPrice(item.price * item.quantity)}`}</Typography>
+                        </Grid>
+                    </Grid>
+                </div>
+            ) : (
                 <React.Fragment>
                     <ImageWrapper bg={product.images[0].src}>
                         <Link to={`/shop/${product.slug}`}><img src={product.images[0].src} alt={product.images[0].alt} /></Link>

@@ -19,7 +19,7 @@ const AddToBagWrapper = styled.div`
   margin: 40px 0;
 `
 
-const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide}) => {
+const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide, leather, size, colorType, setColorType}) => {
     const dispatch = useDispatch()
     const leatherOptions = product?.attributes.filter(attribute => attribute.id === 3)[0]?.options
     const colorOptions = product?.attributes.filter(attribute => attribute.id === 4)[0]?.options
@@ -28,15 +28,13 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide}) => {
     const isOutOfStock = product?.stock_status === 'outofstock'
     const isVeganOption = !!leatherOptions?.filter(opt => opt === 'Vegan')[0]
 
-    const [leatherType, setLeatherType] = useState(leatherOptions ? leatherOptions[0] : null)
-    const [colorType, setColorType] = useState(colorOptions ? colorOptions[0] : null)
-    const [sizeType, setSizeType] = useState(sizeOptions ? sizeOptions[0] : null)
+    const [leatherType, setLeatherType] = useState(leather || (leatherOptions ? leatherOptions[0] : null))
+    const [sizeType, setSizeType] = useState( size || (sizeOptions ? sizeOptions[0] : null))
     const [openDetails, setOpenDetails] = useState(false)
 
     const itemId = variations?.length ?
         variations.filter(variation => {
             return ((!leatherType || variation.attributes.filter(attr => attr.id === 3 && attr.option === leatherType).length > 0) &&
-                (!colorType || variation.attributes.filter(attr => attr.id === 4 && attr.option === colorType).length > 0) &&
                 (!sizeType || variation.attributes.filter(attr => attr.id === 2 && attr.option === sizeType).length > 0))
         })[0]?.id :
         product.id
@@ -112,7 +110,7 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide}) => {
                     {!isPreOrder && !isOutOfStock && (
                         <AddToBag name={product.name} itemId={itemId} leather={leatherType} size={sizeType} color={colorType} image={product.images[0].src} slug={product.slug} price={product.price} />
                     )}
-                    <Button disableGutters disableRipple onClick={() => dispatch(addWishlistItem(itemId, product.name, product.price, leatherType, sizeType, colorType, product.image.src, product.slug, 1))}>add to whishlist</Button>
+                    <Button disableGutters disableRipple onClick={() => dispatch(addWishlistItem(itemId, product.name, product.price, leatherType, sizeType, colorType, product.images[0].src, product.slug, 1))}>add to whishlist</Button>
                 </AddToBagWrapper>
                 {!isMobile && <Divider />}
                 <ExpansionPanel plusMinus title={<Typography>Special enquiries</Typography>}>
@@ -137,7 +135,7 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide}) => {
                 </ExpansionPanel>
                 <Divider />
             </React.Fragment>
-        ), [colorOptions, colorType, colors, dispatch, isMobile, isOutOfStock, isPreOrder, isVeganOption, itemId, leatherOptions, leatherType, openDetails, product, sizeGuide, sizeOptions, sizeType])
+        ), [colorOptions, colorType, colors, dispatch, isMobile, isOutOfStock, isPreOrder, isVeganOption, itemId, leatherOptions, leatherType, openDetails, product, setColorType, sizeGuide, sizeOptions, sizeType])
 
     )
 }

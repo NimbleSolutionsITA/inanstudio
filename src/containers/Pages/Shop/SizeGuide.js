@@ -1,6 +1,5 @@
 import React from "react"
 import {
-    Paper,
     Typography,
     Divider,
     Modal,
@@ -15,7 +14,7 @@ import {
 import Link from "../../../components/Link"
 import Container from "../../../components/Container"
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     paper: {
         margin: '0',
         position: 'absolute',
@@ -26,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
         border: 'none',
         boxShadow: 'none',
     },
-}));
+});
 
 const SizeGuide = ({sizes}) => {
     const classes = useStyles();

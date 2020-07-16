@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core"
 import Button from "../../../components/Button"
 
-const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email, firstName, lastName, error}) => {
+const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email, firstName, lastName, error, isMobile}) => {
     const initialState = {
         firstName: firstName,
         lastName: lastName,
@@ -61,7 +61,6 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
             confirmPassword: data.changePassword && data.password !== data.confirmPassword && 'PASSWORD DOES NOT MATCH',
         })
         if (data.email && data.firstName && data.lastName && regExpEmail.test(data.email) && (!data.changePassword || (data.password && data.password === data.confirmPassword)) && !data.honeypot) {
-            console.log(data)
             updateCustomer(userId, data);
         }
     }
@@ -69,9 +68,10 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
         <Grid container spacing={4}>
             <Grid item xs={12} md={12}>
                 <form>
-                    <Typography variant="h1" component="h1">Personal Info</Typography>
+                    <Typography variant={isMobile ? 'h2' : 'h1'} component="h1">Personal Info</Typography>
                     {!error && userCreated && <Typography variant="body1">PERSONAL INFO {data.changePassword && 'AND PASSWORD'} SUCCESSFULLY UPDATED</Typography> }
                     {userCreated && <Typography variant="body1" color="error">{error}</Typography> }
+                    {isMobile && <br />}
                     <FormControl fullWidth style={{marginTop: '10px'}}>
                         <TextField
                             placeholder="ENTER YOUR FIRST NAME"
@@ -189,7 +189,7 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
                     )}
                     <label className="ohnohoney" htmlFor="name" />
                     <input className="ohnohoney" autoComplete="off" type="name" id="name" name="name" placeholder="Your name here" ref={node => () => setData({...data, honeypot: node?.value})} />
-                    <Grid container spacing={4}>
+                    <Grid container spacing={2}>
                         <Grid item xs={12} md={6}>
                             <Button variant="outlined" color="secondary" fullWidth onClick={handleCancel}>cancel</Button>
                         </Grid>

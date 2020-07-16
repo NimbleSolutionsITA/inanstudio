@@ -5,8 +5,7 @@
  *
  */
 
-import React from 'react';
-import useWoocommerceData from "../../../providers/WoocommerceDataProvider";
+import React, {useMemo} from 'react';
 import {useParams, useHistory, useLocation} from "react-router";
 import {useSelector} from "react-redux";
 import {useMediaQuery, useTheme} from "@material-ui/core";
@@ -18,26 +17,27 @@ function useQuery() {
     return new URLSearchParams(useLocation().search);
 }
 
-function Shop({categories}) {
+function Shop() {
     const headerHeight = useSelector(state => state.header.height)
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
     let { slug } = useParams();
+    const categories = useSelector(state => state.woocommerce['products-categories'])
     let query = useQuery();
     let history = useHistory();
-    let prodId;
-    const products = useWoocommerceData('products', {})
-    const colors = useWoocommerceData('products/attributes/4/terms', {})
+    let prod;
+    let colorVariations;
+    const products = useSelector(state => state.woocommerce.products)
     const sizeGuide = useWordpressData('size_guide', [])
     if(slug && products) {
-        prodId = products.filter(prod => prod.slug === slug)[0]?.id
-        if (!prodId) history.push('/error/product/404')
+        prod= products.filter(p => p.slug === slug)[0]
+        if (!prod) history.push('/error/product/404')
+        colorVariations = products.filter(p => p.name === prod?.name)
     }
-
-    return (
+    return (useMemo(() => (
         <div style={{width: !isMobile && '100%', paddingTop: !isMobile && headerHeight, paddingBottom: '40px'}}>
-            { prodId ? (
-                <ProductView products={products} prodId={prodId} colors={colors} isMobile={isMobile} sizeGuide={sizeGuide} />
+            { prod?.id ? (
+                products && <ProductView colorVariations={colorVariations} product={prod} prodId={prod.id} isMobile={isMobile} sizeGuide={sizeGuide} size={query.get('2')} color={query.get('4')} leather={query.get('3')} />
             ) : (
                 <GridView
                     products={products}
@@ -48,7 +48,7 @@ function Shop({categories}) {
                 />
             ) }
         </div>
-    );
+    ),[categories, colorVariations, headerHeight, isMobile, prod, products, query, sizeGuide]));
 }
 
 export default Shop;

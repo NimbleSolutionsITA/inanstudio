@@ -1,19 +1,21 @@
-import React, {useState} from 'react'
+import React from 'react'
 import {FormControl, Grid, TextField} from "@material-ui/core";
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import useWoocommerceData from "../../../providers/WoocommerceDataProvider";
 
 const AddressForm = ({data, setData, dataError, setDataError}) => {
     const countries = useWoocommerceData('data/countries', [])
-    const [states, setStates] = useState([])
     const countryList = countries?.map(c => {
-        return {name: c.name, code: c.code}
+        return {name: c.name, code: c.code, states: c.states}
     })
+    const country = countryList?.filter(c => c.name === data.country)[0]
+
     const handleChange = (event, field) => {
         setDataError({...dataError, [field]: false})
-        setData({...data, [field]: event.target.value})
         if (field === 'country' && event.target.value)
-            setStates(countries.filter(c => c.code === event.target.value)[0].states)
+            setData({...data, country: event.target.value, state: countries.filter(c => c.name === event.target.value)[0].states[0]?.name || ''})
+        else
+            setData({...data, [field]: event.target.value})
     }
 
     return (
@@ -99,10 +101,11 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                     <Grid item xs={12} lg={6}>
                         <FormControl fullWidth>
                             <Autocomplete
-                                options={countryList}
-                                getOptionLabel={(option) => option.name}
-                                getOptionSelected={(option) => option.code}
-                                onChange={(event,v) => handleChange({target: {value: v ?  v.code : countryList[0].code}}, 'country')}
+                                autoComplete
+                                autoSelect
+                                value={data.country}
+                                options={countryList.map(c => c.name)}
+                                onChange={(event,v) => handleChange({target: {value: v}}, 'country')}
                                 renderInput={(params) =>
                                     <TextField
                                         {...params}
@@ -125,10 +128,12 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                     <Grid item xs={12} lg={6}>
                         <FormControl fullWidth>
                             <Autocomplete
-                                options={states}
-                                getOptionLabel={(option) => option.name}
-                                getOptionSelected={(option) => option.code}
-                                onChange={(event,v) => handleChange({target: {value: v ?  v.code : ''}}, 'state')}
+                                autoComplete
+                                autoSelect
+                                autoCapitalize
+                                value={data.state}
+                                options={country?.states.map(c => c.name) || []}
+                                onChange={(event, v) => handleChange({target: {value: v}}, 'state')}
                                 renderInput={(params) =>
                                     <TextField
                                         {...params}

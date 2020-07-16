@@ -1,4 +1,4 @@
-import React from "react"
+import React, {useMemo, useCallback} from "react"
 import {useDispatch} from "react-redux"
 import {addWishlistItem} from "../Wishlist/actions"
 import styled from "styled-components"
@@ -31,7 +31,7 @@ const ImageWrapper = styled.div`
       opacity: 0;
     }
     :hover {
-      background-image: ${({bgHover}) => `url(${bgHover})`};
+      background-image: ${({bgHover}) => bgHover && `url(${bgHover})`};
     }
     :hover > button {
       opacity: 1;
@@ -48,16 +48,20 @@ const Sale = styled.span`
   text-decoration: line-through;
 `
 
-const ProductCard = ({product, isMobile}) => {
+const ProductCard = ({product, isMobile, attributes}) => {
     const dispatch = useDispatch()
-    const handleClick = () => {
-        dispatch(addWishlistItem(product.id, 1))
-    }
-    return (
+    const handleClick = useCallback(() => {
+        dispatch(addWishlistItem(product.id, 1, product.name, product.price, undefined, product.acf.color?.name, product.images[0].src, product.slug,1))
+    },[dispatch, product.acf.color, product.id, product.images, product.name, product.price, product.slug])
+    const queryString = attributes?.filter(a => a.id !== 2).reduce((acc, item) => {
+        acc[item.id] = item.option;
+        return acc;
+    }, {}) || {}
+    return (useMemo(() => (
         <CardWrapper>
-            <ImageWrapper bg={product.images[0].src} bgHover={product.images[1].src}>
+            <ImageWrapper bg={product.images[0].woocommerce_thumbnail} bgHover={!isMobile && product.images[1].woocommerce_thumbnail}>
                 {!isMobile && <Button disableHover disableGutters disableRipple onClick={handleClick}>add to wishlist</Button>}
-                <Link to={`/shop/${product.slug}`}><img src={product.images[0].src} alt={product.images[0].alt} /></Link>
+                <Link to={`/shop/${product.slug}?${new URLSearchParams(queryString).toString()}`}><img src={product.images[0].woocommerce_thumbnail} alt={product.images[0].alt} /></Link>
             </ImageWrapper>
             <ContentWrapper>
                 <Typography component="p" variant="body1"><b>{product.name}</b></Typography>
@@ -94,7 +98,7 @@ const ProductCard = ({product, isMobile}) => {
                 </Typography>
             </ContentWrapper>
         </CardWrapper>
-    )
+    ), [handleClick, isMobile, product.attributes, product.featured, product.images, product.name, product.on_sale, product.price, product.regular_price, product.sale_price, product.slug, product.stock_quantity, product.stock_status, queryString]))
 }
 
 export default ProductCard

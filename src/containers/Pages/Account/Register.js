@@ -67,18 +67,22 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
     return (
         <Grid style={{marginTop: isMobile ? 0 : '20px'}} container spacing={isMobile ? 0 : 4}>
             <Grid item xs={12} md={12}>
-                <Typography variant="h1" component="h1">Create new account</Typography>
-                {!isMobile && <Divider />}
-                {error ? (
-                    <Typography color="error" variant="body1" component="p">{error}</Typography>
-                ) : (
-                    <Typography variant="body1" component="p">REGISTER TO COMPLETE CHECKOUT MORE QUICKLY, REVIEW ORDER INFORMATION and much more.</Typography>
-                )}
-            </Grid>
-            <Grid item xs={12} md={6}>
                 {userCreated ? (
                     <Typography style={{marginTop: '10px'}} variant="h1" component="h1">CONGRATULATIONS! ACCOUNT CREATED SUCCESSFULLY</Typography>
                 ) : (
+                    <React.Fragment>
+                        <Typography variant="h1" component="h1">Create new account</Typography>
+                        {!isMobile && <Divider />}
+                        {error ? (
+                            <Typography color="error" variant="body1" component="p">{error}</Typography>
+                        ) : (
+                            <Typography variant="body1" component="p">REGISTER TO COMPLETE CHECKOUT MORE QUICKLY, REVIEW ORDER INFORMATION and much more.</Typography>
+                        )}
+                    </React.Fragment>
+                )}
+            </Grid>
+            <Grid item xs={12} md={6}>
+                {!userCreated && (
                     <form>
                         <Grid container spacing={isMobile ? 0 : 4}>
                             <Grid item xs={12} lg={6}>

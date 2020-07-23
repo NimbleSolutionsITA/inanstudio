@@ -5,7 +5,7 @@ import {regExpEmail} from "../../../helpers";
 import {
     Divider,
     FormControl,
-    Grid, IconButton, InputAdornment,
+    Grid, IconButton, InputAdornment, makeStyles,
     TextField,
     Typography, useMediaQuery, useTheme
 } from "@material-ui/core";
@@ -14,6 +14,12 @@ import Button from "../../../components/Button";
 const ResetPassword = () => {
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
+    const useStyles = makeStyles({
+        noUppercase: {
+            textTransform: 'none',
+        },
+    })
+    const classes = useStyles()
     const [data, setData] = useState({
         email: null,
         password: null,
@@ -120,7 +126,9 @@ const ResetPassword = () => {
                             <FormControl fullWidth style={{marginTop: '10px'}}>
                                 <TextField
                                     InputLabelProps={{
-                                        disableAnimation: true
+                                        disableAnimation: true,
+                                        focused: false,
+                                        shrink: true,
                                     }}
                                     placeholder="ENTER YOUR EMAIL"
                                     required
@@ -136,7 +144,9 @@ const ResetPassword = () => {
                             <FormControl fullWidth style={{marginTop: '10px'}}>
                                 <TextField
                                     InputLabelProps={{
-                                        disableAnimation: true
+                                        disableAnimation: true,
+                                        focused: false,
+                                        shrink: true,
                                     }}
                                     placeholder="ENTER THE 4 DIGIT CODE RECEIVED BY EMAIL"
                                     required
@@ -161,9 +171,12 @@ const ResetPassword = () => {
                                     value={data.password}
                                     onChange={(event) => handleChange(event, 'password')}
                                     InputLabelProps={{
-                                        disableAnimation: true
+                                        disableAnimation: true,
+                                        focused: false,
+                                        shrink: true,
                                     }}
-                                    InputProps={{endAdornment:
+                                    InputProps={{
+                                        endAdornment:
                                             <InputAdornment position="end">
                                                 <IconButton
                                                     aria-label="toggle password visibility"
@@ -173,7 +186,8 @@ const ResetPassword = () => {
                                                 >
                                                     {data.showPassword ? <Typography variant="body2">HIDE</Typography> : <Typography variant="body2">SHOW</Typography>}
                                                 </IconButton>
-                                            </InputAdornment>
+                                            </InputAdornment>,
+                                        classes: {input: classes.noUppercase}
                                     }}
                                 />
                             </FormControl>
@@ -199,10 +213,13 @@ const ResetPassword = () => {
                                                 >
                                                     {data.showConfirmPassword ? <Typography variant="body2">HIDE</Typography> : <Typography variant="body2">SHOW</Typography>}
                                                 </IconButton>
-                                            </InputAdornment>
+                                            </InputAdornment>,
+                                        classes: {input: classes.noUppercase}
                                     }}
                                     InputLabelProps={{
-                                        disableAnimation: true
+                                        disableAnimation: true,
+                                        focused: false,
+                                        shrink: true,
                                     }}
                                 />
                             </FormControl>
@@ -225,7 +242,9 @@ const ResetPassword = () => {
                                     value={data.email}
                                     onChange={(event) => handleChange(event, 'email')}
                                     InputLabelProps={{
-                                        disableAnimation: true
+                                        disableAnimation: true,
+                                        focused: false,
+                                        shrink: true,
                                     }}
                                 />
                             </FormControl>

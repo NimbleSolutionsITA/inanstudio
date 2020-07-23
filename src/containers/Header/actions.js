@@ -3,7 +3,7 @@
  * HomeCovers actions
  *
  */
-import { SET_HEADER_HEIGHT, SET_HEADER_COLOR, OPEN_DRAWER } from '../../constants';
+import {SET_HEADER_HEIGHT, SET_HEADER_COLOR, OPEN_DRAWER, OPEN_SIZE_GUIDE} from '../../constants';
 
 export function setHeaderHeight(height) {
   return {
@@ -25,6 +25,14 @@ export function setHeaderColor(headerColor, headerColorMobile) {
 export function openDrawer(open) {
   return {
     type: OPEN_DRAWER,
+    payload: {
+      open,
+    },
+  };
+}
+export function openSizeGuide(open) {
+  return {
+    type: OPEN_SIZE_GUIDE,
     payload: {
       open,
     },

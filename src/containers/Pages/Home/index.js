@@ -8,7 +8,7 @@
 import React, {useLayoutEffect, useMemo, createRef} from 'react';
 import useWordpressData from '../../../providers/WordpressDataProvider';
 import {checkLogin, login, logout} from "../../../providers/AuthProvider/actions";
-import {setCurrentCover} from "./actions";
+import {setCurrentCover, toggleShowContent} from "./actions";
 import {connect} from "react-redux";
 import HomeCover from "./HomeCover";
 import CoverContent from "./HomeCover/CoverContent";
@@ -26,6 +26,9 @@ function Home(props) {
         // add or remove refs
         elRefs.current = Array(arrLength).fill(undefined, undefined, undefined).map((_, i) => elRefs.current[i] || createRef());
     }
+
+    toggleShowContent(true)
+
     useLayoutEffect(() => {
         if(props.covers && window.scrollY === 0)
             props.setCurrentCover(
@@ -121,6 +124,7 @@ const mapDispatchToProps = {
     login,
     logout,
     setCurrentCover,
+    toggleShowContent,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

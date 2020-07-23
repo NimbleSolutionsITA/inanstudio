@@ -35,6 +35,8 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                             value={data.firstName}
                             onChange={(event) => handleChange(event, 'firstName')}
                             InputLabelProps={{
+                                disableAnimation: true,
+                                focused: false,
                                 shrink: true,
                             }}
                         />
@@ -54,6 +56,8 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                             value={data.lastName}
                             onChange={(event) => handleChange(event, 'lastName')}
                             InputLabelProps={{
+                                disableAnimation: true,
+                                focused: false,
                                 shrink: true,
                             }}
                         />
@@ -72,6 +76,8 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                             value={data.company}
                             onChange={(event) => handleChange(event, 'company')}
                             InputLabelProps={{
+                                disableAnimation: true,
+                                focused: false,
                                 shrink: true,
                             }}
                         />
@@ -91,6 +97,8 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                             value={data.address}
                             onChange={(event) => handleChange(event, 'address')}
                             InputLabelProps={{
+                                disableAnimation: true,
+                                focused: false,
                                 shrink: true,
                             }}
                         />
@@ -109,7 +117,7 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                                 renderInput={(params) =>
                                     <TextField
                                         {...params}
-                                        autoComplete="new-password"
+                                        autoComplete="off"
                                         placeholder="ENTER YOUR COUNTRY"
                                         required
                                         error={!!dataError.country}
@@ -118,6 +126,8 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                                         fullWidth
                                         type="text"
                                         InputLabelProps={{
+                                            disableAnimation: true,
+                                            focused: false,
                                             shrink: true,
                                         }}
                                     />
@@ -137,7 +147,7 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                                 renderInput={(params) =>
                                     <TextField
                                         {...params}
-                                        autoComplete="new-password"
+                                        autoComplete="off"
                                         placeholder="ENTER YOUR STATE OR PROVINCE"
                                         error={!!dataError.state}
                                         label="STATE OR PROVINCE"
@@ -145,6 +155,8 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                                         fullWidth
                                         type="text"
                                         InputLabelProps={{
+                                            disableAnimation: true,
+                                            focused: false,
                                             shrink: true,
                                         }}
                                     />
@@ -167,6 +179,8 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                             value={data.city}
                             onChange={(event) => handleChange(event, 'city')}
                             InputLabelProps={{
+                                disableAnimation: true,
+                                focused: false,
                                 shrink: true,
                             }}
                         />
@@ -186,6 +200,8 @@ const AddressForm = ({data, setData, dataError, setDataError}) => {
                             value={data.postcode}
                             onChange={(event) => handleChange(event, 'postcode')}
                             InputLabelProps={{
+                                disableAnimation: true,
+                                focused: false,
                                 shrink: true,
                             }}
                         />

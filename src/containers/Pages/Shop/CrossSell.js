@@ -6,14 +6,14 @@ import "react-multi-carousel/lib/styles.css";
 
 const responsive = {
     desktop: {
-        breakpoint: { max: 1920, min: 925 },
+        breakpoint: { max: 10000, min: 925 },
         items: 3,
-        slidesToSlide: 3 // optional, default to 1.
+        slidesToSlide: 1 // optional, default to 1.
     },
     tablet: {
         breakpoint: { max: 925, min: 735 },
         items: 2,
-        slidesToSlide: 2 // optional, default to 1.
+        slidesToSlide: 1 // optional, default to 1.
     },
     mobile: {
         breakpoint: { max: 735, min: 0 },
@@ -36,8 +36,7 @@ const CrossSell = ({items, isMobile}) => {
                     responsive={responsive}
                     infinite={true}
                     keyBoardControl={true}
-                    customTransition="all .5"
-                    transitionDuration={500}
+                    swipeable
                     containerClass="carousel-container"
                     removeArrowOnDeviceType={["tablet", "mobile"]}
                     itemClass="carousel-item-padding-40-px"

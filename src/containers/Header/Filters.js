@@ -8,12 +8,11 @@ import Container from "../../components/Container"
 
 const NavWrapper = styled.div`
   width: 100%;
+  padding: ${({isMobile}) => !isMobile && '3px 0'};
   border-bottom: ${({isMobile}) => !isMobile && '1px solid'};
-  padding: 3px 0;
 `;
 
 const FilterMobileWrapper = styled.div`
-  height: 23px;
   color: #000;
   border-top: ${({isMobile}) => isMobile && '1px solid'};
 `
@@ -67,38 +66,42 @@ const Filters = ({categories, activeCategory, isMobile, isCollection}) => {
                                 color="inherit"
                                 style={{
                                     marginRight: '20px',
-                                    padding: '2px 0',
+                                    padding: '6px 0',
                                     float: 'left',
                                 }}
                                 to={isCollection ? '/collection' : '/shop'}
                             >
                                 {isCollection ? 'COLLECTION' : 'SHOP'}
                             </Link>
-                            <Link
-                                color="inherit"
-                                style={{
-                                    marginLeft: '20px',
-                                    padding: '2px 0',
-                                    float: 'right',
-                                }}
-                                onClick={event => {
-                                    event.preventDefault()
-                                    setOpen(true)
-                                }}
-                            >
-                                {isCollection ? 'PAST COLLECTIONS' : 'FILTER'}
-                            </Link>
+                            {(!isCollection || categories.length > 2) && (
+                                <Link
+                                    color="inherit"
+                                    style={{
+                                        marginLeft: '20px',
+                                        padding: '6px 0',
+                                        float: 'right',
+                                    }}
+                                    onClick={event => {
+                                        event.preventDefault()
+                                        setOpen(true)
+                                    }}
+                                >
+                                    {isCollection ? 'PAST COLLECTIONS' : 'FILTER'}
+                                </Link>
+                            )}
                         </Container>
                         <RightDrawer open={open} setOpen={setOpen}>
                             <List className={classes.drawerNavContainer} style={{width: '90%'}}>
-                                <ListItem
-                                    component={Typography}
-                                    disableGutters
-                                >
-                                    <ListItemText primaryTypographyProps={{variant: 'h5'}}>
-                                        <b>{isCollection ? 'PAST COLLECTIONS' : 'FILTER'}</b>
-                                    </ListItemText>
-                                </ListItem>
+                                {(!isCollection || categories.length > 2) && (
+                                    <ListItem
+                                        component={Typography}
+                                        disableGutters
+                                    >
+                                        <ListItemText primaryTypographyProps={{variant: 'h5'}}>
+                                            <b>{isCollection ? 'PAST COLLECTIONS' : 'FILTER'}</b>
+                                        </ListItemText>
+                                    </ListItem>
+                                )}
                                 {FilterLinks}
                             </List>
                         </RightDrawer>

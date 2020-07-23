@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import {Dialog, IconButton, makeStyles} from "@material-ui/core";
-import CloseOutlinedIcon from "@material-ui/icons/CloseOutlined";
+import CloseIcon from "./svg/CloseIcon";
 
 
 const ModalImage = ({url, alt}) => {
@@ -24,10 +24,8 @@ const ModalImage = ({url, alt}) => {
     }
     return (
         <React.Fragment>
-            <div style={{backgroundSize: 'cover', backgroundImage: `url(${url.woocommerce_single || url.src})`, height: '100%', width: '100%'}}>
-                <button onClick={handleOpen} style={{opacity: 0, width: '100%', height: '100%'}}>
-                    <img src={url.woocommerce_single || url.src} alt={alt} style={{width: '100%'}} />
-                </button>
+            <div onClick={handleOpen}>
+                <img src={url.woocommerce_single || url.src} alt={alt} style={{width: '100%'}} />
             </div>
             <Dialog
                 open={open}
@@ -40,7 +38,7 @@ const ModalImage = ({url, alt}) => {
                     }
                 }}
             >
-                <IconButton disableRipple onClick={() => setOpen(false)} style={{position: 'absolute', right: 0, top: 0}}><CloseOutlinedIcon style={{fontSize: '5rem'}} /></IconButton>
+                <IconButton disableRipple onClick={() => setOpen(false)} style={{position: 'absolute', right: 0, top: 0}}><CloseIcon width="21px" /></IconButton>
             </Dialog>
         </React.Fragment>
     )

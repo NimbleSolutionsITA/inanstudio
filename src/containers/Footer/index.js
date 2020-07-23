@@ -76,15 +76,7 @@ const Footer = () => {
                                 </div>
                             </Grid>
                             <Grid item md={8} lg={6}>
-                                <div style={{display: 'flex', marginBottom: '10px'}}>
-                                    <div style={{marginRight: '10px', padding: '8px 0'}}><b>NEWSLETTER</b> |</div>
-                                    <NewsletterForm />
-                                    <div style={{marginLeft: '10px', padding: '8px 0'}}>
-                                        <Link color="secondary" to="https://instagram.com/inan_studio" target="_blank" rel="noopener noreferrer">
-                                            <b>Instagram</b>
-                                        </Link>
-                                    </div>
-                                </div>
+                                <NewsletterForm />
                                 <NavWrapper>
                                     {footerLinks.map((link, index) => (
                                         <Link
@@ -96,14 +88,14 @@ const Footer = () => {
                                         </Link>
                                     ))}
                                 </NavWrapper>
-                                <div style={{position: 'relative'}}>
+                                <div style={{position: 'relative', padding: '3px 0'}}>
                                     <div>© 2020 INAN. All Rights Reserved</div>
-                                    <div style={{position: 'absolute', right: 0, top: '-11px', color: '#f1f1f1', height: 0}}>
+                                    <div style={{position: 'absolute', right: 0, top: '-10px', color: '#eceaea', height: 0}}>
                                         Made with
                                         <svg style={{transform: 'scale(0.5) translate(0px, 17px)'}} width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill='#f1f1f1' stroke='#f1f1f1'>
                                             <path d="M12 21.593c-5.63-5.539-11-10.297-11-14.402 0-3.791 3.068-5.191 5.281-5.191 1.312 0 4.151.501 5.719 4.457 1.59-3.968 4.464-4.447 5.726-4.447 2.54 0 5.274 1.621 5.274 5.181 0 4.069-5.136 8.625-11 14.402m5.726-20.583c-2.203 0-4.446 1.042-5.726 3.238-1.285-2.206-3.522-3.248-5.719-3.248-3.183 0-6.281 2.187-6.281 6.191 0 4.661 5.571 9.429 12 15.809 6.43-6.38 12-11.148 12-15.809 0-4.011-3.095-6.181-6.274-6.181"/>
                                         </svg>
-                                        by <a style={{textDecoration: 'none', color: '#f1f1f1'}} href="http://www.nimble-solutions.com" target="_blank" rel="noopener noreferrer">Nimble Solutions</a>
+                                        by <a style={{textDecoration: 'none', color: '#eceaea'}} href="http://www.nimble-solutions.com" target="_blank" rel="noopener noreferrer">Nimble Solutions</a>
                                     </div>
                                 </div>
                             </Grid>

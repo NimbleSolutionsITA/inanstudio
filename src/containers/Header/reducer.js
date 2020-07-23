@@ -4,12 +4,13 @@
  *
  */
 import produce from 'immer';
-import {SET_CURRENT_COVER,SET_HEADER_HEIGHT, OPEN_DRAWER, SET_HEADER_COLOR} from "../../constants";
+import {SET_CURRENT_COVER, SET_HEADER_HEIGHT, OPEN_DRAWER, SET_HEADER_COLOR, OPEN_SIZE_GUIDE} from "../../constants";
 
 export const initialState = {
     headerColor: '#000',
     headerColorMobile: '#000',
     open: false,
+    sizeGuideOpen: false,
     height: 70,
 };
 
@@ -31,6 +32,11 @@ const HeaderReducer = () => (state = initialState, action) =>
             case OPEN_DRAWER:
                 Object.assign(draft, {
                     open: action.payload.open,
+                });
+                break;
+            case OPEN_SIZE_GUIDE:
+                Object.assign(draft, {
+                    sizeGuideOpen: action.payload.open,
                 });
                 break;
             default:

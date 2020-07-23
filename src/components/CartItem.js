@@ -1,28 +1,13 @@
 import React from "react";
 import {useDispatch} from "react-redux";
-import styled from "styled-components";
 import { deleteCartItem, updateCartItem, addCartItem} from "../containers/Pages/ShoppingBag/actions";
 import {addWishlistItem, deleteWishlistItem, updateWishlistItem} from "../containers/Pages/Wishlist/actions";
 import {Grid, Typography, Divider, IconButton} from "@material-ui/core";
 import Button from "../components/Button";
+import PlusIcon from "./svg/PlusIcon";
+import MinusIcon from "./svg/MinusIcon";
 import Link from "../components/Link";
 import {formatPrice} from "../helpers";
-
-const IconWrapper = styled.div`
-  button {
-    border-radius: 10px;
-    width: 15px;
-    border: 1px solid;
-    margin: 5px 20px;
-    padding: 0 5px;
-    :focus {
-      outline: none;
-    }
-    :hover {
-     background-color: #f1f1f5;
-    }
-  }
-`
 
 const CartItem = ({itemData, isBag}) => {
     const dispatch = useDispatch()
@@ -62,12 +47,16 @@ const CartItem = ({itemData, isBag}) => {
                     <br />
                 </div>
                 <Divider light />
-                <IconWrapper>
+                <div>
                     QUANTITY:
-                    <IconButton size="small" disabled={itemData.qty === 1} color="secondary" onClick={() => handleUpdateQty(itemData.qty-1)}>-</IconButton>
+                    <IconButton disableRipple disabled={itemData.qty === 1} color="secondary" onClick={() => handleUpdateQty(itemData.qty-1)}>
+                        <MinusIcon width="14px" />
+                    </IconButton>
                     {itemData.qty}
-                    <IconButton size="small" color="secondary" onClick={() => handleUpdateQty(itemData.qty+1)}>+</IconButton>
-                </IconWrapper>
+                    <IconButton disableRipple color="secondary" onClick={() => handleUpdateQty(itemData.qty+1)}>
+                        <PlusIcon width="14px" />
+                    </IconButton>
+                </div>
                 <Divider light />
                 <Typography style={{padding: '10px 0'}} variant="h2">SUBTOTAL: {formatPrice(itemData.price * itemData.qty)}</Typography>
             </Grid>

@@ -33,7 +33,7 @@ const CookieConsent = ({isMobile}) => {
 
     return (
         <ConsentWrapper open={open} isMobile={isMobile}>
-            <IconButton onClick={handleClick} style={{position: 'absolute', right: '24px', top: isMobile ? '26px' : '5px', padding: 0}}><CloseOutlinedIcon /></IconButton>
+            <IconButton onClick={handleClick} style={{position: 'absolute', right: '24px', top: isMobile ? '26px' : 0, padding: '5px'}}><CloseOutlinedIcon /></IconButton>
             We use cookies on this site to enhance your user experience By clicking any link on this page you are giving your consent for us to set cookies.
         </ConsentWrapper>
     )

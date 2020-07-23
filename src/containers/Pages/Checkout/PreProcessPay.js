@@ -70,6 +70,8 @@ const PreProcessPay = ({setIsCheckoutReady}) => {
                     value={coupon}
                     onChange={handleChangeCoupon}
                     InputLabelProps={{
+                        disableAnimation: true,
+                        focused: false,
                         shrink: true,
                     }}
                 />
@@ -85,7 +87,7 @@ const PreProcessPay = ({setIsCheckoutReady}) => {
                     {order && coupon && loading ? <CircularProgress color="secondary" size={15} /> : 'apply code'}
                 </Button>
             </div>
-            <FormControl component="fieldset" style={{width: '100%', padding: ''}}>
+            {/*<FormControl component="fieldset" style={{width: '100%', padding: ''}}>
                 <FormGroup aria-label="position" style={{marginTop: '-20px', marginBottom: '20px'}}>
                     <FormControlLabel
                         style={{marginRight: 0}}
@@ -102,7 +104,7 @@ const PreProcessPay = ({setIsCheckoutReady}) => {
                         labelPlacement="end"
                     />
                 </FormGroup>
-            </FormControl>
+            </FormControl>*/}
             <div style={{width: '100%'}}>
                 <div style={{display: 'flex'}}>
                     <div style={{flexGrow: 1}}>SUBTOTAL</div>

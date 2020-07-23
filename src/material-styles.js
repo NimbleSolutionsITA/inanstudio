@@ -113,6 +113,19 @@ const materialTheme = {
                 fontSize: '13px',
             }
         },
+        MuiInput: {
+            underline: {
+                '&:after': {
+                    borderBottom: '1px solid #333'
+                }
+            }
+        },
+        MuiInputBase: {
+            input: {
+                textTransform: 'uppercase',
+                padding: '5px 0 0',
+            },
+        },
         MuiInputLabel: {
             root: {
               fontSize: 10,
@@ -121,7 +134,7 @@ const materialTheme = {
               },
             },
             formControl: {
-                top: '8px',
+                top: '6px',
             },
             shrink: {
                 transform: 'translate(0, 1.5px) scale(1)',
@@ -147,6 +160,23 @@ const materialTheme = {
             outlined: {
                 paddingTop: 0,
                 paddingBottom: 0,
+            },
+        },
+        MuiIconButton: {
+            root: {
+                '&:hover': {
+                    backgroundColor: 'none',
+                }
+            },
+            colorSecondary: {
+                '&:hover': {
+                    backgroundColor: 'none',
+                }
+            }
+        },
+        MuiPaper: {
+            root: {
+                color: '#000',
             },
         },
     },

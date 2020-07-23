@@ -40,6 +40,7 @@ export const TOGGLE_SHOW_CONTENT = 'HomeCover/TOGGLE_SHOW_CONTENT';
 export const SET_HEADER_COLOR = 'Header/SET_HEADER_COLOR';
 export const SET_HEADER_HEIGHT = 'Header/SET_HEADER_HEIGHT';
 export const OPEN_DRAWER = 'Header/OPEN_DRAWER';
+export const OPEN_SIZE_GUIDE = 'Header/OPEN_SIZE_GUIDE';
 
 export const CHECK_LOGIN = 'AuthProvider/CHECK_LOGIN';
 export const LOGIN = 'AuthProvider/LOGIN';

@@ -2,60 +2,90 @@ import React from "react"
 import {
     Typography,
     Divider,
-    Modal,
     Table,
     TableBody,
     TableCell,
     TableContainer,
     TableHead,
     TableRow,
-    makeStyles
+    makeStyles,
+    Drawer, IconButton
 } from "@material-ui/core"
 import Link from "../../../components/Link"
 import Container from "../../../components/Container"
+import CloseIcon from "../../../components/svg/CloseIcon";
+import {openSizeGuide} from "../../Header/actions";
+import {useDispatch, useSelector} from "react-redux";
 
-const useStyles = makeStyles({
-    paper: {
-        margin: '0',
-        position: 'absolute',
-        top:' 50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        backgroundColor: '#fff',
-        border: 'none',
-        boxShadow: 'none',
+const useStyles = makeStyles(theme => ({
+    root: {
+        [theme.breakpoints.up('sm')]: {
+            zIndex: '1 !important',
+        }
     },
-});
+    drawerRoot: {
+        height: '100vh',
+        width: '100%',
+        paddingTop: '70px',
+        textTransform: 'uppercase',
+        '& > div': {
+            height: '100%',
+        }
+    },
+}));
 
-const SizeGuide = ({sizes}) => {
+const SizeGuide = ({sizes, isMobile}) => {
     const classes = useStyles();
-    const [open, setOpen] = React.useState(false)
+    const dispatch = useDispatch()
+    const sizeGuideOpen = useSelector(state => state.header.sizeGuideOpen)
     const handleOpen = () => {
-        setOpen(true);
+        dispatch(openSizeGuide(true))
     };
     const handleClose = () => {
-        setOpen(false);
+        dispatch(openSizeGuide(false))
     };
 
     return (
         <React.Fragment>
             <Link style={{lineHeight: '15px'}} onClick={handleOpen} color="inherit"><b>Size guide</b></Link>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="size-guide"
-                aria-describedby="inan-products-size-guide"
+            <Drawer
+                classes={{root: classes.root, paper: classes.drawerRoot}}
+                anchor="top"
+                open={sizeGuideOpen}
+                onClose={() => handleClose}
+                onOpen={() => handleOpen}
             >
-                <React.Fragment>
-                    <div onClick={handleClose} style={{position: 'absolute', backgroundColor: '#fff', top: 0, left: 0, height: '100vh', width: '100vw'}} />
-                    <div className={classes.paper}>
-                        <Container maxWidth="md">
-                            <Typography component="h4" variant="h1">Inan</Typography>
-                            <Divider />
-                            <Typography component="h4" variant="h1">Size Guide</Typography>
+                <Container>
+                    <div  style={{position: 'relative', marginTop: '15px'}}>
+                        {!isMobile && <Divider />}
+                        <Typography component="h4" variant={isMobile ? 'h2' : 'h1'} style={{padding: '5px 0'}}>Size Guide</Typography>
+                        <IconButton disableRipple onClick={handleClose} style={{position: 'absolute', right: '-11px', top: isMobile ? '-7px' : '10px'}}><CloseIcon width={isMobile ? '14px' : '21px'} /></IconButton>
+                    </div>
+                    {isMobile ? (
+                        <React.Fragment>
+                            <br />
+                            <br />
+                            {sizes.map(row => (
+                                <React.Fragment>
+                                    <Divider />
+                                    <Typography variant="h2">{row.title.rendered}</Typography>
+                                    <Divider />
+                                    <br />
+                                    <Typography><b>Adjustable measures:</b> {row.acf.adj_measures}</Typography>
+                                    <br />
+                                    <Typography><b>Wearability:</b> {row.acf.wearability}</Typography>
+                                    <br />
+                                    <Typography><b>Matching size:</b> {row.acf.matching_size}</Typography>
+                                    <br />
+                                    <br />
+                                </React.Fragment>
+                            ))}
+                        </React.Fragment>
+                    ) : (
+                        <React.Fragment>
                             <Divider style={{marginBottom: '35px'}} />
                             <TableContainer>
-                                <Table className={classes.table} aria-label="simple table">
+                                <Table  aria-label="simple table">
                                     <TableHead>
                                         <TableRow>
                                             <TableCell>{" "}</TableCell>
@@ -78,10 +108,10 @@ const SizeGuide = ({sizes}) => {
                                     </TableBody>
                                 </Table>
                             </TableContainer>
-                        </Container>
-                    </div>
-                </React.Fragment>
-            </Modal>
+                        </React.Fragment>
+                    )}
+                </Container>
+            </Drawer>
         </React.Fragment>
     )
 }

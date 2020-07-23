@@ -1,12 +1,18 @@
 import React, {useState} from 'react'
 import {useDispatch, useSelector} from "react-redux";
-import {Typography, TextField, FormControl, CircularProgress} from "@material-ui/core"
+import {Typography, TextField, FormControl, CircularProgress, makeStyles} from "@material-ui/core"
 import {regExpEmail} from "../helpers";
 import {login} from "../providers/AuthProvider/actions"
 import Button from "../components/Button"
 import Link from "../components/Link";
 
 const LoginForm = () => {
+    const useStyles = makeStyles({
+        noUppercase: {
+            textTransform: 'none',
+        },
+    })
+    const classes = useStyles()
     const [email, setEmail] = React.useState('')
     const [emailError, setEmailError] = React.useState(false)
     const [password, setPassword] = useState( '' )
@@ -55,6 +61,8 @@ const LoginForm = () => {
                     value={email}
                     onChange={handleChange}
                     InputLabelProps={{
+                        disableAnimation: true,
+                        focused: false,
                         shrink: true,
                     }}
                 />
@@ -73,7 +81,12 @@ const LoginForm = () => {
                         type="password"
                         value={password}
                         onChange={handleChange}
+                        InputProps={{
+                            classes: {input: classes.noUppercase}
+                        }}
                         InputLabelProps={{
+                            disableAnimation: true,
+                            focused: false,
                             shrink: true,
                         }}
                     />

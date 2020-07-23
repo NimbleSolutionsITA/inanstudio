@@ -10,7 +10,7 @@ import {
     TextField,
     FormControl,
     FormGroup,
-    FormControlLabel,
+    FormControlLabel, useTheme, useMediaQuery,
 } from "@material-ui/core"
 import Button from "../../../components/Button"
 import AddressForm from "../Account/AddressForm"
@@ -18,6 +18,9 @@ import {regExpEmail} from "../../../helpers";
 import Checkbox from "../../../components/Checkbox";
 
 const PreProcessAddress = ({isGuest, address, setAddress, userInfo}) => {
+    const muiTheme = useTheme()
+    const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
+
     const continents = useSelector(state => state.woocommerce.continents)
     const shippingEU = useSelector(state => state.woocommerce['shipping-EU-locations'])
     const shippingW = useSelector(state => state.woocommerce['shipping-W-locations'])
@@ -175,15 +178,15 @@ const PreProcessAddress = ({isGuest, address, setAddress, userInfo}) => {
             {userCreated && <Typography variant="body1" color="error">{error}</Typography> }
             <br />
             <Typography style={{float: 'right', margin: '10px 0'}} ><b>Shipping</b></Typography>
-            <Typography style={{margin: '10px 0'}}><b>{shippingData.firstName ? `${shippingData.firstName} ${shippingData.lastName}${shippingData.company && `- ${shippingData.company}`}` : 'Name Surname'}</b></Typography>
-            <Typography>{shippingData.address ? `${shippingData.address}, ${shippingData.city}, ${shippingData.postcode},${shippingData.state && `${shippingData.state}, `} ${shippingData.country}` : 'Address'}</Typography>
+            <Typography style={{margin: '10px 0'}}><b>{shippingData.firstName} {shippingData.lastName} {shippingData.company && `- ${shippingData.company}`}</b></Typography>
+            <Typography>{shippingData.address ? `${shippingData.address}, ${shippingData.city}, ${shippingData.postcode},${shippingData.state && `${shippingData.state}, `} ${shippingData.country}` : ''}</Typography>
             {billingData.address && (
                 <React.Fragment>
                     <Divider />
                     <br />
                     <Typography style={{float: 'right', margin: '10px 0'}} ><b>Billing</b></Typography>
-                    <Typography style={{margin: '10px 0'}}><b>{billingData.firstName && billingData.lastName ? `${billingData.firstName} ${billingData.lastName}${billingData.company && `- ${billingData.company}`}` : 'Name Surname'}</b></Typography>
-                    <Typography>{billingData.address ? `${billingData.address}, ${billingData.city}, ${billingData.postcode},${billingData.state && `${billingData.state}, `} ${billingData.country}` : 'Address'}</Typography>
+                    <Typography style={{margin: '10px 0'}}><b>{billingData.firstName && billingData.lastName ? `${billingData.firstName} ${billingData.lastName}${billingData.company && `- ${billingData.company}`}` : ''}</b></Typography>
+                    <Typography>{billingData.address ? `${billingData.address}, ${billingData.city}, ${billingData.postcode},${billingData.state && `${billingData.state}, `} ${billingData.country}` : ''}</Typography>
                 </React.Fragment>
             )}
             {isGuest &&
@@ -203,6 +206,8 @@ const PreProcessAddress = ({isGuest, address, setAddress, userInfo}) => {
                             value={guestEmail}
                             onChange={handleChangeEmail}
                             InputLabelProps={{
+                                disableAnimation: true,
+                                focused: false,
                                 shrink: true,
                             }}
                         />
@@ -282,7 +287,7 @@ const PreProcessAddress = ({isGuest, address, setAddress, userInfo}) => {
                             }
                         }}
                     >
-                        {data.isBilling ? 'same as shipping address' : 'different billing address'}
+                        {data.isBilling ? `Same as shipping${isMobile ? '' : ' Address'}`: `Different billing${isMobile ? '' : ' Address'}`}
                     </Button>
                 </Grid>
                 <Grid item xs={6}>

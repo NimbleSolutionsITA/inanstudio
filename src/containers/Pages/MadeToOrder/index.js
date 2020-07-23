@@ -56,8 +56,8 @@ function MadeToOrder() {
             {content && (
                 <React.Fragment>
                     {gallery && (
-                        <Grid container justify="center" style={{position: 'relative'}}>
-                            <Grid item xs={12} md={7}>
+                        <Grid container justify="center">
+                            <Grid item xs={12} md={7} style={{position: 'relative'}}>
                                 <Carousel
                                     arrows={false}
                                     renderButtonGroupOutside={!isMobile}

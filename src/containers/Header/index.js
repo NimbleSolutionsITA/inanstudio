@@ -46,7 +46,7 @@ const Header = () => {
     const { authenticated  } = useSelector(state => state.user)
     const cart = useSelector(state => state.cart)
     const wishlist = useSelector(state => state.wishlist)
-    const { headerColor, height, open  } = useSelector(state => state.header)
+    const { headerColor, height, open, sizeGuideOpen  } = useSelector(state => state.header)
 
     const cartItems = cart.length;
     const wishListItems = wishlist.length;
@@ -107,18 +107,18 @@ const Header = () => {
                         cartItems={cartItems}
                         wishlistItems={wishListItems}
                     >
-                        {!open && <NewsFeed />}
-                        {!open && location.pathname.startsWith('/shop') && (
-                            <div style={{width: '100%', height: '20px'}}>
+                        {!open && !sizeGuideOpen && <NewsFeed />}
+                        {!open && !sizeGuideOpen && location.pathname.startsWith('/shop') && (
+                            <div style={{width: '100%', height: '25px'}}>
                                 {categories && <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />}
                             </div>
                         )}
-                        {!open && location.pathname.startsWith('/collection') && (
-                            <div style={{width: '100%', height: '20px'}}>
+                        {!open && !sizeGuideOpen && location.pathname.startsWith('/collection') &&  (
+                            <div style={{width: '100%', height: '25px'}}>
                                 {categories && <Filters isCollection isMobile={isMobile} categories={categories.filter(ct => ct.slug !== 'view-all')} activeCategory={cPath === 'collection' ? categories.filter(ct => ct.slug !== 'view-all')[0].slug : cPath} />}
                             </div>
                         )}
-                        {!open && pageTitle()[0] && <PageTitle title={pageTitle()[0]} amount={pageTitle()[1]} />}
+                        {!open && !sizeGuideOpen && pageTitle()[0] && <PageTitle title={pageTitle()[0]} amount={pageTitle()[1]} />}
                     </AppBar>
                     <div style={{width: '100%', height: `calc(${height}px`}} />
                 </React.Fragment>
@@ -127,30 +127,34 @@ const Header = () => {
                     <Container>
                         <NewsFeed />
                         <LogoBar fill={headerColor} height={43} />
-                        <NavBar
-                            navLinks={navLinks}
-                            cartItems={cartItems}
-                            wishlistItems={wishListItems}
-                            currentPath={location.pathname}
-                            authenticated={authenticated}
-                        />
-                        {location.pathname.startsWith('/shop') && (
-                            <div style={{width: '100%', height: '19px'}}>
-                                {categories && <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />}
-                            </div>
+                        {!sizeGuideOpen && (
+                            <React.Fragment>
+                                <NavBar
+                                    navLinks={navLinks}
+                                    cartItems={cartItems}
+                                    wishlistItems={wishListItems}
+                                    currentPath={location.pathname}
+                                    authenticated={authenticated}
+                                />
+                                {location.pathname.startsWith('/shop') && (
+                                    <div style={{width: '100%', height: '19px'}}>
+                                        {categories && <Filters isMobile={isMobile} categories={categories} activeCategory={query.get('category') || 'view-all'} />}
+                                    </div>
+                                )}
+                                {location.pathname.startsWith('/collection') && (
+                                    <div style={{width: '100%', height: '19px'}}>
+                                        {categories && <Filters isCollection isMobile={isMobile} categories={categories.filter(ct => ct.slug !== 'view-all')} activeCategory={cPath === 'collection' ? categories.filter(ct => ct.slug !== 'view-all')[0].slug : cPath} />}
+                                    </div>
+                                )}
+                                {!open && pageTitle()[0] && <PageTitle title={pageTitle()[0]} amount={pageTitle()[1]} />}
+                            </React.Fragment>
                         )}
-                        {location.pathname.startsWith('/collection') && (
-                            <div style={{width: '100%', height: '19px'}}>
-                                {categories && <Filters isCollection isMobile={isMobile} categories={categories.filter(ct => ct.slug !== 'view-all')} activeCategory={cPath === 'collection' ? categories.filter(ct => ct.slug !== 'view-all')[0].slug : cPath} />}
-                            </div>
-                        )}
-                        {!open && pageTitle()[0] && <PageTitle title={pageTitle()[0]} amount={pageTitle()[1]} />}
                     </Container>
                 </HeaderWrapper>
             )}
         </React.Fragment>
 
-    ), [isMobile, authenticated, open, navLinks, cartItems, wishListItems, location.pathname, categories, query, cPath, pageTitle, height, headerColor, bgColor])
+    ), [isMobile, authenticated, open, navLinks, cartItems, wishListItems, sizeGuideOpen, location.pathname, categories, query, cPath, pageTitle, height, headerColor, bgColor])
 
 }
 

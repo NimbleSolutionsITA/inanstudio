@@ -15,7 +15,7 @@ const CardWrapper = styled.div`
 const ImageWrapper = styled.div`
     flex-grow: 1;
     background-image: ${({bg}) => `url(${bg})`};
-    background-size: contain;
+    background-size: cover;
     background-position: center;
     background-color: #e9e9e9;
     position: relative;
@@ -48,13 +48,22 @@ const Sale = styled.span`
   text-decoration: line-through;
 `
 
-const ProductCard = ({product, isMobile, attributes}) => {
+const ProductCard = ({product, isMobile}) => {
     const dispatch = useDispatch()
     const handleClick = useCallback(() => {
-        dispatch(addWishlistItem(product.id, 1, product.name, product.price, undefined, product.acf.color?.name, product.images[0].src, product.slug,1))
-    },[dispatch, product.acf.color, product.id, product.images, product.name, product.price, product.slug])
-    const queryString = attributes?.filter(a => a.id !== 2).reduce((acc, item) => {
-        acc[item.id] = item.option;
+        dispatch(addWishlistItem(
+            product.id,
+            product.name,
+            product.price,
+            product.attributes.filter(attribute => attribute.id === 3)[0]?.options[0],
+            product.attributes.filter(attribute => attribute.id === 2)[0]?.options[0],
+            product.acf.color?.name,
+            product.images[0].src, product.slug,
+            1)
+        )
+    },[dispatch, product.acf.color, product.attributes, product.id, product.images, product.name, product.price, product.slug])
+    const queryString = product.attributes?.filter(a => a.id !== 1).reduce((acc, item) => {
+        acc[item.id] = item.options[0];
         return acc;
     }, {}) || {}
     return (useMemo(() => (
@@ -64,13 +73,13 @@ const ProductCard = ({product, isMobile, attributes}) => {
                 <Link to={`/shop/${product.slug}?${new URLSearchParams(queryString).toString()}`}><img src={product.images[0].woocommerce_thumbnail} alt={product.images[0].alt} /></Link>
             </ImageWrapper>
             <ContentWrapper>
-                <Typography component="p" variant="body1"><b>{product.name}</b></Typography>
-                <Typography component="p" variant="body1">
+                <Typography style={{paddingBottom: 0}} component="p" variant="body1"><b>{product.name}</b></Typography>
+                <Typography style={{padding: 0}} component="p" variant="body1">
                     { product.attributes.filter(attribute => attribute.id === 3)[0]?.options.filter(opt => opt === 'Vegan')[0] && (
                         isMobile ? 'Vegan option' : 'Vegan leather option'
                     )}
                 </Typography>
-                <Typography component="p" variant="body1" style={{marginTop: '8px'}}>
+                <Typography component="p" variant="body1">
                     {product.on_sale ?
                         <><Sale>€ {product.regular_price}</Sale> € {product.sale_price}</> :
                         `€ ${product.price}`

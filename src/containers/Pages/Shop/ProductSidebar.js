@@ -32,19 +32,19 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide, leath
     const [sizeType, setSizeType] = useState( size || (sizeOptions ? sizeOptions[0] : null))
     const [openDetails, setOpenDetails] = useState(false)
 
-    const itemId = variations?.length ?
+    const currentProd = variations?.length ?
         variations.filter(variation => {
             return ((!leatherType || variation.attributes.filter(attr => attr.id === 3 && attr.option === leatherType).length > 0) &&
                 (!sizeType || variation.attributes.filter(attr => attr.id === 2 && attr.option === sizeType).length > 0))
-        })[0]?.id :
-        product.id
-
+        })[0] :
+        product
+    const itemId = currentProd.id
     return( useMemo(() => (
             <React.Fragment>
                 <Typography component="h2" variant="h2" style={{paddingTop: '10px'}}>{product?.name}<br />
-                    {product.on_sale ?
-                        <><Sale>€ {product.regular_price}</Sale> - € {product.sale_price}</> :
-                        `€ ${product.price}`
+                    {currentProd.on_sale ?
+                        <><Sale>€ {currentProd.regular_price}</Sale> - € {currentProd.sale_price}</> :
+                        `€ ${currentProd.price}`
                     }
                     {isOutOfStock && ' - out of stock'}
                     {isPreOrder && ' - pre-order'}
@@ -80,11 +80,13 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide, leath
                         <CheckboxFromControl options={sizeOptions} type={sizeType} setType={setSizeType} />
                     )}
                     <div>
-                        <Typography component="p" variant="body1">
-                            Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt.
-                        </Typography>
+                        {product.acf.size && (
+                            <Typography component="p" variant="body1">
+                                {product.acf.size}
+                            </Typography>
+                        )}
                         <br />
-                        {sizeGuide && <SizeGuide sizes={sizeGuide}/>}
+                        {sizeGuide && <SizeGuide isMobile={isMobile} sizes={sizeGuide}/>}
                     </div>
                 </ExpansionPanel>
                 <Divider />
@@ -115,27 +117,27 @@ const ProductSidebar = ({variations, product, colors, isMobile, sizeGuide, leath
                 {!isMobile && <Divider />}
                 <ExpansionPanel plusMinus title={<Typography>Special enquiries</Typography>}>
                     <Typography component="p" variant="body1">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt. <br /><br />
+                        If our sizes, colors or leather types don’t match your desires we’ll be happy to assist you in creating your own inan belt. <br /><br />
                         go to : <Link color="inherit" to="/made-to-order"><b>Made to order</b></Link>
                     </Typography>
                 </ExpansionPanel>
                 <Divider />
                 <ExpansionPanel plusMinus title={<Typography>Product care</Typography>}>
                     <Typography component="p" variant="body1">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt. <br /><br />
+                        Spot clean only. After using your belt store it in its dust bag. In case of stain use a wet cloth to remove dirt. <br /><br />
                         go to : <Link color="inherit" to="/customer-service/product-care"><b>Product care</b></Link>
                     </Typography>
                 </ExpansionPanel>
                 <Divider />
                 <ExpansionPanel plusMinus title={<Typography>Shipping and returns</Typography>}>
                     <Typography component="p" variant="body1">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt. <br /><br />
+                        If this item is in stock we will ship within 7 working days. If it’s a pre-order shipping is expected within 60 and 90 days. If It’s out of stock sign in to get notified once it’s available again. Items are returnable within 14 days from the date that the order was delivered to you. <br /><br />
                         go to : <Link color="inherit" to="/customer-service/shipping"><b>Shipping and returns</b></Link>
                     </Typography>
                 </ExpansionPanel>
                 <Divider />
             </React.Fragment>
-        ), [colorOptions, colorType, colors, dispatch, isMobile, isOutOfStock, isPreOrder, isVeganOption, itemId, leatherOptions, leatherType, openDetails, product, setColorType, sizeGuide, sizeOptions, sizeType])
+        ), [colorOptions, colorType, colors, currentProd.on_sale, currentProd.price, currentProd.regular_price, currentProd.sale_price, dispatch, isMobile, isOutOfStock, isPreOrder, isVeganOption, itemId, leatherOptions, leatherType, openDetails, product, setColorType, sizeGuide, sizeOptions, sizeType])
 
     )
 }

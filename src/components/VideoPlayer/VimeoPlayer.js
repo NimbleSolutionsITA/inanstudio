@@ -6,16 +6,22 @@ import {useDispatch} from "react-redux";
 import {toggleShowContent} from "../../containers/Pages/Home/actions";
 
 const WatchButton = styled.div`
+  display: ${({isPlaying}) => isPlaying && 'none'};
   margin: 0;
-  position: absolute;
   width: 100%;
-  top: 50%;
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+  height: 100%;
   text-align: center;
   cursor: pointer;
   :hover {
     text-decoration: line-through;
+  }
+  h1 {
+      position: absolute;
+      top: 50%;
+      width: 100%;
+      -ms-transform: translateY(-50%);
+      transform: translateY(-50%);
+        padding: 70% 0;
   }
 `;
 
@@ -49,15 +55,15 @@ const VimeoPlayer = ({autoplay = true, video, loop = true, mute = true, color, b
                 loop={loop}
                 muted={mute}
             />
-            <Typography
-                style={{color}}
-                hidden={isPlaying}
-                component={WatchButton}
-                variant="h1"
-                onClick={handlePlay}
-            >
-                WATCH
-            </Typography>
+            <WatchButton style={{color}} hidden={isPlaying}>
+                <Typography
+                    style={{color}}
+                    variant="h1"
+                    onClick={handlePlay}
+                >
+                    WATCH
+                </Typography>
+            </WatchButton>
         </div>
     )
 }

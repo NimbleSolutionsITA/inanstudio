@@ -40,7 +40,7 @@ function lightenDarkenColor(col, amt) {
 
 }
 
-const Checkbox = ({color, fill, ...rest}) => {
+const Checkbox = ({color, fill, onBlack, ...rest}) => {
     const useStyles = makeStyles({
         root: {
             '&:hover': {
@@ -65,6 +65,7 @@ const Checkbox = ({color, fill, ...rest}) => {
         },
         checkedFillIcon: {
             backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
+            border: onBlack && '1px solid #fff',
             'input ~ &': {
                 backgroundColor: '#000',
             },

@@ -88,6 +88,8 @@ const GetNotified = ({ isMobile, leatherType, colorType, sizeType, itemId, produ
                                     value={email}
                                     onChange={handleChange}
                                     InputLabelProps={{
+                                        disableAnimation: true,
+                                        focused: false,
                                         shrink: true,
                                     }}
                                 />

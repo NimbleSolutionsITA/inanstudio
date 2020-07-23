@@ -1,6 +1,6 @@
 import React from "react"
 import styled from "styled-components"
-import {Divider, Grid, Typography, useMediaQuery, useTheme} from "@material-ui/core"
+import {Grid, Typography, useMediaQuery, useTheme} from "@material-ui/core"
 import Link from "../../../components/Link"
 import {formatPrice} from "../../../helpers";
 

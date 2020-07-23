@@ -7,13 +7,15 @@
 
 import React from 'react';
 import Container from "../../../components/Container";
-import {Divider, Typography, Grid} from "@material-ui/core";
+import {Divider, Typography, Grid, useTheme, useMediaQuery} from "@material-ui/core";
 import useWordpressData from "../../../providers/WordpressDataProvider";
 import InLogo from "../../../components/svg/InLogo";
 import AnLogo from "../../../components/svg/AnLogo";
 
 function About() {
     const content = useWordpressData('pages/371', [])
+    const muiTheme = useTheme()
+    const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
     return (
         <div style={{backgroundColor: '#000'}}>
             {content && (
@@ -29,12 +31,19 @@ function About() {
                     </Typography>
                     <Divider style={{backgroundColor: '#fff'}} />
                     <Grid container>
-                        <Grid item xs={3}>
-                            <div style={{display: 'flex', justifyContent: 'left', alignItems: 'center', height: '100%'}}><InLogo color="#fff" /></div>
+                        {!isMobile && (
+                            <Grid item xs={3}>
+                                <div style={{display: 'flex', justifyContent: 'left', alignItems: 'center', height: '100%'}}><InLogo color="#fff" /></div>
+                            </Grid>
+                        )}
+                        <Grid item xs={12} md={6}>
+                            <img style={{width: '100%', marginBottom: '-2px'}} src={content.acf.image} alt="INAN about" />
                         </Grid>
-                        <Grid item xs={6}>
-                            <img style={{width: '100%', marginBottom: '-5px'}} src={content.acf.image} alt="INAN about" />
-                        </Grid>
+                        {isMobile && (
+                            <Grid item xs={9} style={{padding: '10px 0'}}>
+                                <div style={{display: 'flex', justifyContent: 'left', alignItems: 'center', height: '100%'}}><InLogo color="#fff" /></div>
+                            </Grid>
+                        )}
                         <Grid item xs={3}>
                             <div style={{display: 'flex', justifyContent: 'flex-end', alignItems: 'center', height: '100%'}}><AnLogo color="#fff" /></div>
                         </Grid>

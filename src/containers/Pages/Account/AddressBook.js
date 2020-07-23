@@ -177,10 +177,16 @@ const AddressBook = ({userId, shippingWP, billingWP, isMobile}) => {
 
             <Grid container spacing={2}>
                 <Grid item xs={6}>
-                    <Button variant="outlined" color="secondary" fullWidth onClick={handleBillingClick}>{data.isBilling ? 'Remove billing Address': 'Add billing address'}</Button>
+                    <Button variant="outlined" color="secondary" fullWidth onClick={handleBillingClick}>
+                        {data.isBilling ? `Remove billing${isMobile ? '' : ' Address'}`: `Add billing${isMobile ? '' : ' Address'}`}
+                    </Button>
                 </Grid>
                 <Grid item xs={6}>
-                    {data.isShipping && <Button variant="contained" color="secondary" fullWidth onClick={handleSave}>{creatingUser ? <CircularProgress size={15} /> : 'save'}</Button>}
+                    {data.isShipping &&
+                        <Button variant="contained" color="secondary" fullWidth onClick={handleSave}>
+                            {creatingUser ? <CircularProgress size={15} /> : 'save'}
+                        </Button>
+                    }
                 </Grid>
             </Grid>
 

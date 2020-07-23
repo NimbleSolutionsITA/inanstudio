@@ -64,7 +64,7 @@ const Orders = ({orders, isMobile}) => {
                 </React.Fragment>
             ))}
         </React.Fragment>
-    ), [currentOrder, orders]))
+    ), [currentOrder, isMobile, orders]))
 }
 
 export default Orders

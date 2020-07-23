@@ -6,7 +6,8 @@ const GlobalStyle = createGlobalStyle`
      -moz-box-sizing:border-box; 
      -webkit-box-sizing:border-box; 
      -ms-box-sizing:border-box;
-   } 
+   }
+  html * { -webkit-text-size-adjust: none; }
   html,
   body {
     padding-right: 0 !important; 
@@ -17,6 +18,10 @@ const GlobalStyle = createGlobalStyle`
     font-size: 11px;
     line-height: 12px;
     text-transform: uppercase;
+    @media (min-width: 735px) {
+      -webkit-text-size-adjust: 100%;
+      font-size: 10px;
+    }
   }
   ul {
     padding-inline-start: 16px;
@@ -100,12 +105,6 @@ const GlobalStyle = createGlobalStyle`
   }
   input[type="text"] {
       font-size: inherit;
-  }
-  @media (min-width: 735px) {
-      html,
-      body {
-        font-size: 10px;
-      }
   }
 `;
 

@@ -1,10 +1,10 @@
-import React, {useState} from "react"
+import React, {useMemo, useState} from "react"
 import useWoocommerceData from "../../../providers/WoocommerceDataProvider"
 import {
     Grid,
 } from "@material-ui/core"
 import Container from "../../../components/Container"
-import Carousel from "../../../components/Carousel"
+import Carousel from "react-multi-carousel";
 import ProductSidebar from "./ProductSidebar"
 import CrossSell from "./CrossSell";
 import ModalImage from "../../../components/ModalImage";
@@ -21,15 +21,35 @@ const ProductView = ({product, prodId, isMobile, sizeGuide, color, leather, size
         return (
             isMobile ?
                 <Carousel
-                    images={currentProduct.images}
-                    poster={currentProduct.acf.video_cover.url}
-                    src={currentProduct.acf.video}
-                    isMobile={isMobile}
-                />
+                    arrows={false}
+                    showDots={true}
+                    additionalTransfrom={0}
+                    centerMode={false}
+                    draggable
+                    focusOnSelect={false}
+                    infinite
+                    keyBoardControl
+                    minimumTouchDrag={0}
+                    responsive={{
+                        all: {
+                            breakpoint: { max: 10000, min: 0 },
+                            items: 1,
+                        },
+                    }}
+                    slidesToSlide={1}
+                    swipeable
+                >
+                    {currentProduct.images.map((image) =>
+                        <ModalImage url={image} key={image.src} alt={image.alt} />
+                    )}
+                    {currentProduct.acf.video && (
+                        <VimeoPlayer video={currentProduct.acf.video} autoplay={!currentProduct.acf.video_cover} cover={currentProduct.acf.video_cover.url} color="#fff" />
+                    )}
+                </Carousel>
                 : (
                     <div>
-                        {currentProduct.images.map((image, i) =>
-                            <ModalImage url={image} key={image.src + i * Math.random()} alt={image.alt} />
+                        {currentProduct.images.map((image) =>
+                            <ModalImage url={image} key={image.src} alt={image.alt} />
                         )}
                         {currentProduct.acf.video && (
                             <VimeoPlayer video={currentProduct.acf.video} autoplay={!currentProduct.acf.video_cover} cover={currentProduct.acf.video_cover.url} color="#fff" />
@@ -40,7 +60,7 @@ const ProductView = ({product, prodId, isMobile, sizeGuide, color, leather, size
         )
     }
 
-    return (
+    return (useMemo(() => (
         <React.Fragment>
             {currentProduct && variations && isMobile && <Slider />}
             <Container>
@@ -66,7 +86,7 @@ const ProductView = ({product, prodId, isMobile, sizeGuide, color, leather, size
                 </Container>
             )}
         </React.Fragment>
-    )
+    ), [colorType, colors, currentProduct, isMobile, leather, size, sizeGuide, variations]))
 }
 
 export default ProductView;

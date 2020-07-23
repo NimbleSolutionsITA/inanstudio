@@ -9,11 +9,17 @@ import {
     InputAdornment,
     IconButton,
     FormControl,
-    CircularProgress,
+    CircularProgress, makeStyles,
 } from "@material-ui/core"
 import Button from "../../../components/Button"
 
 const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email, firstName, lastName, error, isMobile}) => {
+    const useStyles = makeStyles({
+        noUppercase: {
+            textTransform: 'none',
+        },
+    })
+    const classes = useStyles()
     const initialState = {
         firstName: firstName,
         lastName: lastName,
@@ -64,6 +70,7 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
             updateCustomer(userId, data);
         }
     }
+
     return (
         <Grid container spacing={4}>
             <Grid item xs={12} md={12}>
@@ -85,6 +92,8 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
                             value={data.firstName}
                             onChange={(event) => handleChange(event, 'firstName')}
                             InputLabelProps={{
+                                disableAnimation: true,
+                                focused: false,
                                 shrink: true,
                             }}
                         />
@@ -102,6 +111,8 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
                             value={data.lastName}
                             onChange={(event) => handleChange(event, 'lastName')}
                             InputLabelProps={{
+                                disableAnimation: true,
+                                focused: false,
                                 shrink: true,
                             }}
                         />
@@ -119,6 +130,8 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
                             value={data.email}
                             onChange={(event) => handleChange(event, 'email')}
                             InputLabelProps={{
+                                disableAnimation: true,
+                                focused: false,
                                 shrink: true,
                             }}
                         />
@@ -139,9 +152,12 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
                                     value={data.password}
                                     onChange={(event) => handleChange(event, 'password')}
                                     InputLabelProps={{
+                                        disableAnimation: true,
+                                        focused: false,
                                         shrink: true,
                                     }}
-                                    InputProps={{endAdornment:
+                                    InputProps={{
+                                        endAdornment:
                                             <InputAdornment position="end">
                                                 <IconButton
                                                     aria-label="toggle password visibility"
@@ -151,7 +167,8 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
                                                 >
                                                     {data.showPassword ? <Typography variant="body2">HIDE</Typography> : <Typography variant="body2">SHOW</Typography>}
                                                 </IconButton>
-                                            </InputAdornment>
+                                            </InputAdornment>,
+                                        classes: {input: classes.noUppercase}
                                     }}
                                 />
                             </FormControl>
@@ -167,6 +184,8 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
                                     value={data.confirmPassword}
                                     onChange={(event) => handleChange(event, 'confirmPassword')}
                                     InputLabelProps={{
+                                        disableAnimation: true,
+                                        focused: false,
                                         shrink: true,
                                     }}
                                     InputProps={{endAdornment:
@@ -179,7 +198,8 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
                                                 >
                                                     {data.showConfirmPassword ? <Typography variant="body2">HIDE</Typography> : <Typography variant="body2">SHOW</Typography>}
                                                 </IconButton>
-                                            </InputAdornment>
+                                            </InputAdornment>,
+                                        classes: {input: classes.noUppercase}
                                     }}
                                 />
                             </FormControl>

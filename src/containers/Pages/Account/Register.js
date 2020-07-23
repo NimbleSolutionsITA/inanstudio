@@ -8,7 +8,7 @@ import {
     IconButton,
     FormControl,
     CircularProgress,
-    FormControlLabel, useTheme, useMediaQuery
+    FormControlLabel, useTheme, useMediaQuery, makeStyles
 } from "@material-ui/core"
 import Button from "../../../components/Button"
 import {registerCustomer as registerC} from '../../../providers/WoocommerceDataProvider/actions'
@@ -21,6 +21,12 @@ import {regExpEmail} from "../../../helpers";
 const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
+    const useStyles = makeStyles({
+        noUppercase: {
+            textTransform: 'none',
+        },
+    })
+    const classes = useStyles()
     const [data, setData] = useState({
         firstName: null,
         lastName: null,
@@ -99,6 +105,8 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                         value={data.firstName}
                                         onChange={(event) => handleChange(event, 'firstName')}
                                         InputLabelProps={{
+                                            disableAnimation: true,
+                                            focused: false,
                                             shrink: true,
                                         }}
                                     />
@@ -118,6 +126,8 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                         value={data.lastName}
                                         onChange={(event) => handleChange(event, 'lastName')}
                                         InputLabelProps={{
+                                            disableAnimation: true,
+                                            focused: false,
                                             shrink: true,
                                         }}
                                     />
@@ -137,6 +147,8 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                 value={data.email}
                                 onChange={(event) => handleChange(event, 'email')}
                                 InputLabelProps={{
+                                    disableAnimation: true,
+                                    focused: false,
                                     shrink: true,
                                 }}
                             />
@@ -156,9 +168,12 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                         value={data.password}
                                         onChange={(event) => handleChange(event, 'password')}
                                         InputLabelProps={{
+                                            disableAnimation: true,
+                                            focused: false,
                                             shrink: true,
                                         }}
-                                        InputProps={{endAdornment:
+                                        InputProps={{
+                                            endAdornment:
                                             <InputAdornment position="end">
                                                 <IconButton
                                                     aria-label="toggle password visibility"
@@ -168,7 +183,8 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                                 >
                                                     {data.showPassword ? <Typography variant="body2">HIDE</Typography> : <Typography variant="body2">SHOW</Typography>}
                                                 </IconButton>
-                                            </InputAdornment>
+                                            </InputAdornment>,
+                                            classes: {input: classes.noUppercase}
                                         }}
                                     />
                                 </FormControl>
@@ -186,9 +202,12 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                         value={data.confirmPassword}
                                         onChange={(event) => handleChange(event, 'confirmPassword')}
                                         InputLabelProps={{
+                                            disableAnimation: true,
+                                            focused: false,
                                             shrink: true,
                                         }}
-                                        InputProps={{endAdornment:
+                                        InputProps={{
+                                            endAdornment:
                                             <InputAdornment position="end">
                                                 <IconButton
                                                     aria-label="toggle password visibility"
@@ -198,7 +217,8 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
                                                 >
                                                     {data.showConfirmPassword ? <Typography variant="body2">HIDE</Typography> : <Typography variant="body2">SHOW</Typography>}
                                                 </IconButton>
-                                            </InputAdornment>
+                                            </InputAdornment>,
+                                            classes: {input: classes.noUppercase}
                                         }}
                                     />
                                 </FormControl>

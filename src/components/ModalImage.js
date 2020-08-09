@@ -4,7 +4,7 @@ import CloseIcon from "./svg/CloseIcon";
 
 
 const ModalImage = ({url, alt}) => {
-
+    const [loaded, setLoaded] = useState(false)
     const useStyles = makeStyles({
         paper: {
             backgroundSize: 'contain',
@@ -25,7 +25,8 @@ const ModalImage = ({url, alt}) => {
     return (
         <React.Fragment>
             <div onClick={handleOpen}>
-                <img src={url.woocommerce_single || url.src} alt={alt} style={{width: '100%'}} />
+                {!loaded && <div style={{width: '100%', paddingBottom: '150%', backgroundColor: '#f4f4f6'}} />}
+                <img onLoad={() => setLoaded(true)} src={url.woocommerce_single || url.src} alt={alt} style={{width: '100%'}} />
             </div>
             <Dialog
                 open={open}

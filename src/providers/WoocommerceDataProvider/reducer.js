@@ -13,6 +13,7 @@ import {CREATE_WOOCOMMERCE_CUSTOMER,
   UPDATE_WOOCOMMERCE_ORDER,
   DELETE_WOOCOMMERCE_ORDER,
   SET_WOOCOMMERCE_ORDER_RESPONSE,
+  SET_WOOCOMMERCE_CUSTOMER_UPDATE_RESPONSE,
 } from '../../constants';
 
 export const initialState = {};
@@ -27,10 +28,13 @@ const WoocommerceDataReducer = () => (state = initialState, action) =>
         Object.assign(draft, {creatingUser: true, userCreated: false});
         break;
       case UPDATE_WOOCOMMERCE_CUSTOMER:
-        Object.assign(draft, {creatingUser: true, userCreated: false, [`customers-${action.payload.id}`]: {...draft[`customers-${action.payload.id}`], ...action.payload.data}});
+        Object.assign(draft, {updatingUser: true, userUpdated: false});
         break;
       case SET_WOOCOMMERCE_CUSTOMER_RESPONSE:
         Object.assign(draft, {creatingUser: false, userCreated: !!action.payload.response.id, error: action.payload.response.message});
+        break;
+      case SET_WOOCOMMERCE_CUSTOMER_UPDATE_RESPONSE:
+        Object.assign(draft, {updatingUser: false, userUpdated: !!action.payload.response.id, error: action.payload.response.message});
         break;
       case CREATE_WOOCOMMERCE_ORDER:
         Object.assign(draft, {creatingOrder: true, orderCreated: false});

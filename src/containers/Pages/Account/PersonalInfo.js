@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
-import {updateCustomer as updateC} from '../../../providers/WoocommerceDataProvider/actions'
-import {connect} from "react-redux"
+import {updateCustomer} from '../../../providers/WoocommerceDataProvider/actions'
+import { useDispatch, useSelector} from "react-redux"
 import {regExpEmail} from "../../../helpers";
 import {
     Typography,
@@ -13,7 +13,7 @@ import {
 } from "@material-ui/core"
 import Button from "../../../components/Button"
 
-const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email, firstName, lastName, error, isMobile}) => {
+const PersonalInfo = ({userId, email, firstName, lastName, isMobile}) => {
     const useStyles = makeStyles({
         noUppercase: {
             textTransform: 'none',
@@ -33,6 +33,7 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
         honeypot: false,
     }
     const [data, setData] = useState(initialState)
+    const { updatingUser, userUpdated, error } = useSelector(state => state.woocommerce)
 
     const [dataError, setDataError] = useState({
         firstName: false,
@@ -41,6 +42,7 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
         password: false,
         confirmPassword: false,
     })
+    const dispatch = useDispatch()
     const handleChange = (event, field) => {
         setDataError({...dataError, [field]: false})
         setData({...data, [field]: event.target.value})
@@ -67,7 +69,7 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
             confirmPassword: data.changePassword && data.password !== data.confirmPassword && 'PASSWORD DOES NOT MATCH',
         })
         if (data.email && data.firstName && data.lastName && regExpEmail.test(data.email) && (!data.changePassword || (data.password && data.password === data.confirmPassword)) && !data.honeypot) {
-            updateCustomer(userId, data);
+            dispatch(updateCustomer(userId, data));
         }
     }
 
@@ -76,8 +78,8 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
             <Grid item xs={12} md={12}>
                 <form>
                     <Typography variant={isMobile ? 'h2' : 'h1'} component="h1">Personal Info</Typography>
-                    {!error && userCreated && <Typography variant="body1">PERSONAL INFO {data.changePassword && 'AND PASSWORD'} SUCCESSFULLY UPDATED</Typography> }
-                    {userCreated && <Typography variant="body1" color="error">{error}</Typography> }
+                    {!error && userUpdated && <Typography variant="body1">PERSONAL INFO {data.changePassword && 'AND PASSWORD'} SUCCESSFULLY UPDATED</Typography> }
+                    {userUpdated && <Typography variant="body1" color="error">{error}</Typography> }
                     {isMobile && <br />}
                     <FormControl fullWidth style={{marginTop: '10px'}}>
                         <TextField
@@ -214,7 +216,7 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
                             <Button variant="outlined" color="secondary" fullWidth onClick={handleCancel}>cancel</Button>
                         </Grid>
                         <Grid item xs={12} md={6}>
-                            <Button variant="contained" color="secondary" fullWidth onClick={handleSave}>{creatingUser ? <CircularProgress size={15} /> : 'save'}</Button>
+                            <Button variant="contained" color="secondary" fullWidth onClick={handleSave}>{updatingUser ? <CircularProgress size={15} /> : 'save'}</Button>
                         </Grid>
                     </Grid>
                 </form>
@@ -222,14 +224,5 @@ const PersonalInfo = ({userId, creatingUser, userCreated, updateCustomer, email,
         </Grid>
     )
 }
-const mapStateToProps = state => ({
-    creatingUser: state.woocommerce.creatingUser,
-    userCreated: state.woocommerce.userCreated,
-    error: state.woocommerce.error
-})
 
-const mapDispatchToProps = {
-    updateCustomer: updateC,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(PersonalInfo)
+export default PersonalInfo

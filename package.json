@@ -38,6 +38,7 @@
     "lodash": "^4.17.15",
     "oauth-1.0a": "^2.2.6",
     "react": "^16.13.1",
+    "react-async-script-loader": "^0.3.0",
     "react-dom": "^16.13.1",
     "react-html5video": "^2.5.1",
     "react-mailchimp-subscribe": "^2.1.0",

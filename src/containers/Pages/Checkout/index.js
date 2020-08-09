@@ -85,7 +85,7 @@ const Checkout = () => {
                         <br />
                         <Typography>REGISTER TO COMPLETE CHECKOUT MORE QUICKLY, REVIEW ORDER INFORMATION and much more.</Typography>
                         <div style={{flexGrow: 1, minHeight: '10px'}}/>
-                        <Button fullWidth variant="contained" color="secondary" to="/account/register">register</Button>
+                        <Button fullWidth variant="contained" color="secondary" to="/account/register?origin=checkout">register</Button>
                     </Grid>
                 </Grid> :
                 <React.Fragment>

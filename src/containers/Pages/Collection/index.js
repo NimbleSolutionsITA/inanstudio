@@ -5,7 +5,7 @@
  *
  */
 
-import React, {useMemo, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import {useSelector} from "react-redux";
 import {useHistory, useParams} from "react-router";
 import {Divider, Typography, Grid, useTheme, useMediaQuery, Dialog, IconButton} from "@material-ui/core";
@@ -230,6 +230,7 @@ const Col = ({category, collection, isMobile}) => {
 }
 
 function Collection() {
+    const [hideLoader, setHideLoader] = useState(false)
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
     const collections = useWordpressData('collection', [])
@@ -240,11 +241,20 @@ function Collection() {
     const category = categories?.filter((c,i) => slug ? c.slug === slug : i === 0)[0]
     const collection = collections?.filter((c,i) => slug ? c.title.rendered === slug : i === 0)[0]
     if (categories && !category && !collection) history.push('/error/collection/404')
+
+    useEffect(() => {
+        let timer = setTimeout(() => setHideLoader(true), 500)
+        return () => clearTimeout(timer)
+    })
+
     return (useMemo(() => (
-        <Container disableGutters={isMobile} headerPadding>
-            {category && collection ? <Col isMobile={isMobile} category={category} collection={collection} /> : <div />}
-        </Container>
-    ), [category, collection, isMobile]))
+        <React.Fragment>
+            {!hideLoader && <div style={{zIndex: 9999, width: '100vw', height: '100vh', position: 'fixed', top: 0, backgroundImage: 'url(/loader-collection.gif)', backgroundSize: 'cover', backgroundPosition: 'center'}} />}
+            <Container disableGutters={isMobile} headerPadding>
+                {category && collection ? <Col isMobile={isMobile} category={category} collection={collection} /> : <div />}
+            </Container>
+        </React.Fragment>
+    ), [category, collection, hideLoader, isMobile]))
 }
 
 export default Collection;

@@ -18,6 +18,7 @@ export const FETCH_WOOCOMMERCE_DATA = 'WoocommerceDataProvider/FETCH_DATA';
 export const SET_WOOCOMMERCE_DATA = 'WoocommerceDataProvider/SET_DATA';
 export const CREATE_WOOCOMMERCE_CUSTOMER = 'WoocommerceDataProvider/CREATE_CUSTOMER';
 export const SET_WOOCOMMERCE_CUSTOMER_RESPONSE = 'WoocommerceDataProvider/SET_CUSTOMER_RESPONSE';
+export const SET_WOOCOMMERCE_CUSTOMER_UPDATE_RESPONSE = 'WoocommerceDataProvider/SET_WOOCOMMERCE_CUSTOMER_UPDATE_RESPONSE';
 export const UPDATE_WOOCOMMERCE_CUSTOMER = 'WoocommerceDataProvider/UPDATE_CUSTOMER';
 export const CREATE_WOOCOMMERCE_ORDER = 'WoocommerceDataProvider/CREATE_ORDER';
 export const UPDATE_WOOCOMMERCE_ORDER = 'WoocommerceDataProvider/UPDATE_ORDER';
@@ -49,6 +50,10 @@ export const SET_USER_DATA = 'AuthProvider/SET_USER_DATA';
 export const SET_LOGIN_FAILED = 'AuthProvider/SET_LOGIN_FAILED';
 export const SET_USER_INFO = 'AuthProvider/SET_USER_INFO';
 export const SET_AUTHENTICATED = 'AuthProvider/SET_AUTHENTICATED';
+
+export const PAYPAL_SANDBOX = process.env.REACT_APP_PAYPAL_SANDBOX;
+export const PAYPAL_PRODUCTION = process.env.REACT_APP_PAYPAL_PRODUCTION;
+
 
 export const WCHeaders = () => {
     const myHeaders = new Headers();

@@ -15,8 +15,9 @@ const ImageWrapper = styled.div`
     background-image: ${({bg}) => `url(${bg})`};
     background-size: contain;
     background-position: center;
-    background-color: #e9e9e9;
+    background-color: #f3f1f6;
     position: relative;
+    background-repeat: no-repeat;
     button {
       position: absolute;
       top: 10px;

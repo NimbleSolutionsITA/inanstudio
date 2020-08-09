@@ -51,12 +51,12 @@ const Checkbox = ({color, fill, onBlack, ...rest}) => {
             borderRadius: 0,
             width: 16,
             height: 16,
-            boxShadow: `inset 0 0 0 2px ${(color !== '#ffffff' && color) || '#000'}, inset 0 -2px 0 ${(color !== '#ffffff' && color) || '#000'}`,
+            boxShadow: `inset 0 0 0 2px ${((color !== '#ffffff') && color) || (onBlack ? '#fff' : '#000')}, inset 0 -2px 0 ${(color !== '#ffffff' && color) || (onBlack ? '#fff' : '#000')}`,
             'input ~ &': {
-                backgroundColor: color || '#ebf1f5',
+                backgroundColor: color || (onBlack ? 'transparent' : '#ebf1f5'),
             },
             'input:hover ~ &': {
-                backgroundColor: color ? lightenDarkenColor(color, -10) : '#ebf1f5',
+                backgroundColor: color ? lightenDarkenColor(color, -10) : ( onBlack ? '#333' : '#ebf1f5' ),
             },
             'input:disabled ~ &': {
                 boxShadow: 'none',
@@ -65,9 +65,8 @@ const Checkbox = ({color, fill, onBlack, ...rest}) => {
         },
         checkedFillIcon: {
             backgroundImage: 'linear-gradient(180deg,hsla(0,0%,100%,.1),hsla(0,0%,100%,0))',
-            border: onBlack && '1px solid #fff',
             'input ~ &': {
-                backgroundColor: '#000',
+                backgroundColor: onBlack ? '#fff' : '#000',
             },
             '&:before': {
                 display: 'block',
@@ -76,7 +75,7 @@ const Checkbox = ({color, fill, onBlack, ...rest}) => {
                 content: '""',
             },
             'input:hover ~ &': {
-                backgroundColor: '#232323',
+                backgroundColor: onBlack ? '#ccc' : '#232323',
             },
         },
         checkedIcon: {

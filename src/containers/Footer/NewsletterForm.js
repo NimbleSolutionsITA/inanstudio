@@ -6,7 +6,7 @@ import Checkbox from "../../components/Checkbox";
 import {regExpEmail} from "../../helpers";
 
 
-const NewsletterForm = ({isMobile}) => {
+const NewsletterForm = ({isMobile, isModal, sendFeedback}) => {
     const [email, setEmail] = useState('')
     const [consent, setConsent] = useState(false)
     const [subscribed, setSubscribed] = useState(false)
@@ -30,6 +30,8 @@ const NewsletterForm = ({isMobile}) => {
                     subscribe({ EMAIL: email })
                     setSubscribed(true)
                     setEmail('THANK YOU FOR SUBSCRIBING')
+                    if(isModal)
+                        sendFeedback(true)
                 }
             }
             else setEmailError('Invalid email address')
@@ -42,7 +44,7 @@ const NewsletterForm = ({isMobile}) => {
                 render={({ subscribe, status, message }) => (
                     <React.Fragment>
                         <div style={{display: 'flex', marginBottom: '5px'}}>
-                            {!isMobile && <div style={{marginRight: '10px', padding: '8px 0'}}><b>NEWSLETTER</b> |</div>}
+                            {!isMobile && !isModal && <div style={{marginRight: '10px', padding: '6px 0'}}><b>NEWSLETTER</b> |</div>}
                             <div
                                 style={{
                                     flexGrow: 1,
@@ -62,7 +64,7 @@ const NewsletterForm = ({isMobile}) => {
                                         value={email}
                                         onChange={handleChange}
                                         InputProps={{
-                                            style: {color: isMobile && '#fff', borderBottom: isMobile && 'none'},
+                                            style: {color: (isMobile || isModal) && '#fff', borderBottom: isMobile && 'none'},
                                             disableUnderline: true
                                         }}
                                         InputLabelProps={{
@@ -76,7 +78,7 @@ const NewsletterForm = ({isMobile}) => {
                                 <label className="ohnohoney" htmlFor="name" />
                                 <input className="ohnohoney" autoComplete="off" type="name" id="name" name="name" placeholder="Your name here" ref={node => setHoneypot(node?.value)} />
                             </div>
-                            {!isMobile && (
+                            {!isMobile && !isModal && (
                                 <div style={{marginLeft: '10px', padding: '8px 0'}}>
                                     <Link color="secondary" href="https://instagram.com/inan_studio" target="_blank" rel="noopener noreferrer">
                                         <b>Instagram</b>
@@ -84,16 +86,16 @@ const NewsletterForm = ({isMobile}) => {
                                 </div>
                             )}
                         </div>
-                        {email && (
+                        {(email || isModal) && (
                             <React.Fragment>
-                                <Divider />
+                                <Divider style={{backgroundColor: isModal && '#fff'}} />
                                 <div style={{marginBottom: '30px'}}>
                                     {subscribed ? <Typography variant="h2">THANK YOU</Typography> : (
                                         <React.Fragment>
                                             <FormControlLabel
                                                 control={
                                                     <Checkbox
-                                                        onBlack={isMobile}
+                                                        onBlack={isMobile || isModal}
                                                         fill
                                                         checked={consent}
                                                         inputProps={{ 'aria-label': 'primary checkbox' }}
@@ -102,7 +104,7 @@ const NewsletterForm = ({isMobile}) => {
                                                 label={<Typography color="secondary">i have read, understood and agree to the <Link underline="always" color="secondary" to="/legal-area/privacy-policy">privacy and data protection policy</Link></Typography>}
                                                 labelPlacement="end"
                                             />
-                                            {consent && <Link style={{float: 'right', color: isMobile ? '#fff' : '#000', fontWeight: 'bold'}} onClick={e => submit(subscribe)}>SUBSCRIBE</Link>}
+                                            {consent && <Link style={{float: 'right', color: (isMobile || isModal) ? '#fff' : '#000', fontWeight: 'bold'}} onClick={e => submit(subscribe)}>SUBSCRIBE</Link>}
                                         </React.Fragment>
                                     )}
                                 </div>

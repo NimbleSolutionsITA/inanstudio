@@ -1,4 +1,7 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
+import {registerCustomer} from "../../../providers/WoocommerceDataProvider/actions";
+import {useSelector, useDispatch} from "react-redux"
+import {useQuery} from "../../../helpers";
 import {
     Typography,
     Divider,
@@ -11,14 +14,14 @@ import {
     FormControlLabel, useTheme, useMediaQuery, makeStyles
 } from "@material-ui/core"
 import Button from "../../../components/Button"
-import {registerCustomer as registerC} from '../../../providers/WoocommerceDataProvider/actions'
-import {connect} from "react-redux"
 import Checkbox from "../../../components/Checkbox"
 import Link from "../../../components/Link"
 
 import {regExpEmail} from "../../../helpers";
+import {Redirect} from "react-router";
+import {login} from "../../../providers/AuthProvider/actions";
 
-const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
+const Register = () => {
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
     const useStyles = makeStyles({
@@ -27,6 +30,12 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
         },
     })
     const classes = useStyles()
+    const isCheckout = useQuery().get('origin') === 'checkout'
+    const userCreated = useSelector(state => state.woocommerce.creatingUser)
+    const creatingUser = useSelector(state => state.woocommerce.creatingUser)
+    const authenticated = useSelector(state => state.user.authenticated)
+    const error = useSelector(state => state.woocommerce.error)
+    const dispatch = useDispatch()
     const [data, setData] = useState({
         firstName: null,
         lastName: null,
@@ -67,11 +76,13 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
             password: !data.password && 'PASSWORD IS REQUIRED',
             confirmPassword: data.password !== data.confirmPassword && 'PASSWORD DOES NOT MATCH',
         })
-        if (data.email && data.firstName && data.lastName && regExpEmail.test(data.email) && data.password && data.password === data.confirmPassword && !data.honeypot)
-            registerCustomer(data);
+        if (data.email && data.firstName && data.lastName && regExpEmail.test(data.email) && data.password && data.password === data.confirmPassword && !data.honeypot) {
+            dispatch(registerCustomer(data))
+        }
     }
     return (
         <Grid style={{marginTop: isMobile ? 0 : '20px'}} container spacing={isMobile ? 0 : 4}>
+            {isCheckout && authenticated && <Redirect to="/checkout" />}
             <Grid item xs={12} md={12}>
                 {userCreated ? (
                     <Typography style={{marginTop: '10px'}} variant="h1" component="h1">CONGRATULATIONS! ACCOUNT CREATED SUCCESSFULLY</Typography>
@@ -248,14 +259,5 @@ const Register = ({userCreated, creatingUser, registerCustomer, error}) => {
         </Grid>
     )
 }
-const mapStateToProps = state => ({
-    creatingUser: state.woocommerce.creatingUser,
-    userCreated: state.woocommerce.userCreated,
-    error: state.woocommerce.error
-})
 
-const mapDispatchToProps = {
-    registerCustomer: registerC,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Register)
+export default Register

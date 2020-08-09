@@ -18,6 +18,16 @@ const NavTools = styled.div`
   }
 `;
 
+const Blink = styled.span`
+  animation:blinkingText .75s;
+  @keyframes blinkingText{
+    0%{ color: transparent; }
+    33%{ color: #000; }
+    66%{ color: transparent; }
+    100%{ color: #000; }
+}
+`;
+
 const NavBar = ({navLinks, cartItems, wishlistItems, currentPath, authenticated}) => {
 
     return (
@@ -51,14 +61,14 @@ const NavBar = ({navLinks, cartItems, wishlistItems, currentPath, authenticated}
                             to="/wishlist"
                             isActive={currentPath === '/wishlist'}
                         >
-                            WISHLIST ({wishlistItems && `${wishlistItems}`})
+                            <Blink key={wishlistItems}>WISHLIST ({wishlistItems && `${wishlistItems}`})</Blink>
                         </Link>
                         <Link
                             color="inherit"
                             to="/bag"
                             isActive={currentPath === '/bag'}
                         >
-                            BAG ({cartItems && `${cartItems}`})
+                            <Blink key={cartItems}>BAG ({cartItems && `${cartItems}`})</Blink>
                         </Link>
                     </NavTools>
                 </NavWrapper>

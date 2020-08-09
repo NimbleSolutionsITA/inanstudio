@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import {useLocation} from "react-router";
 
 export const formatPrice = (price) =>  new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(price)
 
@@ -27,5 +28,7 @@ export const template = (templateString, data) =>
  * const templateString = 'Ciao {{nome}} {{cognome}}';
  * const data = { nome: 'Mario', cognome: 'Rossi'};
  *
- * const result = template(templateString, data); // Ciao Mario Rossi
+ * const result = temp0 late(templateString, data); // Ciao Mario Rossi
  */
+
+export const useQuery = () => new URLSearchParams(useLocation().search)

@@ -40,7 +40,6 @@ function* setUserInfo({ payload: userInfo }) {
   const data = yield fetch(`${baseUrl}wp-json/${woocommerceVersion}/customers/${userInfo.id}`, requestOptions)
       .then(response => response.json())
       .catch(error => error.code);
-
   if (data) {
     yield put(setWoocommerceData(`customers-${userInfo.id}`, data));
     yield put(setUserData(userInfo))

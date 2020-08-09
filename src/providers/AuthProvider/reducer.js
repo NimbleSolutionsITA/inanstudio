@@ -5,7 +5,14 @@
  */
 import produce from 'immer';
 
-import {LOGIN, SET_USER_DATA, LOGOUT, SET_LOGIN_FAILED, SET_AUTHENTICATED} from '../../constants';
+import {
+    LOGIN,
+    SET_USER_DATA,
+    LOGOUT,
+    SET_LOGIN_FAILED,
+    SET_AUTHENTICATED,
+    SET_WOOCOMMERCE_CUSTOMER_UPDATE_RESPONSE
+} from '../../constants';
 
 export const initialState = {authenticated: false, authenticating: false, error: false};
 
@@ -24,6 +31,9 @@ const UserDataReducer = () => (state = initialState, action) =>
             return {error: action.payload.error, authenticated: false, authenticating: false}
         case SET_AUTHENTICATED:
             Object.assign(draft, {authenticated: true, authenticating: false});
+            break;
+        case SET_WOOCOMMERCE_CUSTOMER_UPDATE_RESPONSE:
+            Object.assign(draft, action.payload.data);
             break;
     }
   });

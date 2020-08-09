@@ -5,7 +5,7 @@
  *
  */
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Container from "../../../components/Container";
 import {Divider, Typography, Grid, useTheme, useMediaQuery} from "@material-ui/core";
 import useWordpressData from "../../../providers/WordpressDataProvider";
@@ -13,11 +13,19 @@ import InLogo from "../../../components/svg/InLogo";
 import AnLogo from "../../../components/svg/AnLogo";
 
 function About() {
+    const [hideLoader, setHideLoader] = useState(false)
     const content = useWordpressData('pages/371', [])
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
+
+    useEffect(() => {
+        let timer = setTimeout(() => setHideLoader(true), 500)
+        return () => clearTimeout(timer)
+    })
+
     return (
         <div style={{backgroundColor: '#000'}}>
+            {!hideLoader && <div style={{zIndex: 9999, width: '100vw', height: '100vh', position: 'fixed', top: 0, backgroundImage: 'url(/loader-about.gif)', backgroundSize: 'cover', backgroundPosition: 'center'}} />}
             {content && (
                 <Container headerPadding>
                     <Typography style={{color: '#fff'}} variant="h1">{content.title.rendered}</Typography>

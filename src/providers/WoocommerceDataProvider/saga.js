@@ -1,6 +1,8 @@
 import { put, takeEvery } from 'redux-saga/effects';
 
-import { setWoocommerceData, setCustomerResponse, setOrderResponse } from './actions';
+import { setWoocommerceData, setCustomerResponse, setCustomerUpdateResponse, setOrderResponse } from './actions';
+
+import {login, setUserInfo as setUserInfoAction} from "../AuthProvider/actions";
 
 import {
   baseUrl,
@@ -14,6 +16,7 @@ import {
 } from '../../constants';
 
 import {WCHeaders} from "../../constants";
+import axios from "axios";
 
 function* fetchData({ payload: { key, apiPath, params } }) {
   const requestOptions = {
@@ -50,6 +53,8 @@ function* createCustomer({ payload: { data } }) {
       .then(response => response.json())
       .catch(error => error);
   yield put(setCustomerResponse(res))
+  if (res.id)
+    yield put(login(data.email, data.password))
 }
 
 function* updateCustomer({ payload: { id, data } }) {
@@ -71,7 +76,17 @@ function* updateCustomer({ payload: { id, data } }) {
   const res = yield fetch(`${baseUrl}wp-json/${woocommerceVersion}/customers/${id}`, requestOptions)
       .then(response => response.json())
       .catch(error => error);
-  yield put(setCustomerResponse(res))
+  yield put(setCustomerUpdateResponse(res))
+  const localAccessToken = localStorage.getItem('login');
+  if (localAccessToken) {
+    const config = {
+      headers: {Authorization: `Bearer ${localAccessToken}`}
+    };
+    const userInfo = yield axios.post(`${baseUrl}wp-json/wp/v2/users/me`, {}, config)
+        .then(response => response.data)
+        .catch((error) => console.error(error));
+    if (userInfo) yield put(setUserInfoAction(userInfo))
+  }
 }
 
 function* createOrder({ payload: { order } }) {

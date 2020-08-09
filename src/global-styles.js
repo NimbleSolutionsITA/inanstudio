@@ -16,12 +16,24 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
     font-size: 11px;
-    line-height: 12px;
+    line-height: 13px;
     text-transform: uppercase;
     @media (min-width: 735px) {
       -webkit-text-size-adjust: 100%;
       font-size: 10px;
     }
+  }
+  h1 {
+    font-size: 40px;
+    line-height: 35px;
+    @media (min-width: 735px) {
+      font-size: 60px;
+      line-height: 50px;
+    }
+  }
+  h2 {
+    font-size: 15px;
+    line-height: 15px;
   }
   ul {
     padding-inline-start: 16px;

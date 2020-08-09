@@ -30,8 +30,6 @@ const PreProcessPay = ({setIsCheckoutReady}) => {
     const total = isGift ? parseInt(order?.total) + parseInt(giftBoxCost) : order?.total
     const subtotal = formatPrice(cart.map(i => i.qty * i.price).reduce((i, sum) =>  i + sum))
 
-    console.log(order?.discount_total)
-
     const handleChangeCoupon = (event) => {
         setCoupon(event.target.value)
     }

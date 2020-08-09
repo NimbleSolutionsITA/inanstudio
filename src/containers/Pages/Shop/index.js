@@ -12,10 +12,7 @@ import {useMediaQuery, useTheme} from "@material-ui/core";
 import GridView from "./GridView";
 import ProductView from "./ProductView";
 import useWordpressData from "../../../providers/WordpressDataProvider";
-
-function useQuery() {
-    return new URLSearchParams(useLocation().search);
-}
+import {useQuery} from "../../../helpers";
 
 function Shop() {
     const headerHeight = useSelector(state => state.header.height)

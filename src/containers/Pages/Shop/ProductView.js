@@ -1,4 +1,4 @@
-import React, {useMemo, useState} from "react"
+import React, {useEffect, useMemo, useState} from "react"
 import useWoocommerceData from "../../../providers/WoocommerceDataProvider"
 import {
     Grid,
@@ -12,10 +12,16 @@ import {useSelector} from "react-redux";
 import VimeoPlayer from "../../../components/VideoPlayer/VimeoPlayer";
 
 const ProductView = ({product, prodId, isMobile, sizeGuide, color, leather, size, colorVariations}) => {
+    const [hideLoader, setHideLoader] = useState(false)
     const variations = useWoocommerceData(`products/${prodId}/variations`, {per_page: 100})
     const colors = useSelector(state => state.woocommerce['color'])
     const [colorType, setColorType] = useState(product.acf.color?.name || color || null)
     const currentProduct = colorVariations.filter(cv => cv.acf.color?.name === colorType)[0] || product
+
+    useEffect(() => {
+        let timer = setTimeout(() => setHideLoader(true), 500)
+        return () => clearTimeout(timer)
+    })
 
     const Slider = () => {
         return (
@@ -62,6 +68,7 @@ const ProductView = ({product, prodId, isMobile, sizeGuide, color, leather, size
 
     return (useMemo(() => (
         <React.Fragment>
+            {!hideLoader && <div style={{zIndex: 9999, width: '100vw', height: '100vh', position: 'fixed', top: 0, backgroundImage: 'url(/loader-collection.gif)', backgroundSize: 'cover', backgroundPosition: 'center'}} />}
             {currentProduct && variations && isMobile && <Slider />}
             <Container>
                 {currentProduct && variations && (
@@ -76,7 +83,7 @@ const ProductView = ({product, prodId, isMobile, sizeGuide, color, leather, size
                         </Grid>
                     </Grid>
                 )}
-                {!isMobile && currentProduct && currentProduct.cross_sell_ids.length > 0 && (
+                {!isMobile && variations && currentProduct && currentProduct.cross_sell_ids.length > 0 && (
                     <CrossSell isMobile={isMobile} items={currentProduct.cross_sell_ids}/>
                 )}
             </Container>

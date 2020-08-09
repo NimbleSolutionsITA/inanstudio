@@ -6,7 +6,7 @@ import Link from "../../components/Link"
 import InAnLogo from "../../components/svg/InAnLogo"
 import NewsletterForm from "./NewsletterForm"
 import CookieConsent from "./CookieConsent";
-
+import Newsletter from "./Newsletter";
 const NavWrapper = styled.div`
   width: 100%;
   height: 18px;
@@ -38,6 +38,7 @@ const Footer = () => {
     return(
         <React.Fragment>
             <CookieConsent />
+            <Newsletter isMobile={isMobile} />
             <FooterWrapper isMobile={isMobile}>
                 <Container>
                     {isMobile && (

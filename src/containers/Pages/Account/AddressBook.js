@@ -11,8 +11,8 @@ import AddressForm from "./AddressForm"
 import Checkbox from "../../../components/Checkbox";
 
 const AddressBook = ({userId, shippingWP, billingWP, isMobile}) => {
-    const creatingUser = useSelector(state => state.woocommerce.creatingUser)
-    const userCreated = useSelector(state => state.woocommerce.userCreated)
+    const updatingUser = useSelector(state => state.woocommerce.updatingUser)
+    const userUpdated = useSelector(state => state.woocommerce.userUpdated)
     const error = useSelector(state => state.woocommerce.error)
     const dispatch = useDispatch()
     const initialState = (address) => {
@@ -117,8 +117,8 @@ const AddressBook = ({userId, shippingWP, billingWP, isMobile}) => {
     return (
         <form>
             <Typography variant={isMobile ? 'h2' : 'h1'}  component="h1">Address book</Typography>
-            {!error && userCreated && <Typography variant="body1">ADDRESS BOOK SUCCESSFULLY UPDATED</Typography> }
-            {userCreated && <Typography variant="body1" color="error">{error}</Typography> }
+            {!error && userUpdated && <Typography variant="body1">ADDRESS BOOK SUCCESSFULLY UPDATED</Typography> }
+            {userUpdated && <Typography variant="body1" color="error">{error}</Typography> }
             {isMobile && <br />}
             {!data.isShipping && (
                 <React.Fragment>
@@ -184,7 +184,7 @@ const AddressBook = ({userId, shippingWP, billingWP, isMobile}) => {
                 <Grid item xs={6}>
                     {data.isShipping &&
                         <Button variant="contained" color="secondary" fullWidth onClick={handleSave}>
-                            {creatingUser ? <CircularProgress size={15} /> : 'save'}
+                            {updatingUser ? <CircularProgress size={15} /> : 'save'}
                         </Button>
                     }
                 </Grid>

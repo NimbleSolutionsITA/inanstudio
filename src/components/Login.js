@@ -33,15 +33,12 @@ const LoginForm = () => {
     function handleLogin() {
         if (!email) {
             setEmailError('YOUR EMAIL IS REQUIRED')
-            return
         }
         else if (!regExpEmail.test(email)) {
             setEmailError('PLEASE ENTER A VAILD EMAIL ADDRESS')
-            return
         }
         else if (!password) {
             setPasswordError('YOUR PASSWORD IS REQUIRED')
-            return
         }
         else dispatch(login(email, password));
     }

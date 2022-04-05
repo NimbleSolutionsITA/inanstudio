@@ -7,24 +7,24 @@ import Container from "../../../components/Container"
 import Carousel from "react-multi-carousel";
 import ProductSidebar from "./ProductSidebar"
 import CrossSell from "./CrossSell";
-import ModalImage from "../../../components/ModalImage";
+import ModalGallery from "../../../components/ModalGallery";
 import {useSelector} from "react-redux";
 import VimeoPlayer from "../../../components/VideoPlayer/VimeoPlayer";
 
-const ProductView = ({product, prodId, isMobile, sizeGuide, color, leather, size, colorVariations}) => {
-    const [hideLoader, setHideLoader] = useState(false)
-    const variations = useWoocommerceData(`products/${prodId}/variations`, {per_page: 100})
+const ProductView = React.memo(({product, isMobile, sizeGuide, leather, size, colorVariations}) => {
+    const variationsData = useWoocommerceData(`products/${product.id}/variations`, {per_page: 100})
+    const variations = product.type === 'variable' ? variationsData : []
     const colors = useSelector(state => state.woocommerce['color'])
-    const [colorType, setColorType] = useState(product.acf.color?.name || color || null)
+    const [colorType, setColorType] = useState(product.acf.color?.name || null)
     const currentProduct = colorVariations.filter(cv => cv.acf.color?.name === colorType)[0] || product
-
     useEffect(() => {
-        let timer = setTimeout(() => setHideLoader(true), 500)
-        return () => clearTimeout(timer)
-    })
+        setColorType(product.acf.color?.name || null)
+    }, [product])
 
+
+console.log('colorVariations', colorVariations)
     const Slider = () => {
-        return (
+        return (useMemo(() => (
             isMobile ?
                 <Carousel
                     arrows={false}
@@ -45,17 +45,19 @@ const ProductView = ({product, prodId, isMobile, sizeGuide, color, leather, size
                     slidesToSlide={1}
                     swipeable
                 >
-                    {currentProduct.images.map((image) =>
-                        <ModalImage url={image} key={image.src} alt={image.alt} />
+                    {currentProduct.acf.video ? [...currentProduct.images, {acf: !!currentProduct.acf.video}].map((image) =>
+                        image.acf ?
+                            <VimeoPlayer video={currentProduct.acf.video} autoplay={!currentProduct.acf.video_cover} cover={currentProduct.acf.video_cover.url} color="#fff" /> :
+                            <ModalGallery images={currentProduct.images} cImage={image} key={image.src} />
+                    ) : currentProduct.images.map((image) =>
+                        <ModalGallery images={currentProduct.images} cImage={image} key={image.src} />
                     )}
-                    {currentProduct.acf.video && (
-                        <VimeoPlayer video={currentProduct.acf.video} autoplay={!currentProduct.acf.video_cover} cover={currentProduct.acf.video_cover.url} color="#fff" />
-                    )}
+
                 </Carousel>
                 : (
                     <div>
                         {currentProduct.images.map((image) =>
-                            <ModalImage url={image} key={image.src} alt={image.alt} />
+                            <ModalGallery images={currentProduct.images} cImage={image} key={image.src} />
                         )}
                         {currentProduct.acf.video && (
                             <VimeoPlayer video={currentProduct.acf.video} autoplay={!currentProduct.acf.video_cover} cover={currentProduct.acf.video_cover.url} color="#fff" />
@@ -63,12 +65,11 @@ const ProductView = ({product, prodId, isMobile, sizeGuide, color, leather, size
                     </div>
                 )
 
-        )
+        ), []))
     }
 
     return (useMemo(() => (
         <React.Fragment>
-            {!hideLoader && <div style={{zIndex: 9999, width: '100vw', height: '100vh', position: 'fixed', top: 0, backgroundImage: 'url(/loader-collection.gif)', backgroundSize: 'cover', backgroundPosition: 'center'}} />}
             {currentProduct && variations && isMobile && <Slider />}
             <Container>
                 {currentProduct && variations && (
@@ -94,6 +95,6 @@ const ProductView = ({product, prodId, isMobile, sizeGuide, color, leather, size
             )}
         </React.Fragment>
     ), [colorType, colors, currentProduct, isMobile, leather, size, sizeGuide, variations]))
-}
+})
 
 export default ProductView;

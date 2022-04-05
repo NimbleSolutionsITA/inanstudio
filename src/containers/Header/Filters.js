@@ -28,9 +28,11 @@ const Filters = ({categories, activeCategory, isMobile, isCollection}) => {
     });
     const classes = useStyles()
     const [open, setOpen] = useState(false)
-    const FilterLinks = [].concat(categories)
-        .sort((a, b) => a.menu_order > b.menu_order ? 1 : -1)
-        .map(category =>
+    let links =[].concat(categories)
+        .filter(c => !isCollection || c.slug !== 'artisanal')
+        .sort((a, b) => a.slug.localeCompare(b.slug, 'en', { numeric: true }))
+    !isCollection && links.unshift(links.splice(links.findIndex(item => item.slug === 'view-all'), 1)[0])
+    const FilterLinks = links.map(category =>
             isMobile ? (
                 <ListItem
                     key={category.slug}
@@ -73,22 +75,20 @@ const Filters = ({categories, activeCategory, isMobile, isCollection}) => {
                             >
                                 {isCollection ? 'COLLECTION' : 'SHOP'}
                             </Link>
-                            {(!isCollection || categories.length > 2) && (
-                                <Link
-                                    color="inherit"
-                                    style={{
-                                        marginLeft: '20px',
-                                        padding: '6px 0',
-                                        float: 'right',
-                                    }}
-                                    onClick={event => {
-                                        event.preventDefault()
-                                        setOpen(true)
-                                    }}
-                                >
-                                    {isCollection ? 'PAST COLLECTIONS' : 'FILTER'}
-                                </Link>
-                            )}
+                            <Link
+                                color="inherit"
+                                style={{
+                                    marginLeft: '20px',
+                                    padding: '6px 0',
+                                    float: 'right',
+                                }}
+                                onClick={event => {
+                                    event.preventDefault()
+                                    setOpen(true)
+                                }}
+                            >
+                                {isCollection ? 'PAST COLLECTIONS' : 'FILTER'}
+                            </Link>
                         </Container>
                         <RightDrawer open={open} setOpen={setOpen}>
                             <List className={classes.drawerNavContainer} style={{width: '90%'}}>

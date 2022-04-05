@@ -10,6 +10,7 @@ import ScrollToTop from "./components/ScrollToTop";
 const initialState = {};
 const store = configureStore(initialState, history);
 
+
 render(
     <Provider store={store}>
         <ConnectedRouter history={history}>

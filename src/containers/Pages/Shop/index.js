@@ -5,8 +5,8 @@
  *
  */
 
-import React, {useMemo} from 'react';
-import {useParams, useHistory, useLocation} from "react-router";
+import React, {useEffect, useMemo, useState} from 'react';
+import {useParams, useHistory} from "react-router";
 import {useSelector} from "react-redux";
 import {useMediaQuery, useTheme} from "@material-ui/core";
 import GridView from "./GridView";
@@ -14,38 +14,68 @@ import ProductView from "./ProductView";
 import useWordpressData from "../../../providers/WordpressDataProvider";
 import {useQuery} from "../../../helpers";
 
-function Shop() {
+const Shop = () => {
     const headerHeight = useSelector(state => state.header.height)
     const muiTheme = useTheme()
     const isMobile = useMediaQuery(muiTheme.breakpoints.down("sm"))
     let { slug } = useParams();
-    const categories = useSelector(state => state.woocommerce['products-categories'])
     let query = useQuery();
     let history = useHistory();
-    let prod;
-    let colorVariations;
-    const products = useSelector(state => state.woocommerce.products)
+    const allCategories = useSelector(state => state.woocommerce['products-categories'])
+    const allProducts = useSelector(state => state.woocommerce.products)
     const sizeGuide = useWordpressData('size_guide', [])
-    if(slug && products) {
-        prod= products.filter(p => p.slug === slug)[0]
-        if (!prod) history.push('/error/product/404')
-        colorVariations = products.filter(p => p.name === prod?.name)
-    }
-    return (useMemo(() => (
+
+    const [products, setProducts] = useState(null)
+    const [colorVariations, setColorVariations] = useState(null)
+    const [product, setProduct] = useState(null)
+    const [category, setCategory] = useState(null)
+
+    useEffect(() => {
+        if (allCategories) {
+            const currentCat = query.get('category') || 'view-all'
+            setCategory(allCategories.filter(cat => cat.slug === currentCat)[0])
+        }
+    }, [allCategories, query])
+
+    useEffect(() => {
+        if (allProducts && category) {
+            if (slug) {
+                const currentProduct = allProducts.filter(p => p.slug === slug)[0]
+                if (!currentProduct) history.push('/error/product/404')
+                else {
+                    setProduct(currentProduct)
+                    setColorVariations(allProducts.filter(p => !p.acf.isTakeOver && p.name === currentProduct.name))
+                    setProducts(null)
+                }
+            }
+            else {
+                setProduct(null)
+                setColorVariations(null)
+                setProducts(allProducts.filter(prod =>
+                    !prod.acf.isTakeOver && (
+                        ['view-all', 'artisanal'].includes(category.slug) ?
+                            prod.categories.find(cat => cat.slug === category.slug) :
+                            !prod.categories.find(cat => cat.slug === 'artisanal') && prod.categories.find(cat => cat.slug === category.slug)
+                        )
+                ))
+            }
+        }
+
+    }, [allProducts, category, history, slug])
+    console.log('Shop', product)
+    return (
         <div style={{width: !isMobile && '100%', paddingTop: !isMobile && headerHeight, paddingBottom: '40px'}}>
-            { prod?.id ? (
-                products && <ProductView colorVariations={colorVariations} product={prod} prodId={prod.id} isMobile={isMobile} sizeGuide={sizeGuide} size={query.get('2')} color={query.get('4')} leather={query.get('3')} />
-            ) : (
-                <GridView
-                    products={products}
-                    activeCategory={query.get('category') || 'view-all'}
-                    activeCategoryName={categories?.filter(cat => cat.slug === query.get('category'))[0]?.name || 'View all'}
-                    headerHeight={headerHeight}
-                    isMobile={isMobile}
-                />
-            ) }
+            { product && <ProductView colorVariations={colorVariations} product={product} isMobile={isMobile} sizeGuide={sizeGuide} size={query.get('2')} leather={query.get('3')} />}
+            { products &&
+            <GridView
+                products={products}
+                activeCategoryName={category.name}
+                headerHeight={headerHeight}
+                isMobile={isMobile}
+            />
+            }
         </div>
-    ),[categories, colorVariations, headerHeight, isMobile, prod, products, query, sizeGuide]));
+    );
 }
 
 export default Shop;

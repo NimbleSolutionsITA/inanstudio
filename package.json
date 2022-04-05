@@ -31,7 +31,7 @@
     "eslint-config-react-app": "^5.2.1",
     "eslint-plugin-flowtype": "^4.7.0",
     "history": "^4.10.1",
-    "immer": "^5.3.6",
+    "immer": "^9.0.6",
     "immutable": "^4.0.0-rc.12",
     "iphone-inline-video": "^2.2.2",
     "jquery": "^3.5.1",
